@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useRef} from 'react'
-// import Button from '@mui/material/Button';
 import { TextField, Typography, Button } from '@mui/material';
 import style from './style.css'
 
@@ -24,7 +23,7 @@ const LoginScreen = () => {
             <form className='formParent'>
                 <TextField id="username" label="Username" variant="standard" autoComplete='off' onChange={(text)=>setUser(text)}/>
                 <TextField id="password" label="Password" variant="standard" autoComplete='off' onChange={(text)=>setPassword(text)}/>
-                <Button variant="contained" onClick={()=>console.log({user, password})}>Login</Button>
+                <Button variant="contained">Login</Button>
             </form>
         </section>
     )
