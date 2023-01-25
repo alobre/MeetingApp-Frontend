@@ -28,7 +28,6 @@ const HomeScreen = () => {
 
   return (
     <div>
-      Home
       <MeetingTable data={tableData} />
     </div>
   );
