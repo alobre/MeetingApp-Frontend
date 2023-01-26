@@ -9,7 +9,7 @@ import {
   IconButton,
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
   return (
@@ -28,13 +28,8 @@ const NavBar = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             MeetingApp
           </Typography>
-          <Button color="inherit">
-            <Link to={`/`}>Home</Link>
-          </Button>
-          <Button color="inherit">
-            <Link to={`/Login`}>Login</Link>
-          </Button>
-          
+          <Button color="inherit" to={'/'} component={Link}>Home</Button>
+          <Button color="inherit" to={'/Login'} component={Link}>Login</Button>
         </Toolbar>
       </AppBar>
     </Box>
