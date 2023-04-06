@@ -1,7 +1,10 @@
 import './App.css';
 import React, {useState, useEffect} from 'react';
-import Home from './routes/Home'
-import Login from './routes/Login'
+import Home from './routes/Home';
+import Login from './routes/Login';
+import Notification from './routes/Notification';
+import CreateMeeting from './routes/CreateMeeting';
+import Search from './routes/Search';
 import ReactDOM from 'react-dom';
 import AppBar from './components/AppBar';
 import '@fontsource/roboto/300.css';
@@ -37,7 +40,10 @@ function App() {
         <AppBar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/Search" element={<Search />} />
           <Route path="/Login" element={<Login />} />
+          <Route path="/CreateMeeting" element={<CreateMeeting />} />
+          <Route path="/Notification" element={<Notification />} />
         </Routes>
         {/* <RouterProvider router={router} /> */}
         </Router>

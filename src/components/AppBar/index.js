@@ -9,27 +9,40 @@ import {
   IconButton,
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Link } from "react-router-dom";
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import SearchIcon from '@mui/icons-material/Search';
+import HomeIcon from '@mui/icons-material/Home';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+
 
 const NavBar = () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
+        <Toolbar>    
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             MeetingApp
           </Typography>
-          <Button color="inherit" to={'/'} component={Link}>Home</Button>
-          <Button color="inherit" to={'/Login'} component={Link}>Login</Button>
+          <IconButton size="large" aria-label="searchButton" color="inherit" id="searchButton" to={'/Search'} component={Link}>
+            <SearchIcon />
+          </IconButton>
+          <IconButton color="inherit"  to={'/'} component={Link}>
+            <HomeIcon></HomeIcon>
+          </IconButton>
+          <IconButton color="inherit" size="large"
+            aria-label="account of current user"
+            aria-controls="primary-search-account-menu"
+            aria-haspopup="true" to={'/Login'} component={Link}>
+          <AccountCircle />
+          </IconButton>
+          <IconButton color="inherit" to={'/CreateMeeting'} component={Link}>
+            <AddCircleIcon></AddCircleIcon>
+          </IconButton>
+          <IconButton color="inherit" to={'/Notification'} component={Link}>
+            <NotificationsIcon></NotificationsIcon>
+          </IconButton>
         </Toolbar>
       </AppBar>
     </Box>

@@ -16,6 +16,7 @@ const LoginScreen = () => {
     }, [user, password])
     return(
         <section>
+            <div id="loginBox">
             <p ref={errRef} className={errMsg ? 'errmsg' : 'offscreen'} aria-live='assertive'>{errMsg}</p>
             <Typography variant="h3" component="h2">
                 Login
@@ -25,6 +26,7 @@ const LoginScreen = () => {
                 <TextField id="password" label="Password" variant="standard" autoComplete='off' onChange={(text)=>setPassword(text)}/>
                 <Button variant="contained">Login</Button>
             </form>
+            </div>
         </section>
     )
 }
