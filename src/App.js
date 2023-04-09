@@ -1,25 +1,18 @@
-import './App.css';
-import React, {useState, useEffect} from 'react';
-import Home from './routes/Home';
-import Login from './routes/Login';
-import Notification from './routes/Notification';
-import CreateMeeting from './routes/CreateMeeting';
-import Search from './routes/Search';
-import ReactDOM from 'react-dom';
-import AppBar from './components/AppBar';
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import {
-  BrowserRouter as Router, 
-  Routes, 
-  Route
-} from 'react-router-dom';
+import "./App.css";
+import React, { useState, useEffect } from "react";
+import Home from "./routes/Home";
+import Login from "./routes/Login";
+import Notification from "./routes/Notification";
+import CreateMeeting from "./routes/CreateMeeting";
+import Search from "./routes/Search";
+import ReactDOM from "react-dom";
+import AppBar from "./components/AppBar";
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // const router = createBrowserRouter([
 //   {
@@ -33,10 +26,9 @@ import {
 // ]);
 
 function App() {
-
   return (
-      <div>
-        <Router>
+    <div>
+      <Router>
         <AppBar />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -46,8 +38,8 @@ function App() {
           <Route path="/Notification" element={<Notification />} />
         </Routes>
         {/* <RouterProvider router={router} /> */}
-        </Router>
-      </div>
+      </Router>
+    </div>
   );
 }
 

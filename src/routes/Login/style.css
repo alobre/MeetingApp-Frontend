@@ -1,7 +1,32 @@
-.formParent{
-    display: flex;
-    /* justify-content: center; */
-    flex-direction: column;
-    align-items: start;
+.formParent {
+  display: flex;
+  /* justify-content: center; */
+  align-items: start;
 }
 
+.input-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 2em;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  font-size: 25px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.error {
+  color: red;
+  font-size: 15px;
+  margin-top: 5px;
+}
