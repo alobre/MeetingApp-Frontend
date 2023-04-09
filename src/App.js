@@ -1,12 +1,12 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
-import Home from "./routes/Home";
-import Login from "./routes/Login";
-import Notification from "./routes/Notification";
-import CreateMeeting from "./routes/CreateMeeting";
-import Search from "./routes/Search";
+import Home from "routes/Home";
+import Login from "routes/Login";
+import Notification from "routes/Notification";
+import CreateMeeting from "routes/CreateMeeting";
+import Search from "routes/Search";
 import ReactDOM from "react-dom";
-import AppBar from "./components/AppBar";
+import AppBar from "components/AppBar";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";

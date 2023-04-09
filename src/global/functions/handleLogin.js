@@ -1,7 +1,3 @@
-import React, { useState } from 'react'
-import { useNavigate, Navigate } from "react-router-dom";
-
-
 //dummy login function
 const handleLogin = (username, password, handleErrorCallback) =>{
     //dummy login data
@@ -19,21 +15,18 @@ const handleLogin = (username, password, handleErrorCallback) =>{
       if (account.password === password) {
         localStorage.setItem("authenticated", true);
         window.dispatchEvent(new Event("storage"));
-        // navigate("/");
         return {success: true}
       } else {
         // invalid pass
         error.msg = "invalid password"
         error.type = "pass"
         return {success: false, error}
-        // setErrorMessages({ name: "pass", message: errors.pass });
       }
     } else {
       // invalid username
         error.msg = "invalid username"
         error.type = "uname"
         return {success: false, error}
-    //   setErrorMessages({ name: "uname", message: errors.uname });
     }
 }
 

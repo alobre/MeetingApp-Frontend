@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import { TextField, Typography, Button, Card } from "@mui/material";
-import handleLogin from '../../global/functions/handleLogin.js'
+import handleLogin from 'global/functions/handleLogin.js'
 import style from "./style.css";
 
 const LoginScreen = () => {

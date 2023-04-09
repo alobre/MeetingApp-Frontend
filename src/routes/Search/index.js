@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import style from "./style.css";
-import MeetingTable from "../../components/MeetingTable";
+import MeetingTable from "components/MeetingTable";
 
 const SearchScreen = () => {
   

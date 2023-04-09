@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import style from "./style.css";
-import MeetingTable from "../../components/MeetingTable";
+import MeetingTable from "components/MeetingTable";
 
 const HomeScreen = () => {
   // const [authenticated, setauthenticated] = useState(null);
