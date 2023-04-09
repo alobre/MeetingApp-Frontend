@@ -1,52 +1,31 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
-import { TextField, Typography, Button } from "@mui/material";
+import { TextField, Typography, Button, Card } from "@mui/material";
+import handleLogin from '../../global/functions/handleLogin.js'
 import style from "./style.css";
 
 const LoginScreen = () => {
   const navigate = useNavigate();
   const [username, setusername] = useState("");
   const [password, setpassword] = useState("");
-  const [errorMessages, setErrorMessages] = useState({});
-  const users = [{ username: "ana", password: "ana" }];
-  const errors = {
-    uname: "Invalid username",
-    pass: "Invalid password",
-  };
+  const [error, setErrorMessage] = useState("");
 
-  // on "submit" button compare the entries against the "database" (const users) and if there is a user, log them in, save authorization in localStorage and dispatch an event for AppBar to listen to (and show login/logout button)
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const account = users.find((user) => user.username === username);
-    if (account) {
-      if (account.password === password) {
-        localStorage.setItem("authenticated", true);
-        window.dispatchEvent(new Event("storage"));
-        navigate("/");
-      } else {
-        // invalid pass
-        setErrorMessages({ name: "pass", message: errors.pass });
-      }
-    } else {
-      // invalid username
-      setErrorMessages({ name: "uname", message: errors.uname });
-    }
-  };
+  const login = (username, password) =>{
+    const result = handleLogin(username, password)
+    console.log(result)
+    result.success ? navigate('/') : setErrorMessage(result.error)
+  }
 
-  // display error messages for invalid entries
-  const showErrorMessage = (name) =>
-    name === errorMessages.name && (
-      <div className="error">{errorMessages.message}</div>
-    );
+  const ErrorComponent = () =>(<div className="error">{error.msg}</div>)
 
   // check for authenticated
   const authenticated = localStorage.getItem("authenticated") === "true";
 
   // the login form
   return (
-    <div>
-      <div className="title">FHTW LOGIN</div>
-      <form onSubmit={handleSubmit}>
+    <div id="loginParent">
+      <Card id="cardParent">
+      <Typography variant="h2" gutterBottom>FHTW LOGIN</Typography>
         <div className="input-container">
           <TextField
             required
@@ -57,7 +36,7 @@ const LoginScreen = () => {
             value={username}
             onChange={(e) => setusername(e.target.value)}
           />
-          {showErrorMessage("uname")}
+          {error.type == "uname" && <ErrorComponent error={error}/>}
         </div>
         <div className="input-container">
           <TextField
@@ -68,14 +47,14 @@ const LoginScreen = () => {
             name="Password"
             onChange={(e) => setpassword(e.target.value)}
           />
-          {showErrorMessage("pass")}
+          {error.type == "pass" && <ErrorComponent error={error}/>}
         </div>
         <div className="button-container">
-          <Button variant="contained" type="submit" value="Submit">
+          <Button variant="contained" type="submit" value="Submit" onClick={()=>login(username, password)}>
             LOGIN
           </Button>
         </div>
-      </form>
+      </Card>
     </div>
   );
 };
