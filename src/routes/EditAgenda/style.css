@@ -1,0 +1,39 @@
+.cardParent {
+  margin: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardParent > * {
+  margin: 8px 0;
+}
+
+.tableCell {
+  width: 50%;
+}
+
+.subTableCell {
+  padding-left: 48px;
+}
+
+.cardParent .MuiTextField-root {
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+
+.cardParent .button {
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+
+.tableCell .MuiTextField-root {
+  margin-bottom: 10px;
+  margin-right: 10px;
+  align-items: flex-start;
+}
+
+.cardParent .MuiButton-contained {
+  margin-bottom: 10px;
+  margin-right: 10px;
+}

@@ -4,6 +4,7 @@ import Home from "routes/Home";
 import Login from "routes/Login";
 import Notification from "routes/Notification";
 import CreateMeeting from "routes/CreateMeeting";
+import EditAgenda from "routes/EditAgenda";
 import Search from "routes/Search";
 import ReactDOM from "react-dom";
 import AppBar from "components/AppBar";
@@ -36,6 +37,7 @@ function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/CreateMeeting" element={<CreateMeeting />} />
           <Route path="/Notification" element={<Notification />} />
+          <Route path="/EditAgenda" element={<EditAgenda />} />
         </Routes>
         {/* <RouterProvider router={router} /> */}
       </Router>
