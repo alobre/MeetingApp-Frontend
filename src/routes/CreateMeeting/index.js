@@ -87,6 +87,124 @@ const MeetingForm = () => {
     );
   };
 
+  const AddMemberModal = () => (
+    <Modal
+      id="addMember"
+      open={isMemberModalOpen}
+      onClose={() => setMemberModalOpen(false)}
+      className="modal"
+    >
+      <div className="modalBody">
+        <h2>Add Member</h2>
+        <Autocomplete
+          options={users.filter(
+            (user) => !members.find((member) => member.name === user)
+          )}
+          value={selectedMember}
+          onChange={(event, newValue) => {
+            setSelectedMember(newValue);
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              // label="Select member"
+              placeholder="Type to search"
+            />
+          )}
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={isChecked}
+              onChange={(event) => setIsChecked(event.target.checked)}
+            />
+          }
+          label="Can edit agenda"
+        />
+        <Button onClick={handleMemberSave}>Add Member</Button>
+
+        <div className="form-group">
+          {members.map((member, index) => (
+            <div key={member.name}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={member.isChecked}
+                    onChange={() => handleCheck(index)}
+                  />
+                }
+                label={member.name}
+              />
+              <IconButton onClick={() => handleDeleteMember(index)}>
+                <DeleteIcon />
+              </IconButton>
+            </div>
+          ))}
+        </div>
+
+        <div className="form-group">
+          <Button onClick={() => setMemberModalOpen(false)}>Close</Button>
+        </div>
+      </div>
+    </Modal>
+  );
+
+  const SetAddressModal = () => (
+    <Modal open={isAddressModalOpen} onClose={() => setAddressModalOpen(false)} className="modal">
+      <div className="modalBody">
+        <h2>Place</h2>
+        <TextField
+          label="Address"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
+        <TextField
+          label="Building"
+          value={building}
+          onChange={(e) => setBuilding(e.target.value)}
+        />
+        <TextField
+          label="Room"
+          value={room}
+          onChange={(e) => setRoom(e.target.value)}
+        />
+        <Button onClick={handleAddressSave}>Save</Button>
+      </div>
+    </Modal>
+  );
+
+  const SetDateAndTimeModal = () => (
+    <Modal
+      open={isDateTimeModalOpen}
+      onClose={() => setDateTimeModalOpen(false)}
+      className="modal"
+    >
+      <div
+        className="modalBody">
+        <h2>Date and Time</h2>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            label="Date"
+            value={date}
+            onChange={(newValue) => setDate(newValue)}
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <TimePicker
+            label="Time"
+            value={time}
+            onChange={(newValue) => setTime(newValue)}
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </LocalizationProvider>
+        <Button variant="contained" onClick={handleDateTimeSave}>
+          Save
+        </Button>
+      </div>
+    </Modal>
+  );
+
   return (
     <div className="meetingParent">
       <Card id="cardParent">
@@ -105,127 +223,16 @@ const MeetingForm = () => {
             <Button onClick={() => setAddressModalOpen(true)}>
               Set meeting place
             </Button>
-            <Modal
-              open={isAddressModalOpen}
-              onClose={() => setAddressModalOpen(false)}
-            >
-              <div className="modal">
-                <h2>Place</h2>
-                <TextField
-                  label="Address"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                />
-                <TextField
-                  label="Building"
-                  value={building}
-                  onChange={(e) => setBuilding(e.target.value)}
-                />
-                <TextField
-                  label="Room"
-                  value={room}
-                  onChange={(e) => setRoom(e.target.value)}
-                />
-                <Button onClick={handleAddressSave}>Save</Button>
-              </div>
-            </Modal>
           </div>
 
           <div className="form-group">
             <Button onClick={() => setDateTimeModalOpen(true)}>
               Set date and time
             </Button>
-            <Modal
-              open={isDateTimeModalOpen}
-              onClose={() => setDateTimeModalOpen(false)}
-            >
-              <div className="modal">
-                <h2>Date and Time</h2>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Date"
-                    value={date}
-                    onChange={(newValue) => setDate(newValue)}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <TimePicker
-                    label="Time"
-                    value={time}
-                    onChange={(newValue) => setTime(newValue)}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
-                <Button variant="contained" onClick={handleDateTimeSave}>
-                  Save
-                </Button>
-              </div>
-            </Modal>
           </div>
 
           <div className="form-group">
             <Button onClick={() => setMemberModalOpen(true)}>Add Member</Button>
-            <Modal
-              id="addMember"
-              open={isMemberModalOpen}
-              onClose={() => setMemberModalOpen(false)}
-            >
-              <div className="modal">
-                <h2>Add Member</h2>
-                <Autocomplete
-                  options={users.filter(
-                    (user) => !members.find((member) => member.name === user)
-                  )}
-                  value={selectedMember}
-                  onChange={(event, newValue) => {
-                    setSelectedMember(newValue);
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      // label="Select member"
-                      placeholder="Type to search"
-                    />
-                  )}
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={isChecked}
-                      onChange={(event) => setIsChecked(event.target.checked)}
-                    />
-                  }
-                  label="Can edit agenda"
-                />
-                <Button onClick={handleMemberSave}>Add Member</Button>
-
-                <div className="form-group">
-                  {members.map((member, index) => (
-                    <div key={member.name}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={member.isChecked}
-                            onChange={() => handleCheck(index)}
-                          />
-                        }
-                        label={member.name}
-                      />
-                      <IconButton onClick={() => handleDeleteMember(index)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="form-group">
-                  <Button onClick={() => setMemberModalOpen(false)}>
-                    Close
-                  </Button>
-                </div>
-              </div>
-            </Modal>
           </div>
 
           <div className="form-group">
@@ -235,6 +242,9 @@ const MeetingForm = () => {
           </div>
         </div>
       </Card>
+      <SetAddressModal />
+      <SetDateAndTimeModal />
+      <AddMemberModal />
     </div>
   );
 };
