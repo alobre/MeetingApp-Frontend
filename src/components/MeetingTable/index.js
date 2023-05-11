@@ -16,8 +16,8 @@ const MeetingTable = ({ data }) => {
   const navigate = useNavigate();
 
   // added
-  const handleRowClick = (id) => {
-    navigate("/EditAgenda");
+  const handleRowClick = (data) => {
+    navigate("/EditAgenda", {state: data});
   };
 
   return (
@@ -35,7 +35,7 @@ const MeetingTable = ({ data }) => {
               <TableRow
                 key={row.date}
                 // added
-                onClick={() => handleRowClick(row.id)}
+                onClick={() => handleRowClick(row)}
                 //  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row" align="center">
@@ -44,7 +44,7 @@ const MeetingTable = ({ data }) => {
                       {row.date}
                     </Typography>
                     <Typography variant="h7" component="h6">
-                      {row.date}
+                      {row.startTime} - {row.endTime}
                     </Typography>
                   </div>
                 </TableCell>

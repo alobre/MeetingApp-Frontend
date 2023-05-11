@@ -20,38 +20,15 @@ import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import "./style.css";
-
-const dummyData = {
-  meetingTime: "10:00am",
-  meetingDate: "2022-05-01",
-  meetingPlace: "FHTW F1.02",
-  actionPoints: [
-    {
-      title: "Opening",
-      subPoints: [{ title: "Quick introductions" }],
-      comments: [],
-    },
-    {
-      title: "Courses schedule",
-      subPoints: [
-        { title: "Appropriate time for courses" },
-        { title: "Changing the 8AM time slots" },
-      ],
-      comments: [],
-    },
-    {
-      title: "Moodle quiz system bugs",
-      subPoints: [{ title: "Reported issues" }, { title: "Plans for updates" }],
-      comments: [],
-    },
-  ],
-};
+import { useLocation } from "react-router-dom";
 
 const MeetingDetails = () => {
-  const [meetingTime, setMeetingTime] = useState(dummyData.meetingTime);
-  const [meetingDate, setMeetingDate] = useState(dummyData.meetingDate);
-  const [meetingPlace, setMeetingPlace] = useState(dummyData.meetingPlace);
-  const [actionPoints, setActionPoints] = useState(dummyData.actionPoints);
+  const {state} = useLocation();
+  const [meetingTime, setMeetingTime] = useState(state.startTime);
+  const [meetingDate, setMeetingDate] = useState(state.date);
+  const [meetingPlace, setMeetingPlace] = useState(state.meetingPlace);
+  const [actionPoints, setActionPoints] = useState(state.actionPoints);
+
 
   const handleMeetingTimeChange = (event) => {
     setMeetingTime(event.target.value);
@@ -146,7 +123,7 @@ const MeetingDetails = () => {
         })),
       })),
     };
-    console.log(agenda);
+    console.log(agenda, {state});
   };
 
   return (

@@ -15,24 +15,144 @@ const HomeScreen = () => {
 
   const [tableData, setTableData] = useState([
     {
-      date: "22.01.2023",
+      meetingID: 1231,
+      date: "2023-07-01",
+      startTime: "12:15",
+      endTime: "14:20",
       title: "Meeting Board",
+      meetingPlace: "FHTW F1.02",
+      actionPoints: [
+        {
+          title: "Opening",
+          subPoints: [{ title: "Quick introductions" }],
+          comments: [],
+        },
+        {
+          title: "Courses schedule",
+          subPoints: [
+            { title: "Appropriate time for courses" },
+            { title: "Changing the 8AM time slots" },
+          ],
+          comments: [],
+        },
+        {
+          title: "Moodle quiz system bugs",
+          subPoints: [{ title: "Reported issues" }, { title: "Plans for updates" }],
+          comments: [],
+        },
+      ],
     },
     {
-      date: "23.01.2023",
+      meetingID: 1523,
+      date: "2023-07-01",
+      startTime: "12:15",
+      endTime: "14:20",
       title: "Project Stardust Team Meeting",
+      meetingPlace: "FHTW F1.02",
+      actionPoints: [
+        {
+          title: "Opening",
+          subPoints: [{ title: "Quick introductions" }],
+          comments: [],
+        },
+        {
+          title: "Courses schedule",
+          subPoints: [
+            { title: "Appropriate time for courses" },
+            { title: "Changing the 8AM time slots" },
+          ],
+          comments: [],
+        },
+        {
+          title: "Moodle quiz system bugs",
+          subPoints: [{ title: "Reported issues" }, { title: "Plans for updates" }],
+          comments: [],
+        },
+      ],
     },
     {
-      date: "24.01.2023",
+      meetingID: 1233,
+      date: "2023-07-02",
+      startTime: "12:15",
+      endTime: "14:20",
       title: "Board Meeting II",
+      meetingPlace: "FHTW F1.02",
+      actionPoints: [
+        {
+          title: "Opening",
+          subPoints: [{ title: "Quick introductions" }],
+          comments: [],
+        },
+        {
+          title: "Courses schedule",
+          subPoints: [
+            { title: "Appropriate time for courses" },
+            { title: "Changing the 8AM time slots" },
+          ],
+          comments: [],
+        },
+        {
+          title: "Moodle quiz system bugs",
+          subPoints: [{ title: "Reported issues" }, { title: "Plans for updates" }],
+          comments: [],
+        },
+      ],
     },
     {
-      date: "25.01.2023",
+      meetingID: 1123,
+      date: "2023-07-04",
+      startTime: "12:15",
+      endTime: "14:20",
       title: "Meeting Board IV",
+      meetingPlace: "FHTW F1.02",
+      actionPoints: [
+        {
+          title: "Opening",
+          subPoints: [{ title: "Quick introductions" }],
+          comments: [],
+        },
+        {
+          title: "Courses schedule",
+          subPoints: [
+            { title: "Appropriate time for courses" },
+            { title: "Changing the 8AM time slots" },
+          ],
+          comments: [],
+        },
+        {
+          title: "Moodle quiz system bugs",
+          subPoints: [{ title: "Reported issues" }, { title: "Plans for updates" }],
+          comments: [],
+        },
+      ],
     },
     {
-      date: "26.01.2023",
+      meetingID: 1453,
+      date: "2023-07-01",
+      startTime: "12:15",
+      endTime: "14:20",
       title: "Semester Opening",
+      meetingPlace: "FHTW F1.02",
+      actionPoints: [
+        {
+          title: "Opening",
+          subPoints: [{ title: "Quick introductions" }],
+          comments: [],
+        },
+        {
+          title: "Courses schedule",
+          subPoints: [
+            { title: "Appropriate time for courses" },
+            { title: "Changing the 8AM time slots" },
+          ],
+          comments: [],
+        },
+        {
+          title: "Moodle quiz system bugs",
+          subPoints: [{ title: "Reported issues" }, { title: "Plans for updates" }],
+          comments: [],
+        },
+      ],
     },
   ]);
 
