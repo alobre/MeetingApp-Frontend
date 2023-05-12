@@ -38,6 +38,7 @@ const MeetingForm = () => {
   const [isChecked, setIsChecked] = useState(false);
 
   const handleAddressSave = () => {
+    console.log('closing')
     setAddressModalOpen(false);
   };
 
@@ -87,8 +88,85 @@ const MeetingForm = () => {
     );
   };
 
-  const AddMemberModal = () => (
-    <Modal
+  return (
+    <div className="meetingParent">
+      <Card id="cardParent">
+        <Typography variant="h3" gutterBottom>
+          Create new meeting
+        </Typography>
+        <div className="meeting-form">
+          <div className="form-group">
+            <TextField
+              label="Meeting Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <Button onClick={() => setAddressModalOpen(true)}>
+              Set meeting place
+            </Button>
+            <Modal open={isAddressModalOpen} onClose={() => setAddressModalOpen(false)} className="modal">
+      <div className="modalBody">
+        <h2>Place</h2>
+        <TextField
+          label="Address"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
+        <TextField
+          label="Building"
+          value={building}
+          onChange={(e) => setBuilding(e.target.value)}
+        />
+        <TextField
+          label="Room"
+          value={room}
+          onChange={(e) => setRoom(e.target.value)}
+        />
+        <Button onClick={handleAddressSave}>Save</Button>
+      </div>
+    </Modal>
+          </div>
+
+          <div className="form-group">
+            <Button onClick={() => setDateTimeModalOpen(true)}>
+              Set date and time
+            </Button>
+            <Modal
+      open={isDateTimeModalOpen}
+      onClose={() => setDateTimeModalOpen(false)}
+      className="modal"
+    >
+      <div
+        className="modalBody">
+        <h2>Date and Time</h2>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            label="Date"
+            value={date}
+            onChange={(newValue) => setDate(newValue)}
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <TimePicker
+            label="Time"
+            value={time}
+            onChange={(newValue) => setTime(newValue)}
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </LocalizationProvider>
+        <Button variant="contained" onClick={handleDateTimeSave}>
+          Save
+        </Button>
+      </div>
+    </Modal>
+          </div>
+
+          <div className="form-group">
+            <Button onClick={() => setMemberModalOpen(true)}>Add Member</Button>
+            <Modal
       id="addMember"
       open={isMemberModalOpen}
       onClose={() => setMemberModalOpen(false)}
@@ -147,92 +225,6 @@ const MeetingForm = () => {
         </div>
       </div>
     </Modal>
-  );
-
-  const SetAddressModal = () => (
-    <Modal open={isAddressModalOpen} onClose={() => setAddressModalOpen(false)} className="modal">
-      <div className="modalBody">
-        <h2>Place</h2>
-        <TextField
-          label="Address"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-        />
-        <TextField
-          label="Building"
-          value={building}
-          onChange={(e) => setBuilding(e.target.value)}
-        />
-        <TextField
-          label="Room"
-          value={room}
-          onChange={(e) => setRoom(e.target.value)}
-        />
-        <Button onClick={handleAddressSave}>Save</Button>
-      </div>
-    </Modal>
-  );
-
-  const SetDateAndTimeModal = () => (
-    <Modal
-      open={isDateTimeModalOpen}
-      onClose={() => setDateTimeModalOpen(false)}
-      className="modal"
-    >
-      <div
-        className="modalBody">
-        <h2>Date and Time</h2>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="Date"
-            value={date}
-            onChange={(newValue) => setDate(newValue)}
-            renderInput={(params) => <TextField {...params} />}
-          />
-        </LocalizationProvider>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <TimePicker
-            label="Time"
-            value={time}
-            onChange={(newValue) => setTime(newValue)}
-            renderInput={(params) => <TextField {...params} />}
-          />
-        </LocalizationProvider>
-        <Button variant="contained" onClick={handleDateTimeSave}>
-          Save
-        </Button>
-      </div>
-    </Modal>
-  );
-
-  return (
-    <div className="meetingParent">
-      <Card id="cardParent">
-        <Typography variant="h3" gutterBottom>
-          Create new meeting
-        </Typography>
-        <div className="meeting-form">
-          <div className="form-group">
-            <TextField
-              label="Meeting Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <Button onClick={() => setAddressModalOpen(true)}>
-              Set meeting place
-            </Button>
-          </div>
-
-          <div className="form-group">
-            <Button onClick={() => setDateTimeModalOpen(true)}>
-              Set date and time
-            </Button>
-          </div>
-
-          <div className="form-group">
-            <Button onClick={() => setMemberModalOpen(true)}>Add Member</Button>
           </div>
 
           <div className="form-group">
@@ -242,9 +234,6 @@ const MeetingForm = () => {
           </div>
         </div>
       </Card>
-      <SetAddressModal />
-      <SetDateAndTimeModal />
-      <AddMemberModal />
     </div>
   );
 };
