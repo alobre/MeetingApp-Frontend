@@ -1,0 +1,94 @@
+.meetingParent {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+#cardParent {
+  width: 50vw;
+  max-width: 500px;
+}
+
+.meeting-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 50px auto; /* centers the form on the screen and adds space around it */
+  max-width: 500px; /* sets a maximum width for the form */
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  max-width: 50vw; /* sets a maximum width for the modal */
+  width: 50vw;
+}
+.modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.modal h2 {
+  margin-top: 0;
+}
+
+button {
+  margin-left: 10px;
+}
+
+input {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+label {
+  font-weight: bold;
+}
+
+.select {
+  width: 100%;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.date-picker-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.MuiButton-contained {
+  background-color: #1976d2;
+  color: white;
+  margin-right: 10px;
+}
+
+.MuiButton-contained:hover {
+  background-color: #115293;
+}
+
+.modal .MuiTextField-root {
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+
+#cardParent {
+  width: 40%;
+  margin: 10vh;
+  padding: 4vh;
+}

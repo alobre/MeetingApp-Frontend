@@ -17,7 +17,7 @@ const MeetingTable = ({ data }) => {
 
   // added
   const handleRowClick = (data) => {
-    navigate("/EditAgenda", {state: data});
+    navigate("/EditAgenda", { state: data });
   };
 
   return (

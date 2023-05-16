@@ -1,6 +1,5 @@
 /*
 TODO:
-add members button with member picker
 finalize agenda
 invite to edit/comment
 */
@@ -21,14 +20,18 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import "./style.css";
 import { useLocation } from "react-router-dom";
+import AddMemberModal from "components/AddMember";
+import { useNavigate, Navigate } from "react-router-dom";
 
 const MeetingDetails = () => {
-  const {state} = useLocation();
+  const navigate = useNavigate();
+  const { state } = useLocation();
   const [meetingTime, setMeetingTime] = useState(state.startTime);
   const [meetingDate, setMeetingDate] = useState(state.date);
   const [meetingPlace, setMeetingPlace] = useState(state.meetingPlace);
   const [actionPoints, setActionPoints] = useState(state.actionPoints);
-
+  const [isMemberModalOpen, setMemberModalOpen] = useState(false);
+  const [members, setMembers] = useState([]);
 
   const handleMeetingTimeChange = (event) => {
     setMeetingTime(event.target.value);
@@ -122,14 +125,36 @@ const MeetingDetails = () => {
           title: comments.title,
         })),
       })),
+      members,
     };
-    console.log(agenda, {state});
+    navigate("/ViewAgenda", { state: { agenda } }); // Pass the agenda object in the state
+
+    console.log(agenda, { state });
+  };
+
+  const handleMemberSave = (selectedMembers) => {
+    setMembers(selectedMembers);
   };
 
   return (
     <div>
       <Card className="cardParent">
+        <div className="inviteMembersButton">
+          <Button variant="contained" onClick={() => setMemberModalOpen(true)}>
+            Add Member
+          </Button>
+          <AddMemberModal
+            isOpen={isMemberModalOpen}
+            onClose={() => setMemberModalOpen(false)}
+            // users={users}
+            onSave={handleMemberSave}
+          />
+          {/* <Button variant="contained" color="primary">
+            Invite Members
+          </Button> */}
+        </div>
         <TextField
+          type="time"
           label="Meeting Time"
           value={meetingTime}
           onChange={handleMeetingTimeChange}
@@ -149,6 +174,7 @@ const MeetingDetails = () => {
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell>#</TableCell>
                 <TableCell>Action Points</TableCell>
                 <TableCell>Sub-Points</TableCell>
                 <TableCell>Comments</TableCell>
@@ -158,6 +184,7 @@ const MeetingDetails = () => {
             <TableBody>
               {actionPoints.map((actionPoint, index) => (
                 <TableRow key={index}>
+                  <TableCell>{index + 1}</TableCell>
                   <TableCell className="tableCell">
                     <TextField
                       className="actionPoints"
@@ -220,8 +247,9 @@ const MeetingDetails = () => {
         <Button variant="contained" onClick={handleAddActionPoint}>
           Add Action Point
         </Button>
+        <Button variant="contained">save in edit mode</Button>
         <Button variant="contained" onClick={handleSave}>
-          Save
+          Finalize agenda
         </Button>
       </Card>
     </div>

@@ -16,7 +16,7 @@ const HomeScreen = () => {
   const [tableData, setTableData] = useState([
     {
       meetingID: 1231,
-      date: "2023-07-01",
+      date: "2023-07-05",
       startTime: "12:15",
       endTime: "14:20",
       title: "Meeting Board",
@@ -37,26 +37,29 @@ const HomeScreen = () => {
         },
         {
           title: "Moodle quiz system bugs",
-          subPoints: [{ title: "Reported issues" }, { title: "Plans for updates" }],
+          subPoints: [
+            { title: "Reported issues" },
+            { title: "Plans for updates" },
+          ],
           comments: [],
         },
       ],
     },
     {
       meetingID: 1523,
-      date: "2023-07-01",
+      date: "2023-07-03",
       startTime: "12:15",
       endTime: "14:20",
       title: "Project Stardust Team Meeting",
       meetingPlace: "FHTW F1.02",
       actionPoints: [
         {
-          title: "Opening",
-          subPoints: [{ title: "Quick introductions" }],
+          title: "Beginning",
+          subPoints: [{ title: "Say something" }],
           comments: [],
         },
         {
-          title: "Courses schedule",
+          title: "Morning classes",
           subPoints: [
             { title: "Appropriate time for courses" },
             { title: "Changing the 8AM time slots" },
@@ -64,8 +67,11 @@ const HomeScreen = () => {
           comments: [],
         },
         {
-          title: "Moodle quiz system bugs",
-          subPoints: [{ title: "Reported issues" }, { title: "Plans for updates" }],
+          title: "Ferien",
+          subPoints: [
+            { title: "Reported issues" },
+            { title: "Plans for updates" },
+          ],
           comments: [],
         },
       ],
@@ -79,12 +85,12 @@ const HomeScreen = () => {
       meetingPlace: "FHTW F1.02",
       actionPoints: [
         {
-          title: "Opening",
+          title: "Introductions",
           subPoints: [{ title: "Quick introductions" }],
           comments: [],
         },
         {
-          title: "Courses schedule",
+          title: "Grading",
           subPoints: [
             { title: "Appropriate time for courses" },
             { title: "Changing the 8AM time slots" },
@@ -92,8 +98,11 @@ const HomeScreen = () => {
           comments: [],
         },
         {
-          title: "Moodle quiz system bugs",
-          subPoints: [{ title: "Reported issues" }, { title: "Plans for updates" }],
+          title: "Salaries",
+          subPoints: [
+            { title: "Reported issues" },
+            { title: "Plans for updates" },
+          ],
           comments: [],
         },
       ],
@@ -112,7 +121,7 @@ const HomeScreen = () => {
           comments: [],
         },
         {
-          title: "Courses schedule",
+          title: "External contractors",
           subPoints: [
             { title: "Appropriate time for courses" },
             { title: "Changing the 8AM time slots" },
@@ -120,8 +129,11 @@ const HomeScreen = () => {
           comments: [],
         },
         {
-          title: "Moodle quiz system bugs",
-          subPoints: [{ title: "Reported issues" }, { title: "Plans for updates" }],
+          title: "CIS bugs",
+          subPoints: [
+            { title: "Reported issues" },
+            { title: "Plans for updates" },
+          ],
           comments: [],
         },
       ],
@@ -135,21 +147,21 @@ const HomeScreen = () => {
       meetingPlace: "FHTW F1.02",
       actionPoints: [
         {
-          title: "Opening",
+          title: "Meeting beginning",
           subPoints: [{ title: "Quick introductions" }],
           comments: [],
         },
         {
-          title: "Courses schedule",
-          subPoints: [
-            { title: "Appropriate time for courses" },
-            { title: "Changing the 8AM time slots" },
-          ],
+          title: "Student questions",
+          subPoints: [{ title: "Appropriate time for courses" }],
           comments: [],
         },
         {
-          title: "Moodle quiz system bugs",
-          subPoints: [{ title: "Reported issues" }, { title: "Plans for updates" }],
+          title: "Answers",
+          subPoints: [
+            { title: "Reported issues" },
+            { title: "Plans for updates" },
+          ],
           comments: [],
         },
       ],
