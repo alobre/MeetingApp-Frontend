@@ -164,7 +164,7 @@ const WriteProtocol = () => {
         </Typography>
         <List>
           {agenda.members.map((member, index) => (
-            <ListItem key={index}>{member}</ListItem>
+            <ListItem key={index}>{member.name}</ListItem>
           ))}
         </List>
       </Card>
