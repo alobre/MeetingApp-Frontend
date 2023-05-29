@@ -34,3 +34,24 @@ ul {
   margin-top: 10px;
   padding-left: 20px;
 }
+
+.subpoints-container {
+  position: relative;
+}
+
+.comments-container {
+  position: relative;
+}
+
+/* .notes {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  margin-top: 8px;
+} */
+
+.sub-notes {
+  display: flex;
+  align-items: center;
+}

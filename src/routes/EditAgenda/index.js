@@ -140,15 +140,14 @@ const MeetingDetails = () => {
     <div>
       <Card className="cardParent">
         <div className="inviteMembersButton">
-          <Button variant="contained" onClick={() => setMemberModalOpen(true)}>
+          {/* <Button variant="contained" onClick={() => setMemberModalOpen(true)}>
             Add Member
           </Button>
           <AddMemberModal
             isOpen={isMemberModalOpen}
             onClose={() => setMemberModalOpen(false)}
-            // users={users}
             onSave={handleMemberSave}
-          />
+          /> */}
           {/* <Button variant="contained" color="primary">
             Invite Members
           </Button> */}
@@ -244,13 +243,33 @@ const MeetingDetails = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <Button variant="contained" onClick={handleAddActionPoint}>
-          Add Action Point
-        </Button>
-        <Button variant="contained">save in edit mode</Button>
-        <Button variant="contained" onClick={handleSave}>
-          Finalize agenda
-        </Button>
+
+        <div className="button-container">
+          <div className="button-group">
+            <Button variant="contained" onClick={handleAddActionPoint}>
+              Add Action Point
+            </Button>
+          </div>
+          <div className="button-group">
+            <Button
+              variant="contained"
+              onClick={() => setMemberModalOpen(true)}
+            >
+              Add Member
+            </Button>
+            <AddMemberModal
+              isOpen={isMemberModalOpen}
+              onClose={() => setMemberModalOpen(false)}
+              onSave={handleMemberSave}
+            />
+          </div>
+          <div className="button-group">
+            <Button variant="contained">save agenda</Button>
+            <Button variant="contained" onClick={handleSave}>
+              Finalize agenda
+            </Button>
+          </div>
+        </div>
       </Card>
     </div>
   );
