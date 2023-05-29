@@ -3,8 +3,10 @@ import Card from "@mui/material/Card";
 import { useLocation } from "react-router-dom";
 import {
   Button,
+  IconButton,
   List,
   ListItem,
+  Modal,
   Table,
   TableBody,
   TableCell,
@@ -13,22 +15,156 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+
 import "./style.css";
+import { Add } from "@mui/icons-material";
 
 const WriteProtocol = () => {
   const location = useLocation();
-  console.log("location.state:", location.state);
   const agenda = location.state?.agenda;
-  //   console.log("agenda:", agenda);
 
   const [meetingNotes, setMeetingNotes] = useState(
     Array(agenda.actionPoints.length).fill("")
   );
+  const [noteModalOpen, setNoteModalOpen] = useState(false);
+  const [noteText, setNoteText] = useState("");
+  const [noteItem, setNoteItem] = useState(null);
+  const [addNoteItem, setAddNoteItem] = useState(null);
+  const [editNoteItem, setEditNoteItem] = useState(null);
 
   const handleMeetingNotesChange = (event, index) => {
     const updatedMeetingNotes = [...meetingNotes];
     updatedMeetingNotes[index] = event.target.value;
     setMeetingNotes(updatedMeetingNotes);
+  };
+
+  const getNotesFromItem = (item) => {
+    if (item.subPointIndex !== undefined && item.commentIndex !== undefined) {
+      return agenda.actionPoints[item.actionPointIndex].comments[
+        item.commentIndex
+      ].notes[item.noteIndex]; 
+    } else if (item.subPointIndex !== undefined) {
+      return agenda.actionPoints[item.actionPointIndex].subPoints[
+        item.subPointIndex
+      ].notes[item.noteIndex];
+    }
+
+    return "";
+  };
+
+  const handleEditNote = (item, noteIndex) => {
+    const noteItem = { ...item, noteIndex };
+    setEditNoteItem(noteItem);
+    setNoteText(getNotesFromItem(noteItem));
+    setNoteItem(noteItem);
+    setNoteModalOpen(true);
+  };
+
+  const handleAddNote = (item) => {
+    const noteItem = { ...item };
+    setAddNoteItem(noteItem);
+    setNoteText("");
+    setNoteItem(noteItem);
+    setNoteModalOpen(true);
+  };
+
+  const handleNoteCancel = () => {
+    setNoteModalOpen(false);
+    setNoteText("");
+    setNoteItem(null);
+  };
+
+  const handleNoteSave = () => {
+    const updatedNotes = noteText.split("\n");
+
+    if (editNoteItem !== null) {
+      const { actionPointIndex, subPointIndex, commentIndex, noteIndex } =
+        editNoteItem;
+      const updatedAgenda = { ...agenda };
+
+      if (subPointIndex !== undefined && commentIndex === undefined) {
+        const selectedSubPoint =
+          updatedAgenda.actionPoints[actionPointIndex].subPoints[subPointIndex];
+        if (!selectedSubPoint.notes) {
+          selectedSubPoint.notes = []; 
+        }
+        selectedSubPoint.notes[noteIndex] = updatedNotes;
+      } else if (subPointIndex === undefined && commentIndex !== undefined) {
+        const selectedComment =
+          updatedAgenda.actionPoints[actionPointIndex].comments[commentIndex];
+        if (!selectedComment.notes) {
+          selectedComment.notes = []; // 
+        }
+        selectedComment.notes[noteIndex] = updatedNotes;
+      }
+
+      const updatedMeetingNotes = [...meetingNotes];
+      updatedMeetingNotes[actionPointIndex] = updatedNotes.join("\n");
+      setMeetingNotes(updatedMeetingNotes);
+
+      setEditNoteItem(null);
+      setNoteItem(null);
+      setNoteModalOpen(false);
+    } else if (addNoteItem !== null) {
+      const { actionPointIndex, subPointIndex, commentIndex } = addNoteItem;
+      const updatedAgenda = { ...agenda };
+
+      if (subPointIndex !== undefined && commentIndex === undefined) {
+        const selectedSubPoint =
+          updatedAgenda.actionPoints[actionPointIndex].subPoints[subPointIndex];
+        if (!selectedSubPoint.notes) {
+          selectedSubPoint.notes = [];
+        }
+        selectedSubPoint.notes.push(updatedNotes);
+      } else if (subPointIndex === undefined && commentIndex !== undefined) {
+        const selectedComment =
+          updatedAgenda.actionPoints[actionPointIndex].comments[commentIndex];
+        if (!selectedComment.notes) {
+          selectedComment.notes = []; 
+        }
+        selectedComment.notes.push(updatedNotes);
+      }
+
+      const updatedMeetingNotes = [...meetingNotes];
+      updatedMeetingNotes[actionPointIndex] = updatedNotes.join("\n");
+      setMeetingNotes(updatedMeetingNotes);
+
+      setAddNoteItem(null);
+      setNoteItem(null);
+      setNoteModalOpen(false);
+    }
+  };
+
+  const handleDeleteNote = (item, noteIndex) => {
+    if (item.notes) {
+      const updatedNotes = item.notes.filter((_, index) => index !== noteIndex);
+      item.notes = updatedNotes;
+
+      const updatedActionPoints = [...agenda.actionPoints];
+      const selectedActionPoint = updatedActionPoints[item.actionPointIndex];
+
+      if (item.hasOwnProperty("subPointIndex")) {
+        const selectedSubPoint =
+          selectedActionPoint.subPoints[item.subPointIndex];
+        selectedSubPoint.notes = updatedNotes;
+        selectedActionPoint.subPoints[item.subPointIndex] = selectedSubPoint;
+      } else if (item.hasOwnProperty("commentIndex")) {
+        const selectedComment = selectedActionPoint.comments[item.commentIndex];
+        selectedComment.notes = updatedNotes;
+        selectedActionPoint.comments[item.commentIndex] = selectedComment;
+      }
+
+      updatedActionPoints[item.actionPointIndex] = selectedActionPoint;
+      const updatedAgenda = { ...agenda, actionPoints: updatedActionPoints };
+      console.log("Updated Agenda:", updatedAgenda);
+
+      const updatedMeetingNotes = [...meetingNotes];
+      updatedMeetingNotes[item.actionPointIndex] = updatedNotes.join("\n");
+      setMeetingNotes(updatedMeetingNotes);
+    }
   };
 
   if (!agenda) {
@@ -39,13 +175,17 @@ const WriteProtocol = () => {
     const protocol = {
       agendaPoints: agenda.actionPoints.map((actionPoint, index) => ({
         title: actionPoint.title,
-        subPoints: actionPoint.subPoints.map((subPoint) => subPoint.title),
-        comments: actionPoint.comments.map((comment) => comment.title),
-        meetingNotes: meetingNotes[index], // Include meeting notes for each agenda item
+        subPoints: actionPoint.subPoints.map((subPoint) => ({
+          ...subPoint,
+          notes: subPoint.notes || [],
+        })),
+        comments: actionPoint.comments.map((comment) => ({
+          ...comment,
+          notes: comment.notes || [],
+        })),
+        meetingNotes: meetingNotes[index],
       })),
     };
-
-    // Do something with the protocol object, e.g., send it to an API
 
     console.log("Protocol:", protocol);
   };
@@ -112,16 +252,13 @@ const WriteProtocol = () => {
                     Comments
                   </Typography>
                 </TableCell>
-                <TableCell>
-                  <Typography variant="h6" className="custom-h6">
-                    Meeting Notes
-                  </Typography>
-                </TableCell>
               </TableRow>
-              {agenda.actionPoints.map((actionPoint, index) => (
-                <TableRow key={index}>
+              {agenda.actionPoints.map((actionPoint, actionPointIndex) => (
+                <TableRow key={actionPointIndex}>
                   <TableCell>
-                    <Typography variant="body1">{index + 1}</Typography>
+                    <Typography variant="body1">
+                      {actionPointIndex + 1}
+                    </Typography>
                   </TableCell>
                   <TableCell>
                     <Typography variant="h6" className="agenda-item-title">
@@ -130,29 +267,109 @@ const WriteProtocol = () => {
                   </TableCell>
                   <TableCell>
                     <List>
-                      {actionPoint.subPoints.map((subPoint, subIndex) => (
-                        <ListItem key={subIndex}>{subPoint.title}</ListItem>
+                      {actionPoint.subPoints.map((subPoint, subPointIndex) => (
+                        <div key={subPointIndex}>
+                          <ListItem>
+                            {subPoint.title}
+                            <IconButton
+                              variant="outlined"
+                              size="small"
+                              onClick={() =>
+                                handleAddNote({
+                                  actionPointIndex,
+                                  subPointIndex,
+                                })
+                              }
+                            >
+                              <AddIcon />
+                            </IconButton>
+                          </ListItem>
+                          {subPoint.notes && (
+                            <div className="note-list">
+                              {subPoint.notes.map((note, noteIndex) => (
+                                <ListItem key={noteIndex}>
+                                  {note}
+                                  <IconButton
+                                    variant="outlined"
+                                    size="small"
+                                    onClick={() =>
+                                      handleEditNote(
+                                        { actionPointIndex, subPointIndex },
+                                        noteIndex
+                                      )
+                                    }
+                                  >
+                                    <EditIcon />
+                                  </IconButton>
+                                  <IconButton
+                                    variant="outlined"
+                                    size="small"
+                                    onClick={() =>
+                                      handleDeleteNote(subPoint, noteIndex)
+                                    }
+                                  >
+                                    <DeleteIcon />
+                                  </IconButton>
+                                </ListItem>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       ))}
                     </List>
                   </TableCell>
                   <TableCell>
                     <List>
                       {actionPoint.comments.map((comment, commentIndex) => (
-                        <ListItem key={commentIndex}>{comment.title}</ListItem>
+                        <div key={commentIndex}>
+                          <ListItem>
+                            {comment.title}
+                            <IconButton
+                              variant="outlined"
+                              size="small"
+                              onClick={() =>
+                                handleAddNote({
+                                  actionPointIndex,
+                                  commentIndex,
+                                })
+                              }
+                            >
+                              <AddIcon />
+                            </IconButton>
+                          </ListItem>
+                          {comment.notes && (
+                            <div className="note-list">
+                              {comment.notes.map((note, noteIndex) => (
+                                <ListItem key={noteIndex}>
+                                  {note}
+                                  <IconButton
+                                    variant="outlined"
+                                    size="small"
+                                    onClick={() =>
+                                      handleEditNote(
+                                        { actionPointIndex, commentIndex },
+                                        noteIndex
+                                      )
+                                    }
+                                  >
+                                    <EditIcon />
+                                  </IconButton>
+                                  <IconButton
+                                    variant="outlined"
+                                    size="small"
+                                    onClick={() =>
+                                      handleDeleteNote(comment, noteIndex)
+                                    }
+                                  >
+                                    <DeleteIcon />
+                                  </IconButton>
+                                </ListItem>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       ))}
                     </List>
-                  </TableCell>
-                  <TableCell>
-                    <TextField
-                      value={meetingNotes[index] || ""}
-                      onChange={(event) =>
-                        handleMeetingNotesChange(event, index)
-                      }
-                      label="Meeting Notes"
-                      multiline
-                      rows={4}
-                      variant="outlined"
-                    />
                   </TableCell>
                 </TableRow>
               ))}
@@ -168,6 +385,21 @@ const WriteProtocol = () => {
           ))}
         </List>
       </Card>
+      <Modal open={noteModalOpen} onClose={handleNoteCancel}>
+        <div className="note-modal">
+          <TextField
+            value={noteText}
+            onChange={(event) => setNoteText(event.target.value)}
+            label="Add Note"
+            multiline
+            rows={4}
+            variant="outlined"
+          />
+          <Button variant="contained" onClick={handleNoteSave}>
+            Save
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };
