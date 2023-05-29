@@ -1,0 +1,17 @@
+#DateCell{
+    /* display: flex;
+    flex-direction: column;
+    align-items: center; */
+}
+#tableContainer{
+    /* margin-left: 10px;
+    margin-right: 100px;
+    margin-top: 10px;
+    margin-bottom: 10px */
+}
+#tableParent{
+    margin-left: 5vw;
+    margin-right: 5vw;
+    margin-top: 10px;
+    margin-bottom: 10px
+}

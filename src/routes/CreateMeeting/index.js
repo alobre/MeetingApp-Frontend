@@ -21,6 +21,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import "./style.css";
 import AddMemberModal from "components/AddMember";
+import NotificationScreen from "routes/Notification";
 
 // const users = ["Amelie", "Philipp", "Johanna", "Ana", "Florian"];
 
@@ -67,7 +68,15 @@ const MeetingForm = () => {
     };
 
     console.log(JSON.stringify(meetingData));
-
+    /*
+    members.forEach((member) => {
+      console.log("Meeting Title: " + meetingData.title + "invited members " + JSON.stringify(members));
+      const message = `You have been invited to a meeting "` + meetingData.title + '" scheduled on: ' + meetingData.date + ' at ' + meetingData.time;
+      const tmpMember: string = member;
+      //send to db in future
+      //addNotification(tmpMember.toString().toLowerCase(), message, meetingData.date, meetingData.time);
+    });  */
+       
     // Reset all form inputs to initial state
     setAddress("");
     setBuilding("");

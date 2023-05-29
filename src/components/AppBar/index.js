@@ -39,6 +39,8 @@ const NavBar = () => {
   // function for logout button
   const logout = () => {
     localStorage.removeItem("authenticated");
+    localStorage.removeItem("loggedUser");
+
     setisLogged(false);
   };
 

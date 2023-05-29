@@ -14,7 +14,10 @@ const handleLogin = (username, password, handleErrorCallback) =>{
     if (account) {
       if (account.password === password) {
         localStorage.setItem("authenticated", true);
+        localStorage.setItem("loggedUser", username)
         window.dispatchEvent(new Event("storage"));
+        console.log("Set loggedUser in localStorage: " + username);
+        console.log("loggedUser localstorage: " + localStorage.getItem("loggedUser"));
         return {success: true}
       } else {
         // invalid pass
