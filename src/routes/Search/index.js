@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "./style.css";
 import MeetingTable from "components/MeetingTable";
 import { TextField, Button, List, ListItem, ListItemText } from '@material-ui/core';
 import meetings from 'routes/Home'; // Import the meetings array
+import { useLocation } from "react-router-dom";
 
 
 function SearchScreen() {
+  const state = useLocation();
+  const meetings = state.state.meetings;
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
@@ -16,7 +19,9 @@ function SearchScreen() {
     );
     setSearchResults(results);
   };
-
+  useEffect(()=>{
+    console.log(state.state.meetings)
+  }, [state])
   return (
     <div>
       <TextField
@@ -29,11 +34,7 @@ function SearchScreen() {
       </Button>
 
       <List>
-        {searchResults.map(meeting => (
-          <ListItem key={meeting.id}>
-            <ListItemText primary={meeting.title} secondary={meeting.description} />
-          </ListItem>
-        ))}
+      <MeetingTable data={searchResults} />
       </List>
     </div>
   );

@@ -9,7 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { useHistory } from "react-router";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // den data Parameter wird erst beim Home-ScreenÜbergeben.
 const MeetingTable = ({ data }) => {

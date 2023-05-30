@@ -18,8 +18,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import HomeIcon from "@mui/icons-material/Home";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { useNavigate } from "react-router-dom";
 
-const NavBar = () => {
+const NavBar = ({meetings}) => {
   const [isLogged, setisLogged] = useState(
     localStorage.getItem("authenticated") === "true"
   );
@@ -43,6 +44,12 @@ const NavBar = () => {
 
     setisLogged(false);
   };
+  
+  // const navigate = useNavigate();
+  // const navigateSearch = () => {
+  //   console.log('click', meetings)
+  //   navigate("/Search", { state: meetings });
+  // };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -56,10 +63,11 @@ const NavBar = () => {
             aria-label="searchButton"
             color="inherit"
             id="searchButton"
-            to={"/Search"}
+            to="/Search" state={{ meetings }}
             component={Link}
           >
-            <SearchIcon />
+              <SearchIcon />
+            
           </IconButton>
           <IconButton color="inherit" to={"/"} component={Link}>
             <HomeIcon></HomeIcon>
