@@ -55,3 +55,26 @@ ul {
   display: flex;
   align-items: center;
 }
+
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  max-width: 50vw; /* sets a maximum width for the modal */
+  width: 50vw;
+}
+.modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalTextField {
+  max-width: 30vw; /* sets a maximum width for the modal */
+  width: 30vw;
+}
