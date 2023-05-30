@@ -16,6 +16,7 @@ import "@fontsource/roboto/700.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import WriteProtocol from "routes/WriteProtocol";
+import ViewProtocol from "routes/ViewProtocol";
 
 // const router = createBrowserRouter([
 //   {
@@ -42,6 +43,7 @@ function App() {
           <Route path="/EditAgenda" element={<EditAgenda />} />
           <Route path="/ViewAgenda" element={<ViewAgenda />} />
           <Route path="/WriteProtocol" element={<WriteProtocol />} />
+          <Route path="/ViewProtocol" element={<ViewProtocol />} />
         </Routes>
         {/* <RouterProvider router={router} /> */}
       </Router>

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import { useLocation } from "react-router-dom";
+import ViewProtocol from "routes/ViewProtocol";
+
 import {
   Button,
   IconButton,
@@ -18,11 +20,13 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
+import { useNavigate, Navigate } from "react-router-dom";
 
 import "./style.css";
 import { Add } from "@mui/icons-material";
 
 const WriteProtocol = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const agenda = location.state?.agenda;
 
@@ -45,7 +49,7 @@ const WriteProtocol = () => {
     if (item.subPointIndex !== undefined && item.commentIndex !== undefined) {
       return agenda.actionPoints[item.actionPointIndex].comments[
         item.commentIndex
-      ].notes[item.noteIndex]; 
+      ].notes[item.noteIndex];
     } else if (item.subPointIndex !== undefined) {
       return agenda.actionPoints[item.actionPointIndex].subPoints[
         item.subPointIndex
@@ -89,14 +93,14 @@ const WriteProtocol = () => {
         const selectedSubPoint =
           updatedAgenda.actionPoints[actionPointIndex].subPoints[subPointIndex];
         if (!selectedSubPoint.notes) {
-          selectedSubPoint.notes = []; 
+          selectedSubPoint.notes = [];
         }
         selectedSubPoint.notes[noteIndex] = updatedNotes;
       } else if (subPointIndex === undefined && commentIndex !== undefined) {
         const selectedComment =
           updatedAgenda.actionPoints[actionPointIndex].comments[commentIndex];
         if (!selectedComment.notes) {
-          selectedComment.notes = []; // 
+          selectedComment.notes = []; //
         }
         selectedComment.notes[noteIndex] = updatedNotes;
       }
@@ -123,7 +127,7 @@ const WriteProtocol = () => {
         const selectedComment =
           updatedAgenda.actionPoints[actionPointIndex].comments[commentIndex];
         if (!selectedComment.notes) {
-          selectedComment.notes = []; 
+          selectedComment.notes = [];
         }
         selectedComment.notes.push(updatedNotes);
       }
@@ -173,6 +177,10 @@ const WriteProtocol = () => {
 
   const handleSaveProtocol = () => {
     const protocol = {
+      meetingDate: agenda.meetingDate,
+      meetingTime: agenda.meetingTime,
+      meetingPlace: agenda.meetingPlace,
+      members: agenda.members,
       agendaPoints: agenda.actionPoints.map((actionPoint, index) => ({
         title: actionPoint.title,
         subPoints: actionPoint.subPoints.map((subPoint) => ({
@@ -186,6 +194,7 @@ const WriteProtocol = () => {
         meetingNotes: meetingNotes[index],
       })),
     };
+    navigate("/ViewProtocol", { state: { protocol } }); // Pass the agenda object in the state
 
     console.log("Protocol:", protocol);
   };
@@ -385,9 +394,10 @@ const WriteProtocol = () => {
           ))}
         </List>
       </Card>
-      <Modal open={noteModalOpen} onClose={handleNoteCancel}>
-        <div className="note-modal">
+      <Modal open={noteModalOpen} onClose={handleNoteCancel} className="modal">
+        <div className="modalBody">
           <TextField
+            className="modalTextField"
             value={noteText}
             onChange={(event) => setNoteText(event.target.value)}
             label="Add Note"
