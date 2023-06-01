@@ -1,3 +1,10 @@
 .notes-text {
   font-weight: bold;
 }
+.note-list {
+  padding-left: 20px; 
+}
+
+.note-list li {
+  font-style: italic; 
+}

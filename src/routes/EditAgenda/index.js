@@ -136,6 +136,37 @@ const MeetingDetails = () => {
     setMembers(selectedMembers);
   };
 
+  const MemberList = ({ members }) => {
+    const [isDropdownOpen, setDropdownOpen] = useState(false);
+  
+    const handleDropdownClick = () => {
+      setDropdownOpen(!isDropdownOpen);
+    };
+
+    return (
+      <Card className="cardMemberList" onClick={handleDropdownClick}>
+        <h3>Members:</h3>
+        {isDropdownOpen && (
+          <ul>
+            {members.map((member, index) => (
+              <li key={index}>{member.name}</li>
+            ))}
+          </ul>
+        )}
+        {!isDropdownOpen && (
+          <p>
+            {members.map((member, index) => (
+              <span key={index}>
+                {member.name}
+                {index !== members.length - 1 ? ", " : ""}
+              </span>
+            ))}
+          </p>
+        )}
+      </Card>
+    );
+  };
+
   return (
     <div>
       <Card className="cardParent">
@@ -152,23 +183,30 @@ const MeetingDetails = () => {
             Invite Members
           </Button> */}
         </div>
-        <TextField
-          type="time"
-          label="Meeting Time"
-          value={meetingTime}
-          onChange={handleMeetingTimeChange}
-        />
-        <TextField
-          label="Meeting Date"
-          type="date"
-          value={meetingDate}
-          onChange={handleMeetingDateChange}
-        />
-        <TextField
-          label="Meeting Place"
-          value={meetingPlace}
-          onChange={handleMeetingPlaceChange}
-        />
+        <Card className="cardMeetingDetails">
+          <div className="meetingDetailsContainer">
+            <TextField
+              type="time"
+              label="Meeting Time"
+              value={meetingTime}
+              onChange={handleMeetingTimeChange}
+            />
+            <TextField
+              label="Meeting Date"
+              type="date"
+              value={meetingDate}
+              onChange={handleMeetingDateChange}
+            />
+            <TextField
+              label="Meeting Place"
+              value={meetingPlace}
+              onChange={handleMeetingPlaceChange}
+            />
+          </div> 
+          <div className="memberListContainer">
+            <MemberList members={members} />
+          </div>
+        </Card>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
