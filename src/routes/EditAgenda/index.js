@@ -23,6 +23,11 @@ import { useLocation } from "react-router-dom";
 import AddMemberModal from "components/AddMember";
 import { useNavigate, Navigate } from "react-router-dom";
 
+import { AvatarGroup } from '@mui/material';
+import { Avatar } from '@mui/material';
+import Stack from '@mui/material/Stack';
+
+
 const MeetingDetails = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -32,6 +37,54 @@ const MeetingDetails = () => {
   const [actionPoints, setActionPoints] = useState(state.actionPoints);
   const [isMemberModalOpen, setMemberModalOpen] = useState(false);
   const [members, setMembers] = useState([]);
+
+
+
+
+
+  // const MeetingDetails = () => {
+  //   useEffect(() => {
+  //     const avatarContainers = document.querySelectorAll('.avatar-container');
+  
+  //     avatarContainers.forEach((container) => {
+  //       const avatar = container.querySelector('img');
+  //       const hoverLetter = container.querySelector('.hover-letter');
+  
+  //       hoverLetter.addEventListener('mouseover', () => {
+  //         avatar.src = 'new-avatar.jpg';
+  //       });
+  
+  //       hoverLetter.addEventListener('mouseout', () => {
+  //         avatar.src = '/public/Foxl.jpg'; 
+  //       });
+  //     });
+  //   }, []);
+
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const avatarContainers = document.querySelectorAll('.avatar-container');
+    
+      avatarContainers.forEach((container) => {
+        const avatar = container.querySelector('jpg'); // img
+        const hoverLetter = container.querySelector('.hover-letter');
+    
+        hoverLetter.addEventListener('mouseover', () => {
+          avatar.src = 'public/Foxl.jpg';
+        });
+    
+        hoverLetter.addEventListener('mouseout', () => {
+          avatar.src = 'public/Foxl.jpg'; // should be the image
+         
+    
+        });
+      });
+    });
+
+
+    
+    
+
 
   const handleMeetingTimeChange = (event) => {
     setMeetingTime(event.target.value);
@@ -183,6 +236,9 @@ const MeetingDetails = () => {
             Invite Members
           </Button> */}
         </div>
+
+
+     
         <Card className="cardMeetingDetails">
           <div className="meetingDetailsContainer">
             <TextField
@@ -206,6 +262,34 @@ const MeetingDetails = () => {
           <div className="memberListContainer">
             <MemberList members={members} />
           </div>
+
+{/* hier-------------------------------------------------------------------------------------------------------------------- */}
+
+<div>
+<AvatarGroup max={5}>
+  <div class="avatar-container">
+    <Avatar alt="Amelie" src="/static/images/avatar/2.jpg" sx={{ width: 42, height: 42 }}/>
+    <span class="hover-letter">A</span>
+  </div>
+  <div class="avatar-container">
+    <Avatar alt="Philipp" src="/static/images/avatar/3.jpg" sx={{ width: 42, height: 42 }}/>
+    <span class="hover-letter">P</span>
+  </div>
+  <div class="avatar-container">
+    <Avatar alt="Ana" src="/static/images/avatar/6.jpg" sx={{ width: 42, height: 42 }}/>
+    <span class="hover-letter">AM</span>
+  </div>
+  <div class="avatar-container">
+    <Avatar alt="F. E." src="/static/images/avatar/4.jpg"sx={{ width: 42, height: 42 }} />
+    <span class="hover-letter">F</span>
+  </div>
+  <div class="avatar-container">
+    <Avatar alt="Johanna" src="/public/Foxl.jpg" sx={{ width: 42, height: 42 }}/>
+    <span class="hover-letter">J</span>
+  </div>
+</AvatarGroup>
+</div>
+
         </Card>
         <TableContainer component={Paper}>
           <Table>

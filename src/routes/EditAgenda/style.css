@@ -46,3 +46,29 @@
 .memberListContainer {
   
 }
+
+
+
+  .avatar-container {
+    position: relative;
+    display: inline-block;
+    /* margin-right: 10px; */
+    text-align: left;
+  }
+
+  .hover-letter {
+    position: absolute;
+    top: 50%;
+    /* left: 50%; */
+    transform: translate(-50%, -50%);
+    font-size: 16px; 
+    color: white;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .avatar-container:hover .hover-letter {
+    opacity: 1;
+  }
+
