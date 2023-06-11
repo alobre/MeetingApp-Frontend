@@ -42,6 +42,7 @@ const MeetingDetails = () => {
 
 
 
+
   // const MeetingDetails = () => {
   //   useEffect(() => {
   //     const avatarContainers = document.querySelectorAll('.avatar-container');
@@ -51,7 +52,7 @@ const MeetingDetails = () => {
   //       const hoverLetter = container.querySelector('.hover-letter');
   
   //       hoverLetter.addEventListener('mouseover', () => {
-  //         avatar.src = 'new-avatar.jpg';
+  //         avatar.src = '';
   //       });
   
   //       hoverLetter.addEventListener('mouseout', () => {
@@ -62,21 +63,21 @@ const MeetingDetails = () => {
 
 
 
+
+  // useEffect(() => {
   document.addEventListener('DOMContentLoaded', function() {
     const avatarContainers = document.querySelectorAll('.avatar-container');
     
       avatarContainers.forEach((container) => {
-        const avatar = container.querySelector('jpg'); // img
+        const avatar = container.querySelector("img"); // 'img' // jpg
         const hoverLetter = container.querySelector('.hover-letter');
     
         hoverLetter.addEventListener('mouseover', () => {
-          avatar.src = 'public/Foxl.jpg';
+          avatar.src = '/public/Foxl.jpg';
         });
-    
+       // public\Foxl.jpg
         hoverLetter.addEventListener('mouseout', () => {
-          avatar.src = 'public/Foxl.jpg'; // should be the image
-         
-    
+          avatar.src = '/public/Foxl.jpg'; // should be the image
         });
       });
     });
@@ -284,8 +285,8 @@ const MeetingDetails = () => {
     <span class="hover-letter">F</span>
   </div>
   <div class="avatar-container">
-    <Avatar alt="Johanna" src="/public/Foxl.jpg" sx={{ width: 42, height: 42 }}/>
-    <span class="hover-letter">J</span>
+    <Avatar alt="Johanna" src="/public/Foxl.jpg" sx={{ width: 42, height: 42 }}/> 
+    <span class="hover-letter">Jo</span>
   </div>
 </AvatarGroup>
 </div>

@@ -21,6 +21,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import "./style.css";
 import AddMemberModal from "components/AddMember";
+import AddMeetingSerie from "components/AddMeetingSerie";
 import NotificationScreen from "routes/Notification";
 
 // const users = ["Amelie", "Philipp", "Johanna", "Ana", "Florian"];
@@ -46,6 +47,16 @@ const MeetingForm = () => {
   const [isDateTimeModalOpen, setDateTimeModalOpen] = useState(false);
   const [isMemberModalOpen, setMemberModalOpen] = useState(false);
   const [members, setMembers] = useState([]);
+  // ToTest search for meetingSerie
+const [meetingSerie, setMeetingSerie] = useState([]);
+
+  // ToTest search for meetingSerie
+const handleToSearchForMeetingSerie = () => {
+  // console.log("closing");
+  setMeetingSerie([]     ); // oder noch ein bool einrichten 
+}
+
+
 
   const handleAddressSave = () => {
     console.log("closing");
@@ -56,6 +67,8 @@ const MeetingForm = () => {
     setDateTimeModalOpen(false);
   };
 
+
+
   const handleSaveMeeting = () => {
     const meetingData = {
       address,
@@ -65,8 +78,16 @@ const MeetingForm = () => {
       time: time ? dayjs(time).format("HH:mm") : null,
       title,
       members,
+      meetingSerie: [], // seperieren, weil es sich dann ein JArray daruas erstellet ? // mal ein array dafr 
     };
 
+    // toTst.
+    if (meetingSerie) {
+      // Wenn eine Meeting-Serie ausgewählt wurde, füg in [] hinzu
+      meetingData.meetingSeries.push(meetingSerie);
+    }
+    
+    
     console.log(JSON.stringify(meetingData));
     /*
     members.forEach((member) => {
@@ -85,6 +106,7 @@ const MeetingForm = () => {
     setTime(null);
     setTitle("");
     setMembers([]);
+    setMeetingSerie([meetingData]); // ist alles von einem meeting in meetingData saved ?
   };
 
   const handleMemberSave = (selectedMembers) => {
@@ -199,10 +221,23 @@ const MeetingForm = () => {
             />
           </div>
 
+{/* hier --------------------------------------- */}
+          {/* <div className="form-groupII">
+            <Button onClick={() => setMemberModalOpen(true)}>Add Member</Button>
+            <AddMemberModal
+              isOpen={isMemberModalOpen}
+              onClose={() => setMemberModalOpen(false)}
+              // users={users}
+              onSave={handleMemberSave}
+            />
+          </div> */}
+
           <div className="form-group">
             <Button variant="contained" onClick={handleSaveMeeting}>
               Save Meeting
             </Button>
+
+
           </div>
         </div>
       </Card>

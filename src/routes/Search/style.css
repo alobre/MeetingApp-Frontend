@@ -1,0 +1,74 @@
+ /* .search-screen {
+    text-align: center;
+     margin-top: 70px; 
+   }
+  
+  .search-screen .text-field {
+    margin-bottom: 10px;
+  }
+  
+  .search-screen .button {
+    margin-bottom: 20px;
+     margin-top: 120px; 
+   }
+  
+  .search-screen .list {
+    max-width: 500px;
+    margin: 0 auto;
+  }  */
+
+
+
+  #ButtonThePrettier {
+     background-color: rgba(44, 138, 185, 0.274);
+    border: 1px solid rgb(254, 254, 254);
+    border-radius: 8px;
+    padding: 8px; 
+    margin-top: 20px auto;
+
+  }
+
+
+#StylingSearchInTheMiddle {
+     text-align: center;  
+    /* margin-left: 50%; */
+    margin-top: 10px;
+    /* margin-left: 100px; */
+    -ms-flex-align: center;
+
+
+text-align: center;
+
+/* bissli farbe */ 
+/* background-color: rgba(24, 224, 231, 0.142); */ 
+background-color: rgba(3, 47, 109, 0.142);
+/* padding ist für die farbbox */ 
+padding: 200px;
+
+ margin: 50px auto; /* centers the form on the screen and adds space around it */
+
+ /* border ausprobieren */ 
+ background-color: white;
+  border: 1px solid white;
+  border-radius: 4px;
+  padding: 8px;
+
+
+
+
+
+/* oder so 
+text-align: center;
+background-color: white;
+padding: 20px;
+*/ 
+
+  }
+
+
+
+
+  #StylingSearchInTheMiddle .search-textfield {
+    background-color: white;
+    /* Add any other desired styling */
+  }
