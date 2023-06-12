@@ -99,6 +99,21 @@ const WriteProtocol = () => {
     setNewActionPointText("");
   };
 
+  const handleEditSubPoint = (actionPointIndex, subPointIndex) => {
+    const updatedAgenda = { ...newAgenda };
+    const selectedSubPoint =
+      updatedAgenda.actionPoints[actionPointIndex].subPoints[subPointIndex];
+    setNewActionPointText(selectedSubPoint.title);
+    setAddNoteItem({ actionPointIndex, subPointIndex });
+  };
+
+  const handleDeleteSubPoint = (actionPointIndex, subPointIndex) => {
+    const updatedAgenda = { ...newAgenda };
+    const selectedActionPoint = updatedAgenda.actionPoints[actionPointIndex];
+    selectedActionPoint.subPoints.splice(subPointIndex, 1);
+    setNewAgenda(updatedAgenda);
+  };
+
   const handleMeetingNotesChange = (event, index) => {
     const updatedMeetingNotes = [...meetingNotes];
     updatedMeetingNotes[index] = event.target.value;
@@ -350,6 +365,18 @@ const WriteProtocol = () => {
                               }
                             >
                               <AddIcon />
+                            </IconButton>
+                            <IconButton
+                              variant="outlined"
+                              size="small"
+                              onClick={() =>
+                                handleDeleteSubPoint(
+                                  actionPointIndex,
+                                  subPointIndex
+                                )
+                              }
+                            >
+                              <DeleteIcon />
                             </IconButton>
                           </ListItem>
                           {subPoint.notes && (
