@@ -38,6 +38,66 @@ const WriteProtocol = () => {
   const [noteItem, setNoteItem] = useState(null);
   const [addNoteItem, setAddNoteItem] = useState(null);
   const [editNoteItem, setEditNoteItem] = useState(null);
+  // const [newSubPointText, setNewSubPointText] = useState("");
+  const [subPointTexts, setSubPointTexts] = useState(
+    Array(agenda.actionPoints.length).fill("")
+  );
+  const [newAgenda, setNewAgenda] = useState(agenda);
+  const [newActionPointText, setNewActionPointText] = useState("");
+
+  const handleAddSubPoint = (actionPointIndex) => {
+    const updatedAgenda = { ...agenda };
+    const selectedActionPoint = updatedAgenda.actionPoints[actionPointIndex];
+
+    if (!selectedActionPoint.subPoints) {
+      selectedActionPoint.subPoints = [];
+    }
+
+    const newSubPoint = {
+      title: subPointTexts[actionPointIndex],
+      notes: [],
+    };
+
+    selectedActionPoint.subPoints.push(newSubPoint);
+
+    setNewAgenda(updatedAgenda);
+    setSubPointTexts((prevTexts) => {
+      const newTexts = [...prevTexts];
+      newTexts[actionPointIndex] = "";
+      return newTexts;
+    });
+  };
+
+  // const handleAddSubPoint = (actionPointIndex) => {
+  //   const updatedAgenda = { ...agenda };
+  //   const selectedActionPoint = updatedAgenda.actionPoints[actionPointIndex];
+
+  //   if (!selectedActionPoint.subPoints) {
+  //     selectedActionPoint.subPoints = [];
+  //   }
+
+  //   const newSubPoint = {
+  //     title: newSubPointText,
+  //     notes: [],
+  //   };
+
+  //   selectedActionPoint.subPoints.push(newSubPoint);
+
+  //   setNewAgenda(updatedAgenda);
+  //   setNewSubPointText("");
+  // };
+
+  const handleAddActionPoint = () => {
+    const updatedAgenda = { ...newAgenda };
+    const newActionPoint = {
+      title: newActionPointText,
+      subPoints: [],
+      comments: [],
+    };
+    updatedAgenda.actionPoints.push(newActionPoint);
+    setNewAgenda(updatedAgenda);
+    setNewActionPointText("");
+  };
 
   const handleMeetingNotesChange = (event, index) => {
     const updatedMeetingNotes = [...meetingNotes];
@@ -71,7 +131,6 @@ const WriteProtocol = () => {
     const noteItem = { ...item };
     setAddNoteItem(noteItem);
     setNoteText("");
-    setNoteItem(noteItem);
     setNoteModalOpen(true);
   };
 
@@ -325,6 +384,29 @@ const WriteProtocol = () => {
                           )}
                         </div>
                       ))}
+                      <ListItem>
+                        <TextField
+                          className="new-subpoint-input"
+                          value={subPointTexts[actionPointIndex]}
+                          onChange={(event) =>
+                            setSubPointTexts((prevTexts) => {
+                              const newTexts = [...prevTexts];
+                              newTexts[actionPointIndex] = event.target.value;
+                              return newTexts;
+                            })
+                          }
+                          placeholder="Add sub-point"
+                          variant="outlined"
+                          size="small"
+                        />
+                        <IconButton
+                          variant="outlined"
+                          size="small"
+                          onClick={() => handleAddSubPoint(actionPointIndex)}
+                        >
+                          <AddIcon />
+                        </IconButton>
+                      </ListItem>
                     </List>
                   </TableCell>
                   <TableCell>
@@ -382,6 +464,27 @@ const WriteProtocol = () => {
                   </TableCell>
                 </TableRow>
               ))}
+              <TableRow>
+                <TableCell>
+                  <TextField
+                    className="new-actionpoint-input"
+                    value={newActionPointText}
+                    onChange={(event) =>
+                      setNewActionPointText(event.target.value)
+                    }
+                    placeholder="Add action point"
+                    variant="outlined"
+                    size="small"
+                  />
+                  <IconButton
+                    variant="outlined"
+                    size="small"
+                    onClick={handleAddActionPoint}
+                  >
+                    <AddIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
