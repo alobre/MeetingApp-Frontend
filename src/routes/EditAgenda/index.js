@@ -62,28 +62,7 @@ const MeetingDetails = () => {
   //   }, []);
 
 
-
-
-  // useEffect(() => {
-  document.addEventListener('DOMContentLoaded', function() {
-    const avatarContainers = document.querySelectorAll('.avatar-container');
-    
-      avatarContainers.forEach((container) => {
-        const avatar = container.querySelector("img"); // 'img' // jpg
-        const hoverLetter = container.querySelector('.hover-letter');
-    
-        hoverLetter.addEventListener('mouseover', () => {
-          avatar.src = '/public/Foxl.jpg';
-        });
-       // public\Foxl.jpg
-        hoverLetter.addEventListener('mouseout', () => {
-          avatar.src = '/public/Foxl.jpg'; // should be the image
-        });
-      });
-    });
-
-
-    
+ 
     
 
 
@@ -198,12 +177,22 @@ const MeetingDetails = () => {
     };
 
     return (
+
+      // hier members sollten sich erzeugen. 
       <Card className="cardMemberList" onClick={handleDropdownClick}>
         <h3>Members:</h3>
         {isDropdownOpen && (
           <ul>
             {members.map((member, index) => (
-              <li key={index}>{member.name}</li>
+              <li key={index}>      <Avatar alt="Amelie" src="/static/images/avatar/2.jpg" sx={{ width: 42, height: 42 }}/>   {member.name}</li>
+            // <li >
+            // <div class="avatar-container">
+            
+            //     <span class="hover-letter">A</span>
+            //   </div>
+
+            // </li>
+
             ))}
           </ul>
         )}
@@ -264,32 +253,8 @@ const MeetingDetails = () => {
             <MemberList members={members} />
           </div>
 
-{/* hier-------------------------------------------------------------------------------------------------------------------- */}
 
-<div>
-<AvatarGroup max={5}>
-  <div class="avatar-container">
-    <Avatar alt="Amelie" src="/static/images/avatar/2.jpg" sx={{ width: 42, height: 42 }}/>
-    <span class="hover-letter">A</span>
-  </div>
-  <div class="avatar-container">
-    <Avatar alt="Philipp" src="/static/images/avatar/3.jpg" sx={{ width: 42, height: 42 }}/>
-    <span class="hover-letter">P</span>
-  </div>
-  <div class="avatar-container">
-    <Avatar alt="Ana" src="/static/images/avatar/6.jpg" sx={{ width: 42, height: 42 }}/>
-    <span class="hover-letter">AM</span>
-  </div>
-  <div class="avatar-container">
-    <Avatar alt="F. E." src="/static/images/avatar/4.jpg"sx={{ width: 42, height: 42 }} />
-    <span class="hover-letter">F</span>
-  </div>
-  <div class="avatar-container">
-    <Avatar alt="Johanna" src="/public/Foxl.jpg" sx={{ width: 42, height: 42 }}/> 
-    <span class="hover-letter">Jo</span>
-  </div>
-</AvatarGroup>
-</div>
+
 
         </Card>
         <TableContainer component={Paper}>
