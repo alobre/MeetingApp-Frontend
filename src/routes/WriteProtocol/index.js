@@ -24,6 +24,7 @@ import { useNavigate, Navigate } from "react-router-dom";
 
 import "./style.css";
 import { Add } from "@mui/icons-material";
+import MemberList from "components/MemberList";
 
 const WriteProtocol = () => {
   const navigate = useNavigate();
@@ -44,6 +45,21 @@ const WriteProtocol = () => {
   );
   const [newAgenda, setNewAgenda] = useState(agenda);
   const [newActionPointText, setNewActionPointText] = useState("");
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [membersToShow, setMembersToShow] = useState(3);
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+  const showAllMembers = () => {
+    setMembersToShow(agenda.members.length);
+    openModal();
+  };
 
   const handleAddSubPoint = (actionPointIndex) => {
     const updatedAgenda = { ...agenda };
@@ -275,6 +291,25 @@ const WriteProtocol = () => {
 
   return (
     <div>
+      <Card className="card-container">
+        <Typography variant="h5" className="members">
+          Members
+        </Typography>
+        <List>
+          {agenda.members.slice(0, 3).map((member, index) => (
+            <ListItem key={index}>{member.name}</ListItem>
+          ))}
+        </List>
+        <Button variant="outlined" onClick={showAllMembers}>
+          Show All Members
+        </Button>
+      </Card>
+
+      <MemberList
+        isOpen={isModalOpen}
+        closeModal={closeModal}
+        members={agenda.members}
+      />
       <Card className="card-container">
         <Typography variant="h2">Meeting Notes</Typography>
         <Button

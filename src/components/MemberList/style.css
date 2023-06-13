@@ -1,0 +1,48 @@
+.card-container {
+  width: 80%;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.table-container-details .MuiTypography-root {
+  font-weight: normal;
+  font-size: medium;
+}
+
+.agenda-items-header.MuiTypography-root {
+  margin-top: 20px;
+}
+
+.agenda-item-title.MuiTypography-root {
+  font-weight: normal;
+  font-size: medium;
+}
+
+.protocol.MuiButton-root {
+  margin-top: 20px;
+}
+
+.members.MuiTypography-root {
+  margin-top: 20px;
+}
+
+.custom-h6 {
+  font-weight: normal;
+}
+
+ul {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.modal-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  max-width: 50vw; /* sets a maximum width for the modal */
+  width: 50vw;
+}

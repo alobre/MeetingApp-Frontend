@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -12,8 +12,10 @@ import {
   TableContainer,
   TableRow,
   Typography,
+  Modal,
 } from "@mui/material";
 import "./style.css";
+import MemberList from "components/MemberList";
 
 const ViewAgenda = () => {
   const navigate = useNavigate();
@@ -21,6 +23,8 @@ const ViewAgenda = () => {
   console.log("location.state:", location.state);
   const agenda = location.state?.agenda;
   console.log("agenda:", agenda);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [membersToShow, setMembersToShow] = useState(3);
 
   if (!agenda) {
     return <div>No agenda found.</div>;
@@ -30,8 +34,45 @@ const ViewAgenda = () => {
     navigate("/WriteProtocol", { state: { agenda: agenda } });
   };
 
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+  const showAllMembers = () => {
+    setMembersToShow(agenda.members.length);
+    openModal();
+  };
+
+  const showFirstFiveMembers = () => {
+    setMembersToShow(5);
+    openModal();
+  };
+
   return (
     <div>
+      <Card className="card-container">
+        <Typography variant="h5" className="members">
+          Members
+        </Typography>
+        <List>
+          {agenda.members.slice(0, 3).map((member, index) => (
+            <ListItem key={index}>{member.name}</ListItem>
+          ))}
+        </List>
+        <Button variant="outlined" onClick={showAllMembers}>
+          Show All Members
+        </Button>
+      </Card>
+
+      <MemberList
+        isOpen={isModalOpen}
+        closeModal={closeModal}
+        members={agenda.members}
+      />
       <Card className="card-container">
         <Typography variant="h2">Agenda Details</Typography>
         <Button
@@ -122,14 +163,14 @@ const ViewAgenda = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <Typography variant="h5" className="members">
+        {/* <Typography variant="h5" className="members">
           Members
         </Typography>
         <List>
           {agenda.members.map((member, index) => (
             <ListItem key={index}>{member.name}</ListItem>
           ))}
-        </List>
+        </List>{" "} */}
       </Card>
     </div>
   );

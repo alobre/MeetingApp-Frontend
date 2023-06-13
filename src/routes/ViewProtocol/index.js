@@ -19,6 +19,7 @@ import {
 } from "@mui/material";
 import Card from "@mui/material/Card";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import MemberList from "components/MemberList";
 
 import "./style.css";
 
@@ -28,6 +29,21 @@ const ViewProtocol = () => {
   console.log("location.state:", location.state);
   const protocol = location.state?.protocol;
   console.log("protocol:", protocol);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [membersToShow, setMembersToShow] = useState(3);
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+  const showAllMembers = () => {
+    setMembersToShow(protocol.members.length);
+    openModal();
+  };
 
   if (!protocol) {
     return <div>No protocol found.</div>;
@@ -35,6 +51,25 @@ const ViewProtocol = () => {
 
   return (
     <div>
+      <Card className="card-container">
+        <Typography variant="h5" className="members">
+          Members
+        </Typography>
+        <List>
+          {protocol.members.slice(0, 3).map((member, index) => (
+            <ListItem key={index}>{member.name}</ListItem>
+          ))}
+        </List>
+        <Button variant="outlined" onClick={showAllMembers}>
+          Show All Members
+        </Button>
+      </Card>
+
+      <MemberList
+        isOpen={isModalOpen}
+        closeModal={closeModal}
+        members={protocol.members}
+      />
       <Card className="card-container">
         <Typography variant="h2">Meeting Protocol</Typography>
         <TableContainer className="table-container-details">
