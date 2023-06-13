@@ -17,6 +17,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import WriteProtocol from "routes/WriteProtocol";
 import ViewProtocol from "routes/ViewProtocol";
+import { Provider } from 'react-redux';
+import store from './redux/store';
+
 
 // const router = createBrowserRouter([
 //   {
@@ -185,7 +188,7 @@ function App() {
     },
   ]);
   return (
-    <div>
+    <Provider store={store}>
       <Router>
         <AppBar meetings={tableData}/>
 
@@ -202,7 +205,7 @@ function App() {
         </Routes>
         {/* <RouterProvider router={router} /> */}
       </Router>
-    </div>
+    </Provider>
   );
 }
 

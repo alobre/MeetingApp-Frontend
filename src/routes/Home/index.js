@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import style from "./style.css";
 import MeetingTable from "components/MeetingTable";
+import store, { increment, decrement } from 'redux/store';
+import { useSelector } from 'react-redux';
 
 const HomeScreen = () => {
   // const [authenticated, setauthenticated] = useState(null);
@@ -189,4 +191,5 @@ const HomeScreen = () => {
     );
   }
 };
+
 export default HomeScreen;
