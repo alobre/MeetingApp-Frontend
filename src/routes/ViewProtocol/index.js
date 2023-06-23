@@ -51,7 +51,7 @@ const ViewProtocol = () => {
 
   return (
     <div>
-      <Card className="card-container">
+      {/* <Card className="card-container">
         <Typography variant="h5" className="members">
           Members
         </Typography>
@@ -69,7 +69,7 @@ const ViewProtocol = () => {
         isOpen={isModalOpen}
         closeModal={closeModal}
         members={protocol.members}
-      />
+      /> */}
       <Card className="card-container">
         <Typography variant="h2">Meeting Protocol</Typography>
         <TableContainer className="table-container-details">
@@ -93,6 +93,28 @@ const ViewProtocol = () => {
                   <Typography variant="h6">{protocol.meetingPlace}</Typography>
                 </TableCell>
               </TableRow>
+
+              <TableCell>
+                {/* <Card className="card-members"> */}
+                <Typography variant="h5" className="members">
+                  Members
+                </Typography>
+                <List>
+                  {protocol.members.slice(0, 3).map((member, index) => (
+                    <ListItem key={index}>{member.name}</ListItem>
+                  ))}
+                </List>
+                <Button variant="outlined" onClick={showAllMembers}>
+                  Show All Members
+                </Button>
+                {/* </Card> */}
+
+                <MemberList
+                  isOpen={isModalOpen}
+                  closeModal={closeModal}
+                  members={protocol.members}
+                />
+              </TableCell>
             </TableBody>
           </Table>
         </TableContainer>
@@ -179,14 +201,6 @@ const ViewProtocol = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <Typography variant="h5" className="members">
-          Members
-        </Typography>
-        <List>
-          {protocol.members.map((member, index) => (
-            <ListItem key={index}>{member.name}</ListItem>
-          ))}
-        </List>
       </Card>
     </div>
   );

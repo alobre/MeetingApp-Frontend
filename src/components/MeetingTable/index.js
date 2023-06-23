@@ -11,14 +11,22 @@ import Typography from "@mui/material/Typography";
 import { useHistory } from "react-router";
 import { useNavigate } from "react-router-dom";
 
-// den data Parameter wird erst beim Home-ScreenÜbergeben.
 const MeetingTable = ({ data }) => {
   const navigate = useNavigate();
 
-  // added
   const handleRowClick = (data) => {
     navigate("/EditAgenda", { state: data });
   };
+
+  // Group meetings by type
+  const groupedMeetings = data.reduce((groups, meeting) => {
+    const { meetingType } = meeting;
+    if (!groups[meetingType]) {
+      groups[meetingType] = [];
+    }
+    groups[meetingType].push(meeting);
+    return groups;
+  }, {});
 
   return (
     <div id="tableParent">
@@ -31,25 +39,32 @@ const MeetingTable = ({ data }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row) => (
-              <TableRow
-                key={row.date}
-                // added
-                onClick={() => handleRowClick(row)}
-                //  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row" align="center">
-                  <div id="DateCell">
-                    <Typography variant="h7" component="h3">
-                      {row.date}
-                    </Typography>
-                    <Typography variant="h7" component="h6">
-                      {row.startTime} - {row.endTime}
-                    </Typography>
-                  </div>
-                </TableCell>
-                <TableCell>{row.title}</TableCell>
-              </TableRow>
+            {Object.entries(groupedMeetings).map(([meetingType, meetings]) => (
+              <React.Fragment key={meetingType}>
+                <TableRow>
+                  <TableCell
+                    colSpan={2}
+                    style={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}
+                  >
+                    {meetingType}
+                  </TableCell>
+                </TableRow>
+                {meetings.map((row) => (
+                  <TableRow key={row.date} onClick={() => handleRowClick(row)}>
+                    <TableCell component="th" scope="row" align="center">
+                      <div id="DateCell">
+                        <Typography variant="h7" component="h3">
+                          {row.date}
+                        </Typography>
+                        <Typography variant="h7" component="h6">
+                          {row.startTime} - {row.endTime}
+                        </Typography>
+                      </div>
+                    </TableCell>
+                    <TableCell>{row.title}</TableCell>
+                  </TableRow>
+                ))}
+              </React.Fragment>
             ))}
           </TableBody>
         </Table>
@@ -57,4 +72,5 @@ const MeetingTable = ({ data }) => {
     </div>
   );
 };
+
 export default MeetingTable;

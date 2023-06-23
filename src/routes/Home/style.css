@@ -1,0 +1,19 @@
+#card-container {
+  margin-left: 5vw;
+  margin-right: 5vw;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+#sort-type {
+  margin-right: 10px;
+}
+
+#sort-date {
+  margin-right: 10px;
+}
+
+#meeting-space-typography {
+  margin: 10px;
+}

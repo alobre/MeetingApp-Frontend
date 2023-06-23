@@ -1,9 +1,9 @@
 .cardParent {
-  margin: 8px;
+  width: 80%;
+  margin: 20px auto;
   padding: 16px;
   display: flex;
   flex-direction: column;
-  width: 70%;
   align-content: center;
 }
 
@@ -44,31 +44,27 @@
 }
 
 .memberListContainer {
-  
 }
 
+.avatar-container {
+  position: relative;
+  display: inline-block;
+  /* margin-right: 10px; */
+  text-align: left;
+}
 
+.hover-letter {
+  position: absolute;
+  top: 50%;
+  /* left: 50%; */
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  color: white;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
 
-  .avatar-container {
-    position: relative;
-    display: inline-block;
-    /* margin-right: 10px; */
-    text-align: left;
-  }
-
-  .hover-letter {
-    position: absolute;
-    top: 50%;
-    /* left: 50%; */
-    transform: translate(-50%, -50%);
-    font-size: 16px; 
-    color: white;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-  }
-
-  .avatar-container:hover .hover-letter {
-    opacity: 1;
-  }
-
+.avatar-container:hover .hover-letter {
+  opacity: 1;
+}

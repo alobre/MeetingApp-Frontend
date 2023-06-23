@@ -54,7 +54,7 @@ const ViewAgenda = () => {
 
   return (
     <div>
-      <Card className="card-container">
+      {/* <Card className="card-container">
         <Typography variant="h5" className="members">
           Members
         </Typography>
@@ -72,7 +72,7 @@ const ViewAgenda = () => {
         isOpen={isModalOpen}
         closeModal={closeModal}
         members={agenda.members}
-      />
+      /> */}
       <Card className="card-container">
         <Typography variant="h2">Agenda Details</Typography>
         <Button
@@ -103,6 +103,28 @@ const ViewAgenda = () => {
                   <Typography variant="h6">{agenda.meetingPlace}</Typography>
                 </TableCell>
               </TableRow>
+
+              <TableCell>
+                {/* <Card className="card-members"> */}
+                <Typography variant="h5" className="members">
+                  Members
+                </Typography>
+                <List>
+                  {agenda.members.slice(0, 3).map((member, index) => (
+                    <ListItem key={index}>{member.name}</ListItem>
+                  ))}
+                </List>
+                <Button variant="outlined" onClick={showAllMembers}>
+                  Show All Members
+                </Button>
+                {/* </Card> */}
+
+                <MemberList
+                  isOpen={isModalOpen}
+                  closeModal={closeModal}
+                  members={agenda.members}
+                />
+              </TableCell>
             </TableBody>
           </Table>
         </TableContainer>

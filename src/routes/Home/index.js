@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
-import style from "./style.css";
+import { useNavigate } from "react-router-dom";
+import Card from "@mui/material/Card";
+import { Typography, Button } from "@mui/material";
+import "./style.css";
 import MeetingTable from "components/MeetingTable";
-import store, { increment, decrement } from 'redux/store';
-import { useSelector } from 'react-redux';
 
 const HomeScreen = () => {
   // const [authenticated, setauthenticated] = useState(null);
@@ -22,6 +22,7 @@ const HomeScreen = () => {
       endTime: "14:20",
       title: "Meeting Board",
       meetingPlace: "FHTW F1.02",
+      meetingType: "Project Stardust",
       actionPoints: [
         {
           title: "Opening",
@@ -53,6 +54,7 @@ const HomeScreen = () => {
       endTime: "14:20",
       title: "Project Stardust Team Meeting",
       meetingPlace: "FHTW F1.02",
+      meetingType: "IT Department",
       actionPoints: [
         {
           title: "Beginning",
@@ -84,6 +86,7 @@ const HomeScreen = () => {
       endTime: "14:20",
       title: "Board Meeting II",
       meetingPlace: "FHTW F1.02",
+      meetingType: "IT Department",
       actionPoints: [
         {
           title: "Introductions",
@@ -115,6 +118,7 @@ const HomeScreen = () => {
       endTime: "14:20",
       title: "Meeting Board IV",
       meetingPlace: "FHTW F1.02",
+      meetingType: "Board",
       actionPoints: [
         {
           title: "Opening",
@@ -146,6 +150,7 @@ const HomeScreen = () => {
       endTime: "14:20",
       title: "Semester Opening",
       meetingPlace: "FHTW F1.02",
+      meetingType: "Project Stardust",
       actionPoints: [
         {
           title: "Meeting beginning",
@@ -186,10 +191,20 @@ const HomeScreen = () => {
   } else {
     return (
       <div>
+        <Card id="card-container">
+          <Typography variant="h2" id="meeting-space-typography">
+            Meeting Space
+          </Typography>
+          <Button variant="outlined" id="sort-type">
+            sort by type
+          </Button>
+          <Button variant="outlined" id="sort-date">
+            sort by date
+          </Button>
+        </Card>
         <MeetingTable data={tableData} />
       </div>
     );
   }
 };
-
 export default HomeScreen;

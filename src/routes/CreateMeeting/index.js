@@ -10,9 +10,11 @@ import {
   FormControlLabel,
   Checkbox,
   Box,
+  InputLabel,
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useNavigate, Navigate } from "react-router-dom";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
@@ -25,7 +27,11 @@ import AddMeetingSerie from "components/AddMeetingSerie";
 import NotificationScreen from "routes/Notification";
 
 // const users = ["Amelie", "Philipp", "Johanna", "Ana", "Florian"];
-
+const meetingTypes = [
+  { label: "Board" },
+  { label: "IT Department" },
+  { label: "Project Stardust" },
+];
 const MeetingForm = () => {
   // const [address, setAddress] = useState("");
   // const [building, setBuilding] = useState("");
@@ -36,7 +42,7 @@ const MeetingForm = () => {
   // const [isAddressModalOpen, setAddressModalOpen] = useState(false);
   // const [isDateTimeModalOpen, setDateTimeModalOpen] = useState(false);
   // const [isMemberModalOpen, setMemberModalOpen] = useState(false);
-
+  const navigate = useNavigate();
   const [address, setAddress] = useState("");
   const [building, setBuilding] = useState("");
   const [room, setRoom] = useState("");
@@ -47,16 +53,16 @@ const MeetingForm = () => {
   const [isDateTimeModalOpen, setDateTimeModalOpen] = useState(false);
   const [isMemberModalOpen, setMemberModalOpen] = useState(false);
   const [members, setMembers] = useState([]);
-  // ToTest search for meetingSerie
-const [meetingSerie, setMeetingSerie] = useState([]);
+  const [meetingType, setMeetingType] = useState(null);
 
   // ToTest search for meetingSerie
-const handleToSearchForMeetingSerie = () => {
-  // console.log("closing");
-  setMeetingSerie([]     ); // oder noch ein bool einrichten 
-}
+  const [meetingSerie, setMeetingSerie] = useState([]);
 
-
+  // ToTest search for meetingSerie
+  const handleToSearchForMeetingSerie = () => {
+    // console.log("closing");
+    setMeetingSerie([]); // oder noch ein bool einrichten
+  };
 
   const handleAddressSave = () => {
     console.log("closing");
@@ -67,8 +73,6 @@ const handleToSearchForMeetingSerie = () => {
     setDateTimeModalOpen(false);
   };
 
-
-
   const handleSaveMeeting = () => {
     const meetingData = {
       address,
@@ -78,16 +82,16 @@ const handleToSearchForMeetingSerie = () => {
       time: time ? dayjs(time).format("HH:mm") : null,
       title,
       members,
-      meetingSerie: [], // seperieren, weil es sich dann ein JArray daruas erstellet ? // mal ein array dafr 
+      meetingType: meetingType,
+      meetingSerie: [], // seperieren, weil es sich dann ein JArray daruas erstellet ? // mal ein array dafr
     };
 
     // toTst.
-    if (meetingSerie) {
-      // Wenn eine Meeting-Serie ausgewählt wurde, füg in [] hinzu
-      meetingData.meetingSeries.push(meetingSerie);
-    }
-    
-    
+    // if (meetingSerie) {
+    //   // Wenn eine Meeting-Serie ausgewählt wurde, füg in [] hinzu
+    //   meetingData.meetingSeries.push(meetingSerie);
+    // }
+
     console.log(JSON.stringify(meetingData));
     /*
     members.forEach((member) => {
@@ -97,7 +101,7 @@ const handleToSearchForMeetingSerie = () => {
       //send to db in future
       //addNotification(tmpMember.toString().toLowerCase(), message, meetingData.date, meetingData.time);
     });  */
-       
+
     // Reset all form inputs to initial state
     setAddress("");
     setBuilding("");
@@ -106,7 +110,10 @@ const handleToSearchForMeetingSerie = () => {
     setTime(null);
     setTitle("");
     setMembers([]);
-    setMeetingSerie([meetingData]); // ist alles von einem meeting in meetingData saved ?
+    setMeetingType(null);
+    // ist alles von einem meeting in meetingData saved ?
+    // setMeetingSerie([meetingData]);
+    navigate("/");
   };
 
   const handleMemberSave = (selectedMembers) => {
@@ -210,7 +217,20 @@ const handleToSearchForMeetingSerie = () => {
               </div>
             </Modal>
           </div>
+          <div className="form-group">
+            <div className="autocomplete">
+              <InputLabel htmlFor="meeting-type">Meeting Type</InputLabel>
 
+              <Autocomplete
+                options={meetingTypes}
+                getOptionLabel={(option) => option.label}
+                value={meetingType}
+                onChange={(event, newValue) => setMeetingType(newValue)}
+                renderInput={(params) => <TextField {...params} />}
+                className="custom-autocomplete-input"
+              />
+            </div>
+          </div>
           <div className="form-group">
             <Button onClick={() => setMemberModalOpen(true)}>Add Member</Button>
             <AddMemberModal
@@ -221,7 +241,7 @@ const handleToSearchForMeetingSerie = () => {
             />
           </div>
 
-{/* hier --------------------------------------- */}
+          {/* hier --------------------------------------- */}
           {/* <div className="form-groupII">
             <Button onClick={() => setMemberModalOpen(true)}>Add Member</Button>
             <AddMemberModal
@@ -236,8 +256,6 @@ const handleToSearchForMeetingSerie = () => {
             <Button variant="contained" onClick={handleSaveMeeting}>
               Save Meeting
             </Button>
-
-
           </div>
         </div>
       </Card>

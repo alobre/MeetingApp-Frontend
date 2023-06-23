@@ -291,7 +291,7 @@ const WriteProtocol = () => {
 
   return (
     <div>
-      <Card className="card-container">
+      {/* <Card className="card-container">
         <Typography variant="h5" className="members">
           Members
         </Typography>
@@ -309,7 +309,7 @@ const WriteProtocol = () => {
         isOpen={isModalOpen}
         closeModal={closeModal}
         members={agenda.members}
-      />
+      /> */}
       <Card className="card-container">
         <Typography variant="h2">Meeting Notes</Typography>
         <Button
@@ -340,6 +340,28 @@ const WriteProtocol = () => {
                   <Typography variant="h6">{agenda.meetingPlace}</Typography>
                 </TableCell>
               </TableRow>
+
+              <TableCell>
+                {/* <Card className="card-members"> */}
+                <Typography variant="h5" className="members">
+                  Members
+                </Typography>
+                <List>
+                  {agenda.members.slice(0, 3).map((member, index) => (
+                    <ListItem key={index}>{member.name}</ListItem>
+                  ))}
+                </List>
+                <Button variant="outlined" onClick={showAllMembers}>
+                  Show All Members
+                </Button>
+                {/* </Card> */}
+
+                <MemberList
+                  isOpen={isModalOpen}
+                  closeModal={closeModal}
+                  members={agenda.members}
+                />
+              </TableCell>
             </TableBody>
           </Table>
         </TableContainer>
@@ -550,14 +572,6 @@ const WriteProtocol = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <Typography variant="h5" className="members">
-          Members
-        </Typography>
-        <List>
-          {agenda.members.map((member, index) => (
-            <ListItem key={index}>{member.name}</ListItem>
-          ))}
-        </List>
       </Card>
       <Modal open={noteModalOpen} onClose={handleNoteCancel} className="modal">
         <div className="modalBody">
