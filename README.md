@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+# RampUp for the Project <br>
+
+As an IDE we decided to use Visual Studio Code and for better Teamwork GitHub Desktop. <br>
+
+# Getting Started with Create React App <br>
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -69,10 +73,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
-#### In case of Troubles:
-If yarn gives an Error; the following command needs to be executed:
-
-yarn config set ignore-engines true
 
 #### Before executing the program; 
   `yarn add @mui/x-date-pickers`
@@ -80,3 +80,7 @@ yarn config set ignore-engines true
   `yarn add @mui/material`
 
 
+ ## **In case of Troubles:**  <br>
+If yarn gives an Error; the following command needs to be executed: <br>
+
+`yarn config set ignore-engines true`
