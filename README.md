@@ -27,10 +27,10 @@ https://github.com/alobre/MeetingApp-Frontend
 
 If yarn gives an Error; the following command needs to be executed:
 
-yarn install --ignore-engine
-yarn config set ignore-engines true
+`yarn install --ignore-engine` <br>
+`yarn config set ignore-engines true`
 
-##for more detailed installation guide read the project documentation
+## for more detailed installation guide read the project documentation
 
 ### `npm run build` fails to minify
 
