@@ -1,10 +1,40 @@
-# RampUp for the Project <br>
-
-As an IDE we decided to use Visual Studio Code and for better Teamwork GitHub Desktop. <br>
-
-# Getting Started with Create React App <br>
+# Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## installation guide - download/install the following tools
+
+[Optional] Visual Studio Code as IDE:
+https://code.visualstudio.com/download
+
+[Mandatory] Node.js:
+https://nodejs.org/en/download
+
+[Mandatory] Yarn:
+Open command-line and run:
+npm install --global yarn
+
+Clone the repository in Visual Studio Code
+https://github.com/alobre/MeetingApp-Frontend
+
+#### Before executing the program;
+
+`yarn add @mui/x-date-pickers`
+`yarn add dayjs`
+`yarn add @mui/material`
+
+#### In case of Troubles:
+
+If yarn gives an Error; the following command needs to be executed:
+
+yarn install --ignore-engine
+yarn config set ignore-engines true
+
+##for more detailed installation guide read the project documentation
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
 ## Available Scripts
 
@@ -17,6 +47,8 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
+
+To test the application login as nickname "ana" password "ana".
 
 ### `npm test`
 
@@ -68,19 +100,3 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/a
 ### Deployment
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-
-#### Before executing the program; 
-  `yarn add @mui/x-date-pickers`
-  `yarn add dayjs`
-  `yarn add @mui/material`
-
-
- ## **In case of Troubles:**  <br>
-If yarn gives an Error; the following command needs to be executed: <br>
-
-`yarn config set ignore-engines true`
