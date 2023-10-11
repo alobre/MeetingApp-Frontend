@@ -23,48 +23,40 @@ import { useLocation } from "react-router-dom";
 import AddMemberModal from "components/AddMember";
 import { useNavigate, Navigate } from "react-router-dom";
 
-import { AvatarGroup } from '@mui/material';
-import { Avatar } from '@mui/material';
-import Stack from '@mui/material/Stack';
-
+import { AvatarGroup } from "@mui/material";
+import { Avatar } from "@mui/material";
+import Stack from "@mui/material/Stack";
 
 const MeetingDetails = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const [meetingTime, setMeetingTime] = useState(state.startTime);
   const [meetingDate, setMeetingDate] = useState(state.date);
+  const [meetingAddress, setMeetingAddress] = useState(state.meetingAddress);
+  const [meetingBuilding, setMeetingBuilding] = useState(state.meetingBuilding);
+  const [meetingRoom, setMeetingRoom] = useState(state.meetingRoom);
   const [meetingPlace, setMeetingPlace] = useState(state.meetingPlace);
   const [actionPoints, setActionPoints] = useState(state.actionPoints);
   const [isMemberModalOpen, setMemberModalOpen] = useState(false);
   const [members, setMembers] = useState([]);
 
-
-
-
-
-
   // const MeetingDetails = () => {
   //   useEffect(() => {
   //     const avatarContainers = document.querySelectorAll('.avatar-container');
-  
+
   //     avatarContainers.forEach((container) => {
   //       const avatar = container.querySelector('img');
   //       const hoverLetter = container.querySelector('.hover-letter');
-  
+
   //       hoverLetter.addEventListener('mouseover', () => {
   //         avatar.src = '';
   //       });
-  
+
   //       hoverLetter.addEventListener('mouseout', () => {
-  //         avatar.src = '/public/Foxl.jpg'; 
+  //         avatar.src = '/public/Foxl.jpg';
   //       });
   //     });
   //   }, []);
-
-
- 
-    
-
 
   const handleMeetingTimeChange = (event) => {
     setMeetingTime(event.target.value);
@@ -72,6 +64,18 @@ const MeetingDetails = () => {
 
   const handleMeetingDateChange = (event) => {
     setMeetingDate(event.target.value);
+  };
+
+  const handleMeetingAddressChange = (event) => {
+    setMeetingAddress(event.target.value);
+  };
+
+  const handleMeetingBuildingChange = (event) => {
+    setMeetingBuilding(event.target.value);
+  };
+
+  const handleMeetingRoomChange = (event) => {
+    setMeetingRoom(event.target.value);
   };
 
   const handleMeetingPlaceChange = (event) => {
@@ -148,6 +152,9 @@ const MeetingDetails = () => {
     const agenda = {
       meetingTime,
       meetingDate,
+      meetingAddress,
+      meetingBuilding,
+      meetingRoom,
       meetingPlace,
       actionPoints: actionPoints.map((actionPoint) => ({
         title: actionPoint.title,
@@ -171,28 +178,34 @@ const MeetingDetails = () => {
 
   const MemberList = ({ members }) => {
     const [isDropdownOpen, setDropdownOpen] = useState(false);
-  
+
     const handleDropdownClick = () => {
       setDropdownOpen(!isDropdownOpen);
     };
 
     return (
-
-      // hier members sollten sich erzeugen. 
+      // hier members sollten sich erzeugen.
       <Card className="cardMemberList" onClick={handleDropdownClick}>
         <h3>Members:</h3>
         {isDropdownOpen && (
           <ul>
             {members.map((member, index) => (
-              <li key={index}>      <Avatar alt="Amelie" src="/static/images/avatar/2.jpg" sx={{ width: 42, height: 42 }}/>   {member.name}</li>
-            // <li >
-            // <div class="avatar-container">
-            
-            //     <span class="hover-letter">A</span>
-            //   </div>
+              <li key={index}>
+                {" "}
+                <Avatar
+                  alt="Amelie"
+                  src="/static/images/avatar/2.jpg"
+                  sx={{ width: 42, height: 42 }}
+                />{" "}
+                {member.name}
+              </li>
+              // <li >
+              // <div class="avatar-container">
 
-            // </li>
+              //     <span class="hover-letter">A</span>
+              //   </div>
 
+              // </li>
             ))}
           </ul>
         )}
@@ -227,8 +240,6 @@ const MeetingDetails = () => {
           </Button> */}
         </div>
 
-
-     
         <Card className="cardMeetingDetails">
           <div className="meetingDetailsContainer">
             <TextField
@@ -244,18 +255,29 @@ const MeetingDetails = () => {
               onChange={handleMeetingDateChange}
             />
             <TextField
+              label="Meeting Address"
+              value={meetingAddress}
+              onChange={handleMeetingAddressChange}
+            />
+            <TextField
+              label="Meeting Building"
+              value={meetingBuilding}
+              onChange={handleMeetingBuildingChange}
+            />
+            <TextField
+              label="Meeting Room"
+              value={meetingRoom}
+              onChange={handleMeetingRoomChange}
+            />
+            <TextField
               label="Meeting Place"
               value={meetingPlace}
               onChange={handleMeetingPlaceChange}
             />
-          </div> 
+          </div>
           <div className="memberListContainer">
             <MemberList members={members} />
           </div>
-
-
-
-
         </Card>
         <TableContainer component={Paper}>
           <Table>

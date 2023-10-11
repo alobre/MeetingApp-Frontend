@@ -21,6 +21,9 @@ const HomeScreen = () => {
       startTime: "12:15",
       endTime: "14:20",
       title: "Meeting Board",
+      meetingAddress: "Hoechstadtplatz 5",
+      meetingBuilding: "A",
+      meetingRoom: "4.04",
       meetingPlace: "FHTW F1.02",
       meetingType: "Project Stardust",
       actionPoints: [
@@ -53,6 +56,9 @@ const HomeScreen = () => {
       startTime: "12:15",
       endTime: "14:20",
       title: "Project Stardust Team Meeting",
+      meetingAddress: "Hoechstadtplatz 5",
+      meetingBuilding: "A",
+      meetingRoom: "4.04",
       meetingPlace: "FHTW F1.02",
       meetingType: "IT Department",
       actionPoints: [
@@ -85,6 +91,9 @@ const HomeScreen = () => {
       startTime: "12:15",
       endTime: "14:20",
       title: "Board Meeting II",
+      meetingAddress: "Hoechstadtplatz 5",
+      meetingBuilding: "A",
+      meetingRoom: "4.04",
       meetingPlace: "FHTW F1.02",
       meetingType: "IT Department",
       actionPoints: [
@@ -117,6 +126,9 @@ const HomeScreen = () => {
       startTime: "12:15",
       endTime: "14:20",
       title: "Meeting Board IV",
+      meetingAddress: "Hoechstadtplatz 5",
+      meetingBuilding: "A",
+      meetingRoom: "4.04",
       meetingPlace: "FHTW F1.02",
       meetingType: "Board",
       actionPoints: [
@@ -149,6 +161,9 @@ const HomeScreen = () => {
       startTime: "12:15",
       endTime: "14:20",
       title: "Semester Opening",
+      meetingAddress: "Hoechstadtplatz 5",
+      meetingBuilding: "A",
+      meetingRoom: "4.04",
       meetingPlace: "FHTW F1.02",
       meetingType: "Project Stardust",
       actionPoints: [
