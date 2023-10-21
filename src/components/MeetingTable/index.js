@@ -20,11 +20,11 @@ const MeetingTable = ({ data }) => {
 
   // Group meetings by type
   const groupedMeetings = data.reduce((groups, meeting) => {
-    const { meetingType } = meeting;
-    if (!groups[meetingType]) {
-      groups[meetingType] = [];
+    const { meeting_series_name } = meeting;
+    if (!groups[meeting_series_name]) {
+      groups[meeting_series_name] = [];
     }
-    groups[meetingType].push(meeting);
+    groups[meeting_series_name].push(meeting);
     return groups;
   }, {});
 
@@ -39,33 +39,39 @@ const MeetingTable = ({ data }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.entries(groupedMeetings).map(([meetingType, meetings]) => (
-              <React.Fragment key={meetingType}>
-                <TableRow>
-                  <TableCell
-                    colSpan={2}
-                    style={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}
-                  >
-                    {meetingType}
-                  </TableCell>
-                </TableRow>
-                {meetings.map((row) => (
-                  <TableRow key={row.date} onClick={() => handleRowClick(row)}>
-                    <TableCell component="th" scope="row" align="center">
-                      <div id="DateCell">
-                        <Typography variant="h7" component="h3">
-                          {row.date}
-                        </Typography>
-                        <Typography variant="h7" component="h6">
-                          {row.startTime} - {row.endTime}
-                        </Typography>
-                      </div>
+            {Object.entries(groupedMeetings).map(
+              ([meeting_series_name, meetings]) => (
+                <React.Fragment key={meeting_series_name}>
+                  <TableRow>
+                    <TableCell
+                      colSpan={2}
+                      style={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}
+                    >
+                      {meeting_series_name}
                     </TableCell>
-                    <TableCell>{row.title}</TableCell>
                   </TableRow>
-                ))}
-              </React.Fragment>
-            ))}
+                  {meetings.map((row) => (
+                    <TableRow
+                      key={row.date}
+                      onClick={() => handleRowClick(row.meeting_id)}
+                    >
+                      <TableCell component="th" scope="row" align="center">
+                        <div id="DateCell">
+                          <Typography variant="h7" component="h3">
+                            {new Date(row.date).toLocaleDateString()}{" "}
+                          </Typography>
+                          <Typography variant="h7" component="h6">
+                            {row.time}
+                            {/* {row.startTime} - {row.endTime} */}
+                          </Typography>
+                        </div>
+                      </TableCell>
+                      <TableCell>{row.title}</TableCell>
+                    </TableRow>
+                  ))}
+                </React.Fragment>
+              )
+            )}
           </TableBody>
         </Table>
       </TableContainer>
