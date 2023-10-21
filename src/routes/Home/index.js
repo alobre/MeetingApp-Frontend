@@ -10,6 +10,21 @@ const HomeScreen = () => {
   const navigate = useNavigate();
   const [authenticated, setauthenticated] = useState(null);
 
+    const getMeetings = async () => {
+      try {
+        const response = await fetch('http://localhost:4000/getMeetings', {
+          method: 'GET',
+          mode: 'cors'
+        })
+        const jsonData = await response.json();
+        console.log(jsonData);
+        setMeetings(jsonData);
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+
+/*
   const getMeetings = async () => {
     try {
       const response = await fetch("http://localhost:4000/getMeetings");
@@ -20,7 +35,7 @@ const HomeScreen = () => {
       console.error(err.message);
     }
   };
-
+*/
   // useEffect(() => {
   //   getMeetings();
   // }, []);
