@@ -16,6 +16,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.5.1",
     "dayjs": "^1.11.10",
     "eslint-config-react-app": "^7.0.1",
     "localforage": "^1.10.0",

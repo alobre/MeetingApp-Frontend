@@ -25,6 +25,7 @@ import "./style.css";
 import AddMemberModal from "components/AddMember";
 import AddMeetingSerie from "components/AddMeetingSerie";
 import NotificationScreen from "routes/Notification";
+import { createMeeting } from "components/AxiosInterceptor/AxiosInterceptor";
 
 // const users = ["Amelie", "Philipp", "Johanna", "Ana", "Florian"];
 const meetingTypes = [
@@ -93,6 +94,7 @@ const MeetingForm = () => {
     // }
 
     console.log(JSON.stringify(meetingData));
+    createMeeting(meetingData);
     /*
     members.forEach((member) => {
       console.log("Meeting Title: " + meetingData.title + "invited members " + JSON.stringify(members));

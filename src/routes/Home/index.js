@@ -4,25 +4,26 @@ import Card from "@mui/material/Card";
 import { Typography, Button } from "@mui/material";
 import "./style.css";
 import MeetingTable from "components/MeetingTable";
+import { getMeetings } from "components/AxiosInterceptor/AxiosInterceptor";
 
 const HomeScreen = () => {
   const [meetings, setMeetings] = useState([]);
   const navigate = useNavigate();
-  const [authenticated, setauthenticated] = useState(null);
+  const [authenticated, setAuthenticated] = useState(null);
 
-    const getMeetings = async () => {
-      try {
-        const response = await fetch('http://localhost:4000/getMeetings', {
-          method: 'GET',
-          mode: 'cors'
-        })
-        const jsonData = await response.json();
-        console.log(jsonData);
-        setMeetings(jsonData);
-      } catch (err) {
-        console.error(err.message);
-      }
-    };
+    // const getMeetings = async () => {
+    //   try {
+    //     const response = await fetch('http://localhost:4000/getMeetings', {
+    //       method: 'GET',
+    //       mode: 'cors'
+    //     })
+    //     const jsonData = await response.json();
+    //     console.log(jsonData);
+    //     setMeetings(jsonData);
+    //   } catch (err) {
+    //     console.error(err.message);
+    //   }
+    // };
 
 /*
   const getMeetings = async () => {
@@ -44,8 +45,12 @@ const HomeScreen = () => {
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("authenticated") !== null;
     if (isAuthenticated) {
-      setauthenticated(true);
-      getMeetings();
+      setAuthenticated(true);
+      const fetchMeetings = async () =>{
+        const meetings = await getMeetings();
+        setMeetings(meetings);
+      }
+      fetchMeetings()
     } else {
       navigate("/Login");
     }
