@@ -4,7 +4,7 @@ finalize agenda
 invite to edit/comment
 */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -22,16 +22,18 @@ import "./style.css";
 import { useLocation } from "react-router-dom";
 import AddMemberModal from "components/AddMember";
 import { useNavigate, Navigate } from "react-router-dom";
-
+import { getAgenda } from "components/AxiosInterceptor/AxiosInterceptor";
 import { AvatarGroup } from "@mui/material";
 import { Avatar } from "@mui/material";
 import Stack from "@mui/material/Stack";
+import dayjs from "dayjs";
 
-const MeetingDetails = () => {
+const MeetingDetails = (props) => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const [meetingTime, setMeetingTime] = useState(state.startTime);
-  const [meetingDate, setMeetingDate] = useState(state.date);
+  const [meetingDetails, setMeetingsDetails] = useState()
+  const [meetingTime, setMeetingTime] = useState(meetingDetails?.startTime);
+  const [meetingDate, setMeetingDate] = useState(meetingDetails?.date);
   const [meetingAddress, setMeetingAddress] = useState(state.meetingAddress);
   const [meetingBuilding, setMeetingBuilding] = useState(state.meetingBuilding);
   const [meetingRoom, setMeetingRoom] = useState(state.meetingRoom);
@@ -39,6 +41,18 @@ const MeetingDetails = () => {
   const [actionPoints, setActionPoints] = useState(state.actionPoints);
   const [isMemberModalOpen, setMemberModalOpen] = useState(false);
   const [members, setMembers] = useState([]);
+
+  useEffect(()=>{
+    const fetchAgenda = async () =>{
+      var result = await getAgenda(state);
+      setMeetingsDetails(result);
+      const parsedDate = dayjs(result.date, {format:'YYYY-MM-DD'});
+      const formattedDate = parsedDate.format('YYYY-MM-DD')
+      setMeetingTime(result.start_time)
+      setMeetingDate(formattedDate)
+    }
+    fetchAgenda()
+  }, [])
 
   // const MeetingDetails = () => {
   //   useEffect(() => {
@@ -156,12 +170,12 @@ const MeetingDetails = () => {
       meetingBuilding,
       meetingRoom,
       meetingPlace,
-      actionPoints: actionPoints.map((actionPoint) => ({
+      actionPoints: actionPoints?.map((actionPoint) => ({
         title: actionPoint.title,
-        subPoints: actionPoint.subPoints.map((subPoint) => ({
+        subPoints: actionPoint.subPoints?.map((subPoint) => ({
           title: subPoint.title,
         })),
-        comments: actionPoint.comments.map((comments) => ({
+        comments: actionPoint.comments?.map((comments) => ({
           title: comments.title,
         })),
       })),
@@ -189,7 +203,7 @@ const MeetingDetails = () => {
         <h3>Members:</h3>
         {isDropdownOpen && (
           <ul>
-            {members.map((member, index) => (
+            {members?.map((member, index) => (
               <li key={index}>
                 {" "}
                 <Avatar
@@ -211,7 +225,7 @@ const MeetingDetails = () => {
         )}
         {!isDropdownOpen && (
           <p>
-            {members.map((member, index) => (
+            {members?.map((member, index) => (
               <span key={index}>
                 {member.name}
                 {index !== members.length - 1 ? ", " : ""}
@@ -291,7 +305,7 @@ const MeetingDetails = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {actionPoints.map((actionPoint, index) => (
+              {actionPoints?.map((actionPoint, index) => (
                 <TableRow key={index}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell className="tableCell">
@@ -302,7 +316,7 @@ const MeetingDetails = () => {
                     />
                   </TableCell>
                   <TableCell className="actionSubPoints">
-                    {actionPoint.subPoints.map((subPoint, subIndex) => (
+                    {actionPoint.subPoints?.map((subPoint, subIndex) => (
                       <div key={subIndex}>
                         <TextField
                           value={subPoint.title}
@@ -322,7 +336,7 @@ const MeetingDetails = () => {
                     </IconButton>
                   </TableCell>
                   <TableCell className="comments">
-                    {actionPoint.comments.map((comments, commentsIndex) => (
+                    {actionPoint.comments?.map((comments, commentsIndex) => (
                       <div key={commentsIndex}>
                         <TextField
                           value={comments.title}

@@ -20,19 +20,29 @@ axios.interceptors.response.use(function (response) {
   });
 
 export const getMeetings = async () =>{
-    try {
-            const response = await axios.get('http://localhost:4000/getMeetings');
-            return response.data;
-        } catch (err) {
-            console.error(err.message);
-        }
+  try {
+          const response = await axios.get('http://localhost:4000/getMeetings');
+          return response.data;
+      } catch (err) {
+          console.error(err.message);
+  }
 };
 
 export const createMeeting = async (body) =>{
-    try {
-            const response = await axios.post('http://localhost:4000/meetings', body);
-            return response.data;
-        } catch (err) {
-            console.error(err.message);
-        }
+  try {
+          const response = await axios.post('http://localhost:4000/meetings', body);
+          return response.data;
+      } catch (err) {
+          console.error(err.message);
+  }
 };
+
+export const getAgenda = async (agenda_id) =>{
+  try {
+          const response = await axios.get('http://localhost:4000/agenda/' + agenda_id);
+          return response.data;
+      } catch (err) {
+          console.error(err.message);
+  }
+};
+
