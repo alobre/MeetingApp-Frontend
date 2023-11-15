@@ -11,36 +11,6 @@ const HomeScreen = () => {
   const navigate = useNavigate();
   const [authenticated, setAuthenticated] = useState(null);
 
-    // const getMeetings = async () => {
-    //   try {
-    //     const response = await fetch('http://localhost:4000/getMeetings', {
-    //       method: 'GET',
-    //       mode: 'cors'
-    //     })
-    //     const jsonData = await response.json();
-    //     console.log(jsonData);
-    //     setMeetings(jsonData);
-    //   } catch (err) {
-    //     console.error(err.message);
-    //   }
-    // };
-
-/*
-  const getMeetings = async () => {
-    try {
-      const response = await fetch("http://localhost:4000/getMeetings");
-      const jsonData = await response.json();
-      console.log(jsonData);
-      setMeetings(jsonData);
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-*/
-  // useEffect(() => {
-  //   getMeetings();
-  // }, []);
-
   // on the "myMeetingScreen" first check if the user is logged in, if yes, then display the table, if not, redirect to Login page
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("authenticated") !== null;

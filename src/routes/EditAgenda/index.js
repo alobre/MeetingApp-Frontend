@@ -22,7 +22,7 @@ import "./style.css";
 import { useLocation } from "react-router-dom";
 import AddMemberModal from "components/AddMember";
 import { useNavigate, Navigate } from "react-router-dom";
-import { getAgenda } from "components/AxiosInterceptor/AxiosInterceptor";
+import { getAgenda, getActionPoints } from "components/AxiosInterceptor/AxiosInterceptor";
 import { AvatarGroup } from "@mui/material";
 import { Avatar } from "@mui/material";
 import Stack from "@mui/material/Stack";
@@ -44,12 +44,17 @@ const MeetingDetails = (props) => {
 
   useEffect(()=>{
     const fetchAgenda = async () =>{
-      var result = await getAgenda(state);
-      setMeetingsDetails(result);
-      const parsedDate = dayjs(result.date, {format:'YYYY-MM-DD'});
+      let agenda = await getAgenda(state);
+      console.log({agenda})
+      setMeetingsDetails(agenda);
+      const parsedDate = dayjs(agenda.date, {format:'YYYY-MM-DD'});
       const formattedDate = parsedDate.format('YYYY-MM-DD')
-      setMeetingTime(result.start_time)
+      setMeetingTime(agenda.start_time)
       setMeetingDate(formattedDate)
+
+      let actionPoints = await getActionPoints(state);
+      console.log({actionPoints})
+
     }
     fetchAgenda()
   }, [])

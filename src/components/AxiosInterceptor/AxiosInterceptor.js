@@ -31,6 +31,7 @@ export const getMeetings = async () =>{
 export const createMeeting = async (body) =>{
   try {
           const response = await axios.post('http://localhost:4000/meetings', body);
+          console.log({body})
           return response.data;
       } catch (err) {
           console.error(err.message);
@@ -45,4 +46,14 @@ export const getAgenda = async (agenda_id) =>{
           console.error(err.message);
   }
 };
+
+export const getActionPoints = async (agenda_id) =>{
+  try {
+          const response = await axios.get('http://localhost:4000/actionPoints/' + agenda_id);
+          return response.data;
+      } catch (err) {
+          console.error(err.message);
+  }
+};
+
 
