@@ -53,6 +53,7 @@ const MeetingDetails = (props) => {
       setMeetingDate(formattedDate)
 
       let actionPoints = await getActionPoints(state);
+      setActionPoints(actionPoints);
       console.log({actionPoints})
 
     }
@@ -316,15 +317,15 @@ const MeetingDetails = (props) => {
                   <TableCell className="tableCell">
                     <TextField
                       className="actionPoints"
-                      value={actionPoint.title}
+                      value={actionPoint.text}
                       onChange={(e) => handleActionPointTitleChange(index, e)}
                     />
                   </TableCell>
                   <TableCell className="actionSubPoints">
-                    {actionPoint.subPoints?.map((subPoint, subIndex) => (
+                    {actionPoint.actionPointSubPoints?.map((subPoint, subIndex) => (
                       <div key={subIndex}>
                         <TextField
-                          value={subPoint.title}
+                          value={subPoint.message}
                           onChange={(e) =>
                             handleSubPointTitleChange(index, subIndex, e)
                           }
@@ -341,10 +342,10 @@ const MeetingDetails = (props) => {
                     </IconButton>
                   </TableCell>
                   <TableCell className="comments">
-                    {actionPoint.comments?.map((comments, commentsIndex) => (
+                    {actionPoint.actionPointComments?.map((comments, commentsIndex) => (
                       <div key={commentsIndex}>
                         <TextField
-                          value={comments.title}
+                          value={comments.comment_text}
                           onChange={(e) =>
                             handleCommentTitleChange(index, commentsIndex, e)
                           }
