@@ -22,7 +22,7 @@ import "./style.css";
 import { useLocation } from "react-router-dom";
 import AddMemberModal from "components/AddMember";
 import { useNavigate, Navigate } from "react-router-dom";
-import { getAgenda, getActionPoints } from "components/AxiosInterceptor/AxiosInterceptor";
+import { getAgenda, getActionPoints, deleteActionPointComment, deleteActionPointSubPoint, deleteActionPoint } from "components/AxiosInterceptor/AxiosInterceptor";
 import { AvatarGroup } from "@mui/material";
 import { Avatar } from "@mui/material";
 import Stack from "@mui/material/Stack";
@@ -42,21 +42,21 @@ const MeetingDetails = (props) => {
   const [isMemberModalOpen, setMemberModalOpen] = useState(false);
   const [members, setMembers] = useState([]);
 
+  const fetchAgenda = async () =>{
+    let agenda = await getAgenda(state);
+    console.log({agenda})
+    setMeetingsDetails(agenda);
+    const parsedDate = dayjs(agenda.date, {format:'YYYY-MM-DD'});
+    const formattedDate = parsedDate.format('YYYY-MM-DD')
+    setMeetingTime(agenda.start_time)
+    setMeetingDate(formattedDate)
+
+    let actionPoints = await getActionPoints(state);
+    setActionPoints(actionPoints);
+    console.log({actionPoints})
+
+  }
   useEffect(()=>{
-    const fetchAgenda = async () =>{
-      let agenda = await getAgenda(state);
-      console.log({agenda})
-      setMeetingsDetails(agenda);
-      const parsedDate = dayjs(agenda.date, {format:'YYYY-MM-DD'});
-      const formattedDate = parsedDate.format('YYYY-MM-DD')
-      setMeetingTime(agenda.start_time)
-      setMeetingDate(formattedDate)
-
-      let actionPoints = await getActionPoints(state);
-      setActionPoints(actionPoints);
-      console.log({actionPoints})
-
-    }
     fetchAgenda()
   }, [])
 
@@ -150,22 +150,25 @@ const MeetingDetails = (props) => {
     setActionPoints(updatedActionPoints);
   };
 
-  const handleDeleteActionPoint = (index) => {
-    const updatedActionPoints = [...actionPoints];
-    updatedActionPoints.splice(index, 1);
-    setActionPoints(updatedActionPoints);
+  const handleDeleteActionPoint = async (action_point_id) => {
+    const res = await deleteActionPoint(action_point_id);
+    fetchAgenda();
   };
 
-  const handleDeleteSubPoint = (actionPointIndex, subPointIndex) => {
-    const updatedActionPoints = [...actionPoints];
-    updatedActionPoints[actionPointIndex].subPoints.splice(subPointIndex, 1);
-    setActionPoints(updatedActionPoints);
+  const handleDeleteSubPoint = async (action_point_subpoint_id) => {
+
+    const res = await deleteActionPointSubPoint(action_point_subpoint_id);
+    fetchAgenda();
   };
 
-  const handleDeleteComment = (actionPointIndex, commentsIndex) => {
-    const updatedActionPoints = [...actionPoints];
-    updatedActionPoints[actionPointIndex].comments.splice(commentsIndex, 1);
-    setActionPoints(updatedActionPoints);
+  const handleDeleteComment = async (comment_id) => {
+    const res = await deleteActionPointComment(comment_id);
+    // const updatedActionPoints = actionPoints.map(ap => {
+    //   ap.actionPointComments = ap.actionPointComments.filter(apc => apc.action_point_comment_id !== comment_id);
+    //   return ap;
+    // });
+    // setActionPoints(updatedActionPoints);
+    fetchAgenda();
   };
 
   const handleSave = () => {
@@ -331,7 +334,7 @@ const MeetingDetails = (props) => {
                           }
                         />
                         <IconButton
-                          onClick={() => handleDeleteSubPoint(index, subIndex)}
+                          onClick={() => handleDeleteSubPoint(subPoint.action_point_subpoint_id, index)}
                         >
                           <DeleteIcon />
                         </IconButton>
@@ -342,17 +345,17 @@ const MeetingDetails = (props) => {
                     </IconButton>
                   </TableCell>
                   <TableCell className="comments">
-                    {actionPoint.actionPointComments?.map((comments, commentsIndex) => (
+                    {actionPoint.actionPointComments?.map((comment, commentsIndex) => (
                       <div key={commentsIndex}>
                         <TextField
-                          value={comments.comment_text}
+                          value={comment.comment_text}
                           onChange={(e) =>
                             handleCommentTitleChange(index, commentsIndex, e)
                           }
                         />
                         <IconButton
                           onClick={() =>
-                            handleDeleteComment(index, commentsIndex)
+                            handleDeleteComment(comment.action_point_comment_id)
                           }
                         >
                           <DeleteIcon />

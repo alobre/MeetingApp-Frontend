@@ -56,4 +56,30 @@ export const getActionPoints = async (agenda_id) =>{
   }
 };
 
+export const deleteActionPoint = async (action_point_id) =>{
+  try {
+          const response = await axios.delete('http://localhost:4000/actionPoint/' + action_point_id);
+          return response.data;
+      } catch (err) {
+          console.error(err.message);
+  }
+};
+
+export const deleteActionPointComment = async (comment_id) =>{
+  try {
+          const response = await axios.delete('http://localhost:4000/actionPointComment/' + comment_id);
+          return response.data;
+      } catch (err) {
+          console.error(err.message);
+  }
+};
+
+export const deleteActionPointSubPoint = async (action_point_subpoint_id) =>{
+  try {
+          const response = await axios.delete('http://localhost:4000/actionPointSubPoint/' + action_point_subpoint_id);
+          return response.data;
+      } catch (err) {
+          console.error(err.message);
+  }
+};
 
