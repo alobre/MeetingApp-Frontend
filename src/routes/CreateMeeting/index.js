@@ -48,7 +48,8 @@ const MeetingForm = () => {
   const [building, setBuilding] = useState("");
   const [room, setRoom] = useState("");
   const [date, setDate] = useState(null);
-  const [time, setTime] = useState(null);
+  const [start_time, setStartTime] = useState(null);
+  const [end_time, setEndTime] = useState(null);
   const [title, setTitle] = useState("");
   const [isAddressModalOpen, setAddressModalOpen] = useState(false);
   const [isDateTimeModalOpen, setDateTimeModalOpen] = useState(false);
@@ -74,16 +75,17 @@ const MeetingForm = () => {
     setDateTimeModalOpen(false);
   };
 
-  const handleSaveMeeting = () => {
+  const handleSaveMeeting = async () => {
     const meetingData = {
       address,
       building,
       room,
       date: date ? dayjs(date).format("YYYY-MM-DD") : null,
-      time: time ? dayjs(time).format("HH:mm") : null,
+      start_time: start_time ? dayjs(start_time).format("HH:mm") : null,
+      end_time: end_time ? dayjs(end_time).format("HH:mm") : null,
       title,
       members,
-      meetingType: meetingType,
+      meetingType: meetingType.label,
       meetingSerie: [], // seperieren, weil es sich dann ein JArray daruas erstellet ? // mal ein array dafr
     };
 
@@ -94,8 +96,25 @@ const MeetingForm = () => {
     // }
 
     console.log(JSON.stringify(meetingData));
-    createMeeting(meetingData);
-    /*
+    try {
+      const response = await createMeeting(meetingData);
+      console.log("Meeting created:", response);
+
+      // Reset all form inputs to initial state
+      setAddress("");
+      setBuilding("");
+      setRoom("");
+      setDate(null);
+      setStartTime(null);
+      setEndTime(null);
+      setTitle("");
+      setMembers([]);
+      setMeetingType(null);
+      navigate("/");
+    } catch (error) {
+      console.error("Error creating meeting:", error);
+      // Handle the error as needed
+    } /*
     members.forEach((member) => {
       console.log("Meeting Title: " + meetingData.title + "invited members " + JSON.stringify(members));
       const message = `You have been invited to a meeting "` + meetingData.title + '" scheduled on: ' + meetingData.date + ' at ' + meetingData.time;
@@ -105,17 +124,8 @@ const MeetingForm = () => {
     });  */
 
     // Reset all form inputs to initial state
-    setAddress("");
-    setBuilding("");
-    setRoom("");
-    setDate(null);
-    setTime(null);
-    setTitle("");
-    setMembers([]);
-    setMeetingType(null);
     // ist alles von einem meeting in meetingData saved ?
     // setMeetingSerie([meetingData]);
-    navigate("/");
   };
 
   const handleMemberSave = (selectedMembers) => {
@@ -207,9 +217,18 @@ const MeetingForm = () => {
                 </LocalizationProvider>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <TimePicker
-                    label="Time"
-                    value={time}
-                    onChange={(newValue) => setTime(newValue)}
+                    label="Start Time"
+                    value={start_time}
+                    onChange={(newValue) => setStartTime(newValue)}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
+
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <TimePicker
+                    label="End Time"
+                    value={end_time}
+                    onChange={(newValue) => setEndTime(newValue)}
                     renderInput={(params) => <TextField {...params} />}
                   />
                 </LocalizationProvider>
