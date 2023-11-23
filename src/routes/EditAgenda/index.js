@@ -43,15 +43,15 @@ const MeetingDetails = (props) => {
   const [members, setMembers] = useState([]);
 
   const fetchAgenda = async () =>{
-    let agenda = await getAgenda(state);
-    console.log({agenda})
+    let agenda = await getAgenda(state.meeting_id);
+    console.log({state})
     setMeetingsDetails(agenda);
     const parsedDate = dayjs(agenda.date, {format:'YYYY-MM-DD'});
     const formattedDate = parsedDate.format('YYYY-MM-DD')
     setMeetingTime(agenda.start_time)
     setMeetingDate(formattedDate)
 
-    let actionPoints = await getActionPoints(state);
+    let actionPoints = await getActionPoints(state.agenda_id);
     setActionPoints(actionPoints);
     console.log({actionPoints})
 
