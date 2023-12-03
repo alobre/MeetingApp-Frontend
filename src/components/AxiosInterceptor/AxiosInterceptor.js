@@ -83,3 +83,74 @@ export const deleteActionPointSubPoint = async (action_point_subpoint_id) =>{
   }
 };
 
+export const postActionPoint = async (text, agenda_id) =>{
+  try {
+    const body = {
+      text,
+      agenda_id
+    }
+    const response = await axios.post('http://localhost:4000/actionPoint', body);
+    return response.data;
+  } catch (err) {
+      console.error(err.message);
+  }
+}
+export const updateActionPoint = async (text, agenda_id) =>{
+  try {
+    const body = {
+      text,
+      agenda_id
+    }
+    const response = await axios.put('http://localhost:4000/actionPoint', body);
+    return response.data;
+  } catch (err) {
+      console.error(err.message);
+  }
+}
+export const postActionPointComment = async (user_id, comment_text, action_point_id) =>{
+  try {
+    const body = {
+      user_id, comment_text, action_point_id
+    }
+    const response = await axios.post('http://localhost:4000/actionPointComment', body);
+    return response.data;
+  } catch (err) {
+      console.error(err.message);
+  }
+}
+export const updateActionPointComment = async (user_id, comment_text, action_point_id) =>{
+  try {
+    const body = {
+      user_id, comment_text, action_point_id
+    }
+    const response = await axios.put('http://localhost:4000/actionPointComment', body);
+    return response.data;
+  } catch (err) {
+      console.error(err.message);
+  }
+}
+export const postActionPointSubPoint = async (message, action_point_id) =>{
+  try {
+    const body = {
+      message,
+      action_point_id
+    }
+    const response = await axios.post('http://localhost:4000/actionPointSubPoint', body);
+    return response.data;
+  } catch (err) {
+      console.error(err.message);
+  }
+}
+export const updateActionPointSubPoint = async (message, action_point_subpoint_id) =>{
+  try {
+    const body = {
+      message,
+      action_point_subpoint_id
+    }
+    console.log(body)
+    const response = await axios.put('http://localhost:4000/actionPointSubPoint', body);
+    return response.data;
+  } catch (err) {
+      console.error(err.message);
+  }
+}

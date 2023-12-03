@@ -74,7 +74,7 @@ const MeetingTable = ({ data }) => {
                   {meetings.map((row) => (
                     <TableRow
                       key={row.meeting_id}
-                      onClick={() => handleRowClick({meeting_id: row.meeting_id, agenda_id: row.agenda_id})}
+                      onClick={() => handleRowClick({meeting_id: row.meeting_id, agenda_id: row.agenda_id, meeting: row})}
                     >
                       <TableCell component="th" scope="row" align="center">
                         <div id="DateCell">

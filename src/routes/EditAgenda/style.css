@@ -41,6 +41,15 @@
 }
 .meetingDetailsContainer {
   margin-top: 15px;
+
+}
+.timeContainer{
+  display:flex;
+  flex-basis: 2;
+}
+.timePicker{
+  width: fit-content;
+  display: inline-block;
 }
 
 .memberListContainer {
