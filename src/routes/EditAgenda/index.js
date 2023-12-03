@@ -342,6 +342,7 @@ const MeetingDetails = (props) => {
         </div>
 
         <Card className="cardMeetingDetails">
+          <h1>{meetingDetails.title}</h1>
           <div className="meetingDetailsContainer">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={['TimePicker']} className="timeContainer">
