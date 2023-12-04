@@ -5,10 +5,10 @@ invite to edit/comment
 */
 
 import React, { useEffect, useState } from "react";
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -26,7 +26,21 @@ import "./style.css";
 import { useLocation } from "react-router-dom";
 import AddMemberModal from "components/AddMember";
 import { useNavigate, Navigate } from "react-router-dom";
-import { getAgenda, getActionPoints, deleteActionPointComment, deleteActionPointSubPoint, deleteActionPoint, postActionPoint, postActionPointComment, postActionPointSubPoint, updateActionPoint, updateActionPointComment, updateActionPointSubPoint } from "components/AxiosInterceptor/AxiosInterceptor";
+import {
+  getAgenda,
+  getActionPoints,
+  deleteActionPointComment,
+  deleteActionPointSubPoint,
+  deleteActionPoint,
+  postActionPoint,
+  postActionPointComment,
+  postActionPointSubPoint,
+  updateActionPoint,
+  updateActionPointComment,
+  updateActionPointSubPoint,
+  editMeeting,
+  deleteMeeting,
+} from "components/AxiosInterceptor/AxiosInterceptor";
 import { AvatarGroup } from "@mui/material";
 import { Avatar } from "@mui/material";
 import Stack from "@mui/material/Stack";
@@ -35,35 +49,40 @@ import dayjs from "dayjs";
 const MeetingDetails = (props) => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const [meetingDetails, setMeetingsDetails] = useState(state.meeting)
+  const [meetingDetails, setMeetingsDetails] = useState(state.meeting);
   const [meetingTime, setMeetingTime] = useState(meetingDetails?.startTime);
   const [meetingStart, setMeetingStart] = useState(meetingDetails?.start_time);
   const [meetingEnd, setMeetingEnd] = useState(meetingDetails?.end_time);
   const [meetingDate, setMeetingDate] = useState(meetingDetails?.date);
   const [meetingAddress, setMeetingAddress] = useState(meetingDetails?.address);
-  const [meetingBuilding, setMeetingBuilding] = useState(meetingDetails?.building);
+  const [meetingBuilding, setMeetingBuilding] = useState(
+    meetingDetails?.building
+  );
   const [meetingRoom, setMeetingRoom] = useState(meetingDetails?.room);
-  const [meetingPlace, setMeetingPlace] = useState(meetingDetails?.meetingPlace);
+  const [meetingPlace, setMeetingPlace] = useState(
+    meetingDetails?.meetingPlace
+  );
   const [actionPoints, setActionPoints] = useState();
   const [isMemberModalOpen, setMemberModalOpen] = useState(false);
   const [members, setMembers] = useState(meetingDetails?.members);
 
-  const [actionPointIdCounter, setActionPointIdCounter] = useState(5000)
-  const [subPointIdCounter, setSubPointIdCounter] = useState(4000)
-  const [commentIdCounter, setCommentIdCounter] = useState(3000)
+  const [actionPointIdCounter, setActionPointIdCounter] = useState(5000);
+  const [subPointIdCounter, setSubPointIdCounter] = useState(4000);
+  const [commentIdCounter, setCommentIdCounter] = useState(3000);
 
-
-  const fetchAgenda = async () =>{
-    const parsedDate = dayjs(meetingDetails.date, {format:'YYYY-MM-DD'});
-    const formattedDate = parsedDate.format('YYYY-MM-DD')
-    setMeetingDate(formattedDate)
+  const fetchAgenda = async () => {
+    const parsedDate = dayjs(meetingDetails.date, { format: "YYYY-MM-DD" });
+    const formattedDate = parsedDate.format("YYYY-MM-DD");
+    setMeetingDate(formattedDate);
 
     let actionPoints = await getActionPoints(state.agenda_id);
     setActionPoints(actionPoints);
-  }
-  useEffect(()=>{
-    fetchAgenda()
-  }, [])
+  };
+  useEffect(() => {
+    fetchAgenda();
+  }, []);
+
+  // console.log("State: ", JSON.stringify(state, null, 2));
 
   // const MeetingDetails = () => {
   //   useEffect(() => {
@@ -113,7 +132,11 @@ const MeetingDetails = (props) => {
   const handleActionPointTitleChange = (index, event) => {
     const updatedActionPoints = [...actionPoints];
     updatedActionPoints[index].text = event.target.value;
-    if(updatedActionPoints[index].addToDB == false || updatedActionPoints[index].addToDB == undefined) updatedActionPoints[index].updateActionPointTitle = true;
+    if (
+      updatedActionPoints[index].addToDB == false ||
+      updatedActionPoints[index].addToDB == undefined
+    )
+      updatedActionPoints[index].updateActionPointTitle = true;
     setActionPoints(updatedActionPoints);
   };
 
@@ -123,17 +146,36 @@ const MeetingDetails = (props) => {
     event
   ) => {
     const updatedActionPoints = [...actionPoints];
-    updatedActionPoints[actionPointIndex].actionPointSubPoints[subPointIndex].message = event.target.value;
-    if(updatedActionPoints[actionPointIndex].actionPointSubPoints[subPointIndex].addToDB == false || updatedActionPoints[actionPointIndex].actionPointSubPoints[subPointIndex].addToDB == undefined ) updatedActionPoints[actionPointIndex].actionPointSubPoints[subPointIndex].updateSubPointMessage = true;
+    updatedActionPoints[actionPointIndex].actionPointSubPoints[
+      subPointIndex
+    ].message = event.target.value;
+    if (
+      updatedActionPoints[actionPointIndex].actionPointSubPoints[subPointIndex]
+        .addToDB == false ||
+      updatedActionPoints[actionPointIndex].actionPointSubPoints[subPointIndex]
+        .addToDB == undefined
+    )
+      updatedActionPoints[actionPointIndex].actionPointSubPoints[
+        subPointIndex
+      ].updateSubPointMessage = true;
     updatedActionPoints[actionPointIndex].changesSubPoints = true;
     setActionPoints(updatedActionPoints);
   };
 
   const handleCommentTextChange = (actionPointIndex, commentsIndex, event) => {
     const updatedActionPoints = [...actionPoints];
-    updatedActionPoints[actionPointIndex].actionPointComments[commentsIndex].comment_text =
-      event.target.value;
-    if(updatedActionPoints[actionPointIndex].actionPointComments[commentsIndex].addToDB == false || updatedActionPoints[actionPointIndex].actionPointComments[commentsIndex].addToDB == undefined) updatedActionPoints[actionPointIndex].actionPointComments[commentsIndex].updateActionPointComment = true;
+    updatedActionPoints[actionPointIndex].actionPointComments[
+      commentsIndex
+    ].comment_text = event.target.value;
+    if (
+      updatedActionPoints[actionPointIndex].actionPointComments[commentsIndex]
+        .addToDB == false ||
+      updatedActionPoints[actionPointIndex].actionPointComments[commentsIndex]
+        .addToDB == undefined
+    )
+      updatedActionPoints[actionPointIndex].actionPointComments[
+        commentsIndex
+      ].updateActionPointComment = true;
     updatedActionPoints[actionPointIndex].changesComments = true;
     setActionPoints(updatedActionPoints);
 
@@ -149,7 +191,7 @@ const MeetingDetails = (props) => {
     //       }else{
     //         allEditedComments.push(updatedActionPoints[actionPointIndex].actionPointComments[commentsIndex])
     //       }
-    //     }) 
+    //     })
     //   }
     // })
     // if(updatedActionPoints[actionPointIndex].actionPointComments[commentsIndex].addToDB){
@@ -162,12 +204,16 @@ const MeetingDetails = (props) => {
   };
 
   const handleAddActionPoint = () => {
-    const newActionPoint = { text: "", actionPointSubPoints: [], actionPointComments: [], action_point_id: actionPointIdCounter, agenda_id: meetingDetails.agenda_id, addToDB: true }
-    const updatedActionPoints = [
-      ...actionPoints,
-      newActionPoint
-    ];
-    setActionPointIdCounter(actionPointIdCounter+1)
+    const newActionPoint = {
+      text: "",
+      actionPointSubPoints: [],
+      actionPointComments: [],
+      action_point_id: actionPointIdCounter,
+      agenda_id: meetingDetails.agenda_id,
+      addToDB: true,
+    };
+    const updatedActionPoints = [...actionPoints, newActionPoint];
+    setActionPointIdCounter(actionPointIdCounter + 1);
     setActionPoints(updatedActionPoints);
   };
 
@@ -177,12 +223,14 @@ const MeetingDetails = (props) => {
       message: "",
       action_point_id: actionPoints[actionPointIndex].action_point_id,
       addToDB: true,
-      actionPointSubPointId: subPointIdCounter
-    }
-    updatedActionPoints[actionPointIndex].actionPointSubPoints.push(newSubPoint);
+      actionPointSubPointId: subPointIdCounter,
+    };
+    updatedActionPoints[actionPointIndex].actionPointSubPoints.push(
+      newSubPoint
+    );
     updatedActionPoints[actionPointIndex].newActionPointSubPoint = true;
     setActionPoints(updatedActionPoints);
-    setSubPointIdCounter(subPointIdCounter+1);
+    setSubPointIdCounter(subPointIdCounter + 1);
   };
 
   const handleAddComment = (actionPointIndex) => {
@@ -190,11 +238,11 @@ const MeetingDetails = (props) => {
     const newComment = {
       comment_text: "",
       addToDB: true,
-      comment_id: commentIdCounter
-    }
+      comment_id: commentIdCounter,
+    };
     updatedActionPoints[actionPointIndex].actionPointComments.push(newComment);
     setActionPoints(updatedActionPoints);
-    setCommentIdCounter(commentIdCounter+1)
+    setCommentIdCounter(commentIdCounter + 1);
   };
 
   const handleDeleteActionPoint = async (index) => {
@@ -204,7 +252,6 @@ const MeetingDetails = (props) => {
   };
 
   const handleDeleteSubPoint = async (action_point_subpoint_id) => {
-
     const res = await deleteActionPointSubPoint(action_point_subpoint_id);
     fetchAgenda();
   };
@@ -293,36 +340,72 @@ const MeetingDetails = (props) => {
     );
   };
 
-  const updateActionPoints = async() =>{
-    actionPoints.map(async ap =>{
-      if(ap.addToDB){
-        const res = await postActionPoint(ap.text, ap.agenda_id)
+  const updateActionPoints = async () => {
+    actionPoints.map(async (ap) => {
+      if (ap.addToDB) {
+        const res = await postActionPoint(ap.text, ap.agenda_id);
       }
-      if(ap.updateActionPointTitle){
-        const res = await updateActionPoint(ap.text, ap.agenda_id)
+      if (ap.updateActionPointTitle) {
+        const res = await updateActionPoint(ap.text, ap.agenda_id);
       }
-      if(ap.changesComments){
-        ap.actionPointComments.map(async apc=>{
-          if(apc.addToDB == true){
-            const res = await postActionPointComment(1, apc.comment_text, ap.action_point_id)
+      if (ap.changesComments) {
+        ap.actionPointComments.map(async (apc) => {
+          if (apc.addToDB == true) {
+            const res = await postActionPointComment(
+              1,
+              apc.comment_text,
+              ap.action_point_id
+            );
           }
-          if(apc.updateActionPointComment == true){
-            const res = await updateActionPointComment(1, apc.comment_text, ap.action_point_id)
+          if (apc.updateActionPointComment == true) {
+            const res = await updateActionPointComment(
+              1,
+              apc.comment_text,
+              ap.action_point_id
+            );
           }
-        })
+        });
       }
-      if(ap.changesSubPoints){
-        ap.actionPointSubPoints.map(async apsp => {
-          if(apsp.addToDB == true){
-            const res = await postActionPointSubPoint(apsp.message, apsp.action_point_id)
+      if (ap.changesSubPoints) {
+        ap.actionPointSubPoints.map(async (apsp) => {
+          if (apsp.addToDB == true) {
+            const res = await postActionPointSubPoint(
+              apsp.message,
+              apsp.action_point_id
+            );
           }
-          if(apsp.updateSubPointMessage == true){
-            const res = await updateActionPointSubPoint(apsp.message, apsp.action_point_subpoint_id)
+          if (apsp.updateSubPointMessage == true) {
+            const res = await updateActionPointSubPoint(
+              apsp.message,
+              apsp.action_point_subpoint_id
+            );
           }
-        })
+        });
       }
-    })
-  }
+    });
+  };
+
+  const handleEditMeeting = async () => {
+    const meetingId = state.meeting_id;
+    const meeting = {
+      meetingStart,
+      meetingEnd,
+      meetingDate,
+      meetingAddress,
+      meetingBuilding,
+      meetingRoom,
+      members,
+    };
+    // console.log("edited meeting " + JSON.stringify(meeting));
+    const response = await editMeeting(meetingId, meeting);
+    // console.log("Meeting edited:", response);
+  };
+
+  const meetingIdToDelete = state.meeting_id;
+  const handleDeleteMeeting = async () => {
+    const response = await deleteMeeting(meetingIdToDelete);
+    navigate("/");
+  };
 
   return (
     <div>
@@ -344,24 +427,27 @@ const MeetingDetails = (props) => {
         <Card className="cardMeetingDetails">
           <h1>{meetingDetails.title}</h1>
           <div className="meetingDetailsContainer">
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['TimePicker']} className="timeContainer">
-            <TimePicker
-              className="timePicker"
-              type="time"
-              label="Meeting Start"
-              value={dayjs(`2022-04-17T${meetingStart}`)}
-              onChange={handleStartTimeChange}
-            />
-            <TimePicker
-              className="timePicker"
-              type="time"
-              label="Meeting End"
-              value={dayjs(`2022-04-17T${meetingEnd}`)}
-              onChange={handleEndTimeChange}
-            />
-            </DemoContainer>
-          </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer
+                components={["TimePicker"]}
+                className="timeContainer"
+              >
+                <TimePicker
+                  className="timePicker"
+                  type="time"
+                  label="Meeting Start"
+                  value={dayjs(`2022-04-17T${meetingStart}`)}
+                  onChange={handleStartTimeChange}
+                />
+                <TimePicker
+                  className="timePicker"
+                  type="time"
+                  label="Meeting End"
+                  value={dayjs(`2022-04-17T${meetingEnd}`)}
+                  onChange={handleEndTimeChange}
+                />
+              </DemoContainer>
+            </LocalizationProvider>
             <TextField
               label="Meeting Date"
               type="date"
@@ -392,6 +478,18 @@ const MeetingDetails = (props) => {
           <div className="memberListContainer">
             <MemberList members={members} />
           </div>
+          <div className="button-container">
+            <div className="button-group">
+              <Button variant="contained" onClick={handleEditMeeting}>
+                Edit
+              </Button>
+            </div>
+            <div className="button-group">
+              <Button variant="contained" onClick={handleDeleteMeeting}>
+                Delete
+              </Button>
+            </div>
+          </div>
         </Card>
         <TableContainer component={Paper}>
           <Table>
@@ -416,43 +514,54 @@ const MeetingDetails = (props) => {
                     />
                   </TableCell>
                   <TableCell className="actionSubPoints">
-                    {actionPoint.actionPointSubPoints?.map((subPoint, subIndex) => (
-                      <div key={subIndex}>
-                        <TextField
-                          value={subPoint.message}
-                          onChange={(e) =>
-                            handleSubPointMessageChange(index, subIndex, e)
-                          }
-                        />
-                        <IconButton
-                          onClick={() => handleDeleteSubPoint(subPoint.action_point_subpoint_id, index)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </div>
-                    ))}
+                    {actionPoint.actionPointSubPoints?.map(
+                      (subPoint, subIndex) => (
+                        <div key={subIndex}>
+                          <TextField
+                            value={subPoint.message}
+                            onChange={(e) =>
+                              handleSubPointMessageChange(index, subIndex, e)
+                            }
+                          />
+                          <IconButton
+                            onClick={() =>
+                              handleDeleteSubPoint(
+                                subPoint.action_point_subpoint_id,
+                                index
+                              )
+                            }
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </div>
+                      )
+                    )}
                     <IconButton onClick={() => handleAddSubPoint(index)}>
                       <AddIcon />
                     </IconButton>
                   </TableCell>
                   <TableCell className="comments">
-                    {actionPoint.actionPointComments?.map((comment, commentsIndex) => (
-                      <div key={commentsIndex}>
-                        <TextField
-                          value={comment.comment_text}
-                          onChange={(e) =>
-                            handleCommentTextChange(index, commentsIndex, e)
-                          }
-                        />
-                        <IconButton
-                          onClick={() =>
-                            handleDeleteComment(comment.action_point_comment_id)
-                          }
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </div>
-                    ))}
+                    {actionPoint.actionPointComments?.map(
+                      (comment, commentsIndex) => (
+                        <div key={commentsIndex}>
+                          <TextField
+                            value={comment.comment_text}
+                            onChange={(e) =>
+                              handleCommentTextChange(index, commentsIndex, e)
+                            }
+                          />
+                          <IconButton
+                            onClick={() =>
+                              handleDeleteComment(
+                                comment.action_point_comment_id
+                              )
+                            }
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </div>
+                      )
+                    )}
                     <IconButton onClick={() => handleAddComment(index)}>
                       <AddIcon />
                     </IconButton>
@@ -488,7 +597,9 @@ const MeetingDetails = (props) => {
             />
           </div>
           <div className="button-group">
-            <Button variant="contained" onClick={updateActionPoints}>save agenda</Button>
+            <Button variant="contained" onClick={updateActionPoints}>
+              save agenda
+            </Button>
             <Button variant="contained" onClick={handleSave}>
               Finalize agenda
             </Button>
