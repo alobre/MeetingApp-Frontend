@@ -59,9 +59,7 @@ const MeetingDetails = (props) => {
     meetingDetails?.building
   );
   const [meetingRoom, setMeetingRoom] = useState(meetingDetails?.room);
-  const [meetingPlace, setMeetingPlace] = useState(
-    meetingDetails?.meetingPlace
-  );
+
   const [actionPoints, setActionPoints] = useState();
   const [isMemberModalOpen, setMemberModalOpen] = useState(false);
   const [members, setMembers] = useState(meetingDetails?.members);
@@ -102,11 +100,12 @@ const MeetingDetails = (props) => {
   //     });
   //   }, []);
 
-  const handleStartTimeChange = (event) => {
-    setMeetingStart(event.target.value);
+  const handleStartTimeChange = (date) => {
+    setMeetingStart(dayjs(date).format("HH:mm"));
   };
-  const handleEndTimeChange = (event) => {
-    setMeetingEnd(event.target.value);
+
+  const handleEndTimeChange = (date) => {
+    setMeetingEnd(dayjs(date).format("HH:mm"));
   };
 
   const handleMeetingDateChange = (event) => {
@@ -123,10 +122,6 @@ const MeetingDetails = (props) => {
 
   const handleMeetingRoomChange = (event) => {
     setMeetingRoom(event.target.value);
-  };
-
-  const handleMeetingPlaceChange = (event) => {
-    setMeetingPlace(event.target.value);
   };
 
   const handleActionPointTitleChange = (index, event) => {
@@ -274,7 +269,6 @@ const MeetingDetails = (props) => {
       meetingAddress,
       meetingBuilding,
       meetingRoom,
-      meetingPlace,
       actionPoints: actionPoints?.map((actionPoint) => ({
         title: actionPoint.title,
         subPoints: actionPoint.subPoints?.map((subPoint) => ({
@@ -290,7 +284,8 @@ const MeetingDetails = (props) => {
   };
 
   const handleMemberSave = (selectedMembers) => {
-    setMembers(selectedMembers);
+    // Concatenate the new members to the existing array
+    setMembers((prevMembers) => [...prevMembers, ...selectedMembers]);
   };
 
   const MemberList = ({ members }) => {
@@ -307,35 +302,11 @@ const MeetingDetails = (props) => {
         {isDropdownOpen && (
           <ul>
             {members?.map((member, index) => (
-              <li key={index}>
-                {" "}
-                <Avatar
-                  alt="Amelie"
-                  src="/static/images/avatar/2.jpg"
-                  sx={{ width: 42, height: 42 }}
-                />{" "}
-                {member.name}
-              </li>
-              // <li >
-              // <div class="avatar-container">
-
-              //     <span class="hover-letter">A</span>
-              //   </div>
-
-              // </li>
+              <li key={index}>{member.first_name}</li>
             ))}
           </ul>
         )}
-        {!isDropdownOpen && (
-          <p>
-            {members?.map((member, index) => (
-              <span key={index}>
-                {member.name}
-                {index !== members.length - 1 ? ", " : ""}
-              </span>
-            ))}
-          </p>
-        )}
+        {!isDropdownOpen && <p>Click to show members of the meeting</p>}
       </Card>
     );
   };
@@ -436,15 +407,16 @@ const MeetingDetails = (props) => {
                   className="timePicker"
                   type="time"
                   label="Meeting Start"
-                  value={dayjs(`2022-04-17T${meetingStart}`)}
-                  onChange={handleStartTimeChange}
+                  value={dayjs(`2022-04-17T${meetingStart}`).toDate()}
+                  onChange={(date) => handleStartTimeChange(date)}
                 />
+
                 <TimePicker
                   className="timePicker"
                   type="time"
                   label="Meeting End"
-                  value={dayjs(`2022-04-17T${meetingEnd}`)}
-                  onChange={handleEndTimeChange}
+                  value={dayjs(`2022-04-17T${meetingEnd}`).toDate()}
+                  onChange={(date) => handleEndTimeChange(date)}
                 />
               </DemoContainer>
             </LocalizationProvider>
@@ -469,16 +441,24 @@ const MeetingDetails = (props) => {
               value={meetingRoom}
               onChange={handleMeetingRoomChange}
             />
-            <TextField
-              label="Meeting Place"
-              value={meetingPlace}
-              onChange={handleMeetingPlaceChange}
-            />
           </div>
           <div className="memberListContainer">
             <MemberList members={members} />
           </div>
           <div className="button-container">
+            <div className="button-group">
+              <Button
+                variant="contained"
+                onClick={() => setMemberModalOpen(true)}
+              >
+                Add Member
+              </Button>
+              <AddMemberModal
+                isOpen={isMemberModalOpen}
+                onClose={() => setMemberModalOpen(false)}
+                onSave={handleMemberSave}
+              />
+            </div>
             <div className="button-group">
               <Button variant="contained" onClick={handleEditMeeting}>
                 Edit
@@ -583,7 +563,7 @@ const MeetingDetails = (props) => {
               Add Action Point
             </Button>
           </div>
-          <div className="button-group">
+          {/* <div className="button-group">
             <Button
               variant="contained"
               onClick={() => setMemberModalOpen(true)}
@@ -595,7 +575,7 @@ const MeetingDetails = (props) => {
               onClose={() => setMemberModalOpen(false)}
               onSave={handleMemberSave}
             />
-          </div>
+          </div> */}
           <div className="button-group">
             <Button variant="contained" onClick={updateActionPoints}>
               save agenda

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   TextField,
@@ -9,38 +9,43 @@ import {
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-// const users = [
-//     { name: "Amelie Boehme", email: "amelie@fhtw.at" },
-//     { name: "Philipp Kis", email: "philipp@fhtw.at" },
-//     { name: "Johanna", email: "johanna@fhtw.at" },
-//     { name: "Ana Matic", email: "ana@fhtw.at" },
-//     { name: "Florian Eckkrammer", email: "florian@fhtw.at" },
-//   ];
-
-const users = ["Amelie", "Philipp", "Johanna", "Ana", "Florian"];
+import { fetchUsers } from "components/AxiosInterceptor/AxiosInterceptor";
 
 const AddMemberModal = ({ isOpen, onClose, onSave }) => {
   const [members, setMembers] = useState([]);
   const [selectedMember, setSelectedMember] = useState(null);
   const [hasRightsToEdit, setHasRightsToEdit] = useState(false);
-  const [isMemberModalOpen, setMemberModalOpen] = useState(false);
+  const [users, setUsers] = useState([]);
+
+  const fetchUsersFromDatabase = async () => {
+    try {
+      const response = await fetchUsers();
+      setUsers(response.users);
+    } catch (error) {
+      console.error("Error fetching users from the database", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsersFromDatabase();
+  }, []);
 
   const handleDeleteMember = (index) => {
-    setMembers(members.filter((_, i) => i !== index));
+    setMembers((prevMembers) => prevMembers.filter((_, i) => i !== index));
   };
 
   const handleMemberSave = () => {
     if (!selectedMember) return;
-    setMembers([...members, { name: selectedMember, hasRightsToEdit }]);
+    const newMember = { first_name: selectedMember, hasRightsToEdit };
+    setMembers((prevMembers) => [...prevMembers, newMember]);
     setSelectedMember(null);
     setHasRightsToEdit(false);
-    onSave([...members, { name: selectedMember, hasRightsToEdit }]);
+    onSave([...members, newMember]);
   };
 
   const handleCheck = (index) => {
-    setMembers((prevState) =>
-      prevState.map((member, i) =>
+    setMembers((prevMembers) =>
+      prevMembers.map((member, i) =>
         i === index
           ? { ...member, hasRightsToEdit: !member.hasRightsToEdit }
           : member
@@ -53,19 +58,13 @@ const AddMemberModal = ({ isOpen, onClose, onSave }) => {
       <div className="modalBody">
         <h2>Add Member</h2>
         <Autocomplete
-          options={users.filter(
-            (user) => !members.find((member) => member.name === user)
-          )}
+          options={users.map((user) => user.first_name)}
           value={selectedMember}
           onChange={(event, newValue) => {
             setSelectedMember(newValue);
           }}
           renderInput={(params) => (
-            <TextField
-              {...params}
-              // label="Select member"
-              placeholder="Type to search"
-            />
+            <TextField {...params} placeholder="Type to search" />
           )}
         />
         <FormControlLabel
@@ -81,7 +80,7 @@ const AddMemberModal = ({ isOpen, onClose, onSave }) => {
 
         <div className="form-group">
           {members.map((member, index) => (
-            <div key={member.name}>
+            <div key={member.first_name}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -89,7 +88,7 @@ const AddMemberModal = ({ isOpen, onClose, onSave }) => {
                     onChange={() => handleCheck(index)}
                   />
                 }
-                label={member.name}
+                label={member.first_name}
               />
               <IconButton onClick={() => handleDeleteMember(index)}>
                 <DeleteIcon />

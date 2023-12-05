@@ -27,22 +27,12 @@ import AddMeetingSerie from "components/AddMeetingSerie";
 import NotificationScreen from "routes/Notification";
 import { createMeeting } from "components/AxiosInterceptor/AxiosInterceptor";
 
-// const users = ["Amelie", "Philipp", "Johanna", "Ana", "Florian"];
 const meetingTypes = [
   { label: "Board" },
   { label: "IT Department" },
   { label: "Project Stardust" },
 ];
 const MeetingForm = () => {
-  // const [address, setAddress] = useState("");
-  // const [building, setBuilding] = useState("");
-  // const [room, setRoom] = useState("");
-  // const [date, setDate] = useState(null);
-  // const [time, setTime] = useState(null);
-  // const [title, setTitle] = useState("");
-  // const [isAddressModalOpen, setAddressModalOpen] = useState(false);
-  // const [isDateTimeModalOpen, setDateTimeModalOpen] = useState(false);
-  // const [isMemberModalOpen, setMemberModalOpen] = useState(false);
   const navigate = useNavigate();
   const [address, setAddress] = useState("");
   const [building, setBuilding] = useState("");
@@ -131,25 +121,6 @@ const MeetingForm = () => {
   const handleMemberSave = (selectedMembers) => {
     setMembers(selectedMembers);
   };
-
-  // const handleDeleteMember = (index) => {
-  //   setMembers(members.filter((_, i) => i !== index));
-  // };
-
-  // const handleMemberSave = () => {
-  //   if (!selectedMember) return;
-  //   setMembers([...members, { name: selectedMember, isChecked }]);
-  //   setSelectedMember(null);
-  //   setIsChecked(false);
-  // };
-
-  // const handleCheck = (index) => {
-  //   setMembers((prevState) =>
-  //     prevState.map((member, i) =>
-  //       i === index ? { ...member, isChecked: !member.isChecked } : member
-  //     )
-  //   );
-  // };
 
   return (
     <div className="meetingParent">
