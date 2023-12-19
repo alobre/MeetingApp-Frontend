@@ -34,6 +34,17 @@ export const getMeetings = async () => {
   }
 };
 
+export const login = async (body) => {
+  try {
+    const response = await axios.post("http://localhost:4000/login", body);
+    console.log({ body});
+    console.log("Response Data: " + JSON.stringify(response.data));
+    return response.data;
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
 export const createMeeting = async (body) => {
   try {
     const response = await axios.post("http://localhost:4000/meetings", body);

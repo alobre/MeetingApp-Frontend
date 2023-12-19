@@ -10,10 +10,17 @@ const LoginScreen = () => {
   const [password, setpassword] = useState("");
   const [error, setErrorMessage] = useState("");
 
-  const login = (username, password) =>{
-    const result = handleLogin(username, password)
-    console.log(result)
-    result.success ? navigate('/') : setErrorMessage(result.error)
+  const login = async (username, password) =>{
+    const result = await handleLogin(username, password)
+    console.log("Form username password: " + result +username)
+    console.log("login success? " + result.success)
+    console.log("Result login frontend: " +JSON.stringify(result))
+    if(result.success === true){
+      console.log("Login theoretically successful")
+      localStorage.setItem("authenticated", true);
+      navigate('/') ;
+    } 
+    //result.success ? navigate('/') : setErrorMessage(result.error)
   }
 
   const ErrorComponent = () =>(<div className="error">{error.msg}</div>)
