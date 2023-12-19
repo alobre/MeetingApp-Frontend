@@ -263,6 +263,7 @@ const MeetingDetails = (props) => {
 
   const handleSave = () => {
     const agenda = {
+      id: state.agenda_id,
       meetingStart,
       meetingEnd,
       meetingDate,

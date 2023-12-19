@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Button,
   List,
@@ -10,21 +9,34 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableHead,
   TableRow,
   Typography,
-  Modal,
+  Paper,
 } from "@mui/material";
+import { getAgenda } from "components/AxiosInterceptor/AxiosInterceptor";
 import "./style.css";
 import MemberList from "components/MemberList";
 
 const ViewAgenda = () => {
-  const navigate = useNavigate();
   const location = useLocation();
-  console.log("location.state:", location.state);
-  const agenda = location.state?.agenda;
-  console.log("agenda:", agenda);
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [membersToShow, setMembersToShow] = useState(3);
+  const navigate = useNavigate();
+  const agenda_id = location.state?.agenda.id;
+  const [agenda, setAgenda] = useState(null);
+
+  useEffect(() => {
+    const fetchAgendaDetails = async () => {
+      try {
+        const response = await getAgenda(agenda_id);
+        setAgenda(response);
+        console.log(JSON.stringify(response));
+      } catch (error) {
+        console.error("Error fetching agenda details", error);
+      }
+    };
+
+    fetchAgendaDetails();
+  }, [agenda_id]);
 
   if (!agenda) {
     return <div>No agenda found.</div>;
@@ -34,47 +46,9 @@ const ViewAgenda = () => {
     navigate("/WriteProtocol", { state: { agenda: agenda } });
   };
 
-  const openModal = () => {
-    setModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalOpen(false);
-  };
-
-  const showAllMembers = () => {
-    setMembersToShow(agenda.members.length);
-    openModal();
-  };
-
-  const showFirstFiveMembers = () => {
-    setMembersToShow(5);
-    openModal();
-  };
-
   return (
     <div>
-      {/* <Card className="card-container">
-        <Typography variant="h5" className="members">
-          Members
-        </Typography>
-        <List>
-          {agenda.members.slice(0, 3).map((member, index) => (
-            <ListItem key={index}>{member.name}</ListItem>
-          ))}
-        </List>
-        <Button variant="outlined" onClick={showAllMembers}>
-          Show All Members
-        </Button>
-      </Card>
-
-      <MemberList
-        isOpen={isModalOpen}
-        closeModal={closeModal}
-        members={agenda.members}
-      /> */}
       <Card className="card-container">
-        <Typography variant="h2">Agenda Details</Typography>
         <Button
           variant="outlined"
           className="protocol"
@@ -82,102 +56,59 @@ const ViewAgenda = () => {
         >
           Start a protocol
         </Button>
-        <TableContainer className="table-container-details">
-          <Table>
-            <TableBody>
-              <TableRow>
-                <TableCell>
-                  <Typography variant="h6">Meeting Time:</Typography>
-                  <Typography variant="h6">{agenda.meetingTime}</Typography>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>
-                  <Typography variant="h6">Meeting Date:</Typography>
-                  <Typography variant="h6">{agenda.meetingDate}</Typography>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>
-                  <Typography variant="h6">Meeting Place:</Typography>
-                  <Typography variant="h6">{agenda.meetingPlace}</Typography>
-                </TableCell>
-              </TableRow>
-
-              <TableCell>
-                {/* <Card className="card-members"> */}
-                <Typography variant="h5" className="members">
-                  Members
-                </Typography>
-                <List>
-                  {agenda.members.slice(0, 3).map((member, index) => (
-                    <ListItem key={index}>{member.name}</ListItem>
-                  ))}
-                </List>
-                <Button variant="outlined" onClick={showAllMembers}>
-                  Show All Members
-                </Button>
-                {/* </Card> */}
-
-                <MemberList
-                  isOpen={isModalOpen}
-                  closeModal={closeModal}
-                  members={agenda.members}
-                />
-              </TableCell>
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <Typography variant="h5" className="agenda-items-header">
-          Agenda Items
+        <Typography variant="h2">Meeting Details</Typography>
+        <Typography variant="h5">{agenda.meeting.title}</Typography>
+        <Typography variant="body1">
+          Date: {new Date(agenda.meeting.date).toLocaleDateString()}
         </Typography>
-        <TableContainer className="table-container-agenda">
+        <Typography variant="body1">
+          Location: {agenda.meeting.address}, {agenda.meeting.building},{" "}
+          {agenda.meeting.room}
+        </Typography>
+        <Typography variant="h5" className="members">
+          Meeting Members
+        </Typography>
+        <List>
+          {agenda.meetingMembers.map((member, index) => (
+            <ListItem key={index}>{member.first_name}</ListItem>
+          ))}
+        </List>
+        <Typography variant="h5" className="agenda-items-header">
+          Action Points
+        </Typography>
+        <TableContainer component={Paper}>
           <Table>
-            <TableBody>
+            <TableHead>
               <TableRow>
-                <TableCell>
-                  <Typography variant="h6" className="custom-h6">
-                    Item No.
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="h6" className="custom-h6">
-                    Action Points
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="h6" className="custom-h6">
-                    Sub-Points
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="h6" className="custom-h6">
-                    Comments
-                  </Typography>
-                </TableCell>
+                <TableCell>Item No.</TableCell>
+                <TableCell>Action Point</TableCell>
+                <TableCell>Sub-Points</TableCell>
+                <TableCell>Comments</TableCell>
               </TableRow>
+            </TableHead>
+            <TableBody>
               {agenda.actionPoints.map((actionPoint, index) => (
-                <TableRow key={index}>
-                  <TableCell>
-                    <Typography variant="body1">{index + 1}</Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="h6" className="agenda-item-title">
-                      {actionPoint.title}
-                    </Typography>
-                  </TableCell>
+                <TableRow key={actionPoint.action_point_id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{actionPoint.text}</TableCell>
                   <TableCell>
                     <List>
-                      {actionPoint.subPoints.map((subPoint, subIndex) => (
-                        <ListItem key={subIndex}>{subPoint.title}</ListItem>
-                      ))}
+                      {actionPoint.subpoints &&
+                        actionPoint.subpoints.map((subPoint, subIndex) => (
+                          <ListItem key={subPoint.action_point_subpoint_id}>
+                            {subPoint.message}
+                          </ListItem>
+                        ))}
                     </List>
                   </TableCell>
                   <TableCell>
                     <List>
-                      {actionPoint.comments.map((comment, commentIndex) => (
-                        <ListItem key={commentIndex}>{comment.title}</ListItem>
-                      ))}
+                      {actionPoint.comments &&
+                        actionPoint.comments.map((comment, commentIndex) => (
+                          <ListItem key={comment.action_point_comment_id}>
+                            {comment.comment_text}
+                          </ListItem>
+                        ))}
                     </List>
                   </TableCell>
                 </TableRow>
@@ -185,14 +116,6 @@ const ViewAgenda = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        {/* <Typography variant="h5" className="members">
-          Members
-        </Typography>
-        <List>
-          {agenda.members.map((member, index) => (
-            <ListItem key={index}>{member.name}</ListItem>
-          ))}
-        </List>{" "} */}
       </Card>
     </div>
   );
