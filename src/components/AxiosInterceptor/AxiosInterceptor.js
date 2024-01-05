@@ -28,6 +28,7 @@ axios.interceptors.response.use(
 export const getMeetings = async () => {
   try {
     const response = await axios.get("http://localhost:4000/getMeetings");
+    console.log("response meetings from db " + JSON.stringify(response));
     return response.data;
   } catch (err) {
     console.error(err.message);
@@ -37,9 +38,17 @@ export const getMeetings = async () => {
 export const login = async (body) => {
   try {
     const response = await axios.post("http://localhost:4000/login", body);
-    console.log({ body});
+    console.log({ body });
     console.log("Response Data: " + JSON.stringify(response.data));
-    return response.data;
+
+    const response2 = await axios.post(
+      "http://localhost:4000/users",
+      response.data
+    );
+
+    return { loginResponse: response.data, userResponse: response2.data };
+
+    // return response.data;
   } catch (err) {
     console.error(err.message);
   }
@@ -76,6 +85,7 @@ export const getAgenda = async (agenda_id) => {
     const response = await axios.get(
       "http://localhost:4000/agenda/" + agenda_id
     );
+    console.log("getAgenda in axios response " + JSON.stringify(response.data));
     return response.data;
   } catch (err) {
     console.error(err.message);
@@ -239,9 +249,11 @@ export const updateActionPointSubPoint = async (
   }
 };
 
-export const fetchUsers = async () => {
+export const fetchUsers = async (username) => {
   try {
-    const response = await axios.get("http://localhost:4000/users");
+    const response = await axios.get("http://localhost:4000/user/" + username);
+    // console.log({ username });
+    console.log("Response Data: " + JSON.stringify(response.data));
     return response.data;
   } catch (err) {
     console.error(err.message);

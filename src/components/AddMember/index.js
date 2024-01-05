@@ -17,18 +17,45 @@ const AddMemberModal = ({ isOpen, onClose, onSave }) => {
   const [hasRightsToEdit, setHasRightsToEdit] = useState(false);
   const [users, setUsers] = useState([]);
 
-  const fetchUsersFromDatabase = async () => {
+  const fetchUsersFromDatabase = async (query) => {
     try {
-      const response = await fetchUsers();
-      setUsers(response.users);
+      const response = await fetchUsers(query);
+
+      const ldapUsers = response.ldapUser;
+
+      if (ldapUsers && ldapUsers.length > 0) {
+        const usersList = ldapUsers.map((ldapUser) => {
+          const cnAttribute = ldapUser.attributes.find(
+            (attr) => attr.type === "cn"
+          );
+          const uidAttribute = ldapUser.attributes.find(
+            (attr) => attr.type === "uid"
+          );
+          const mailAttribute = ldapUser.attributes.find(
+            (attr) => attr.type === "mail"
+          );
+
+          const cnValues = cnAttribute ? cnAttribute.values.join(", ") : "";
+          const uidValues = uidAttribute ? uidAttribute.values.join(", ") : "";
+          const mailValues = mailAttribute
+            ? mailAttribute.values.join(", ")
+            : "";
+
+          const combinedValues = [cnValues, uidValues, mailValues];
+
+          return combinedValues.join(", ");
+        });
+
+        // set the combined values in the state
+        setUsers(usersList);
+      } else {
+        console.log("No attributes found in the LDAP response.");
+        setUsers([]); // Set users to an empty array if no attributes are found
+      }
     } catch (error) {
-      console.error("Error fetching users from the database", error);
+      console.error("Error fetching users from LDAP", error);
     }
   };
-
-  useEffect(() => {
-    fetchUsersFromDatabase();
-  }, []);
 
   const handleDeleteMember = (index) => {
     setMembers((prevMembers) => prevMembers.filter((_, i) => i !== index));
@@ -58,14 +85,22 @@ const AddMemberModal = ({ isOpen, onClose, onSave }) => {
       <div className="modalBody">
         <h2>Add Member</h2>
         <Autocomplete
-          options={users.map((user) => user.first_name)}
+          options={users}
           value={selectedMember}
           onChange={(event, newValue) => {
             setSelectedMember(newValue);
           }}
+          onInputChange={(event, newInputValue) => {
+            fetchUsersFromDatabase(newInputValue);
+          }}
           renderInput={(params) => (
-            <TextField {...params} placeholder="Type to search" />
+            <TextField
+              {...params}
+              placeholder="Type to search"
+              style={{ width: 300 }} //
+            />
           )}
+          style={{ width: 300 }}
         />
         <FormControlLabel
           control={

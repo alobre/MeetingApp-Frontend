@@ -68,6 +68,8 @@ const MeetingDetails = (props) => {
   const [subPointIdCounter, setSubPointIdCounter] = useState(4000);
   const [commentIdCounter, setCommentIdCounter] = useState(3000);
 
+  const active_uid = localStorage.getItem("active_uid");
+
   const fetchAgenda = async () => {
     const parsedDate = dayjs(meetingDetails.date, { format: "YYYY-MM-DD" });
     const formattedDate = parsedDate.format("YYYY-MM-DD");
@@ -303,7 +305,11 @@ const MeetingDetails = (props) => {
         {isDropdownOpen && (
           <ul>
             {members?.map((member, index) => (
-              <li key={index}>{member.first_name}</li>
+              <li key={index}>
+                {`${member.first_name || ""} ${member.last_name || ""} ${
+                  member.email || ""
+                }`}
+              </li>
             ))}
           </ul>
         )}
@@ -324,14 +330,14 @@ const MeetingDetails = (props) => {
         ap.actionPointComments.map(async (apc) => {
           if (apc.addToDB == true) {
             const res = await postActionPointComment(
-              1,
+              active_uid,
               apc.comment_text,
               ap.action_point_id
             );
           }
           if (apc.updateActionPointComment == true) {
             const res = await updateActionPointComment(
-              1,
+              active_uid,
               apc.comment_text,
               ap.action_point_id
             );
