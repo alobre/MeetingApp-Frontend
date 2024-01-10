@@ -35,6 +35,22 @@ export const getMeetings = async () => {
   }
 };
 
+export const getNotifications = async () => {
+  try {
+    const activeUser = localStorage.getItem("active_uid");
+    console.log("Active user = " + localStorage.getItem("active_uid"));
+    const response = await axios.get("http://localhost:4000/getNotifications",{
+      params: {
+        active_uid: activeUser,
+      },
+    });
+    console.log("response notifications from db " + JSON.stringify(response));
+    return response.data;
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
 export const login = async (body) => {
   try {
     const response = await axios.post("http://localhost:4000/login", body);
