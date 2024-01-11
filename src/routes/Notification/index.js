@@ -7,6 +7,7 @@ const NotificationScreen = () => {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
 
+  // user has to be logged in, if not goto login screen
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("authenticated") !== null;
     if (isAuthenticated) {

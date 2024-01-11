@@ -1,15 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Navigate } from "react-router-dom";
-
-import style from "./style.css";
-import {
-  AppBar,
-  Box,
-  Toolbar,
-  Typography,
-  Button,
-  IconButton,
-} from "@mui/material";
+import { AppBar, Box, Toolbar, Typography, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Link } from "react-router-dom";
@@ -20,12 +10,11 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 
-const NavBar = ({meetings}) => {
+const NavBar = () => {
   const [isLogged, setisLogged] = useState(
     localStorage.getItem("authenticated") === "true"
   );
 
-  // listen for the changes in the local storage, if a user is authenticated set the isLogged to true, if not, to false - important for toggling the button in the NavBar (show login when the user is logged out and logout when the user is logged in)
   useEffect(() => {
     const handleStorageChange = () => {
       setisLogged(localStorage.getItem("authenticated") === "true");
@@ -35,21 +24,16 @@ const NavBar = ({meetings}) => {
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
-  }, [isLogged]);
+  }, []);
 
-  // function for logout button
+  const navigate = useNavigate();
+
   const logout = () => {
     localStorage.removeItem("authenticated");
     localStorage.removeItem("loggedUser");
-
     setisLogged(false);
+    navigate("/Login");
   };
-  
-  // const navigate = useNavigate();
-  // const navigateSearch = () => {
-  //   console.log('click', meetings)
-  //   navigate("/Search", { state: meetings });
-  // };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -62,30 +46,23 @@ const NavBar = ({meetings}) => {
             size="large"
             aria-label="searchButton"
             color="inherit"
-            id="searchButton"
-            to="/Search" state={{ meetings }}
+            to="/Search"
             component={Link}
           >
-              <SearchIcon />
-            
+            <SearchIcon />  
           </IconButton>
           <IconButton color="inherit" to={"/"} component={Link}>
-            <HomeIcon></HomeIcon>
+            <HomeIcon />
           </IconButton>
           <IconButton color="inherit" to={"/CreateMeeting"} component={Link}>
-            <AddCircleIcon></AddCircleIcon>
+            <AddCircleIcon />
           </IconButton>
           <IconButton color="inherit" to={"/Notification"} component={Link}>
-            <NotificationsIcon></NotificationsIcon>
+            <NotificationsIcon />
           </IconButton>
-          {isLogged ? (
-            <IconButton
-              color="inherit"
-              to={"/Login"}
-              component={Link}
-              onClick={logout}
-            >
-              <LogoutIcon></LogoutIcon>
+          {localStorage.getItem("authenticated") ? (
+            <IconButton color="inherit" onClick={logout}>
+              <LogoutIcon />
             </IconButton>
           ) : (
             <IconButton
@@ -105,4 +82,5 @@ const NavBar = ({meetings}) => {
     </Box>
   );
 };
+
 export default NavBar;

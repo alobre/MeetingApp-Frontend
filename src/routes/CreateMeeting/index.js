@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   TextField,
@@ -32,6 +32,9 @@ const meetingTypes = [
   { label: "IT Department" },
   { label: "Project Stardust" },
 ];
+
+
+
 const MeetingForm = () => {
   const navigate = useNavigate();
   const [address, setAddress] = useState("");
@@ -46,6 +49,16 @@ const MeetingForm = () => {
   const [isMemberModalOpen, setMemberModalOpen] = useState(false);
   const [members, setMembers] = useState([]);
   const [meetingType, setMeetingType] = useState(null);
+
+  // user has to be logged in, if not goto login screen
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem("authenticated") !== null;
+    if (isAuthenticated) {
+      
+    } else {
+      navigate("/Login");
+    }
+  }, []);
 
   // ToTest search for meetingSerie
   const [meetingSerie, setMeetingSerie] = useState([]);
