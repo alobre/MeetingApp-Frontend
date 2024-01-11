@@ -16,7 +16,7 @@ const NotificationTable = ({ data }) => {
   if (!data || data.length === 0) {
     return <Typography>No notifications found.</Typography>;
   }
-  const handleRowClick = (data) => {
+  const handleRowClick = (data) => {//TO DO VieWAgenda
     navigate("/EditAgenda", { state: data });
   };
 

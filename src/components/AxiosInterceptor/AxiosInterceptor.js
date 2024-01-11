@@ -35,6 +35,24 @@ export const getMeetings = async () => {
   }
 };
 
+export const hasRightToEdit = async (meetingId) => {
+  try {
+    console.log("has right to editbody: " + JSON.stringify(meetingId));
+    const activeUser = localStorage.getItem("active_uid");
+    const response = await axios.get("http://localhost:4000/getRightToEdit", {
+      params: {
+        active_uid: activeUser,
+        meeting_id: meetingId,
+      },
+    });
+    console.log("response hasRightToEdit from db ");
+
+    return response;
+  } catch (err) {
+    console.error(err.message);
+  }
+}
+
 export const getNotifications = async () => {
   try {
     const activeUser = localStorage.getItem("active_uid");

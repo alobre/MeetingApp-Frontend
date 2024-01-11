@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import style from "./style.css";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -13,12 +13,24 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useHistory } from "react-router";
 import { useNavigate } from "react-router-dom";
+import { hasRightToEdit } from "components/AxiosInterceptor/AxiosInterceptor";
 
 const MeetingTable = ({ data }) => {
   const navigate = useNavigate();
+  var memberHasRightToEdit;
 
-  const handleRowClick = (data) => {
-    navigate("/EditAgenda", { state: data });
+
+
+  const handleRowClick = async (body) => {
+    console.log("Data from handleRowClick: " + JSON.stringify(data));
+    const response = await hasRightToEdit(body.meeting_id);
+    const memberHasRightToEdit = response.data.rows[0].edit_agenda;
+    console.log("On Click - info has right to Edit: " + memberHasRightToEdit);
+    if(memberHasRightToEdit === true){
+      navigate("/EditAgenda", { state: body });
+    } else {
+      navigate("/ViewAgenda"); 
+    }
   };
 
   // const handleRowClick = (action, data) => {
