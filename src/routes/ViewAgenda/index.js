@@ -39,7 +39,7 @@ const ViewAgenda = () => {
   }, [agenda_id]);
 
   if (!agenda) {
-    return <div>No agenda found.</div>;
+    return <div>Loading...</div>;
   }
 
   const navigateToWriteProtocol = (agenda) => {

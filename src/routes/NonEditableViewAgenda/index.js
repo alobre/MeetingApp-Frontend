@@ -19,31 +19,33 @@ import "./style.css";
 import MemberList from "components/MemberList";
 
 const NonEditableViewAgenda = () => {
-    const location = useLocation();
-    const navigate = useNavigate();
-  
-    const [agenda, setAgenda] = useState(null);
-  
-    useEffect(() => {
-      const fetchAgendaDetails = async () => {
-        try {
-          // Check if location.state and location.state.agenda_id are defined
-          if (location.state && location.state.agenda_id) {
-            console.log("NonEditableViewAgenda agenda_id: " + location.state.agenda_id);
-            const response = await getAgenda(location.state.agenda_id);
-            setAgenda(response);
-            console.log(JSON.stringify(response));
-          } else {
-            console.error("Invalid data passed to NonEditableViewAgenda");
-          }
-        } catch (error) {
-          console.error("Error fetching agenda details", error);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const [agenda, setAgenda] = useState(null);
+
+  useEffect(() => {
+    const fetchAgendaDetails = async () => {
+      try {
+        // Check if location.state and location.state.agenda_id are defined
+        if (location.state && location.state.agenda_id) {
+          console.log(
+            "NonEditableViewAgenda agenda_id: " + location.state.agenda_id
+          );
+          const response = await getAgenda(location.state.agenda_id);
+          setAgenda(response);
+          console.log(JSON.stringify(response));
+        } else {
+          console.error("Invalid data passed to NonEditableViewAgenda");
         }
-      };
-  
-      fetchAgendaDetails();
-    }, [location.state]);
-/*
+      } catch (error) {
+        console.error("Error fetching agenda details", error);
+      }
+    };
+
+    fetchAgendaDetails();
+  }, [location.state]);
+  /*
 const NonEditableViewAgenda = (data) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -66,7 +68,7 @@ const NonEditableViewAgenda = (data) => {
   }, [data.agenda_id]);
 */
   if (!agenda) {
-    return <div>No agenda found.</div>;
+    return <div>Loading...</div>;
   }
 
   const navigateToWriteProtocol = (agenda) => {

@@ -46,7 +46,7 @@ const ViewProtocol = () => {
   };
 
   if (!protocol) {
-    return <div>No protocol found.</div>;
+    return <div>Loading...</div>;
   }
 
   return (
