@@ -27,7 +27,8 @@ axios.interceptors.response.use(
 
 export const getMeetings = async () => {
   try {
-    const response = await axios.get("http://localhost:4000/getMeetings");
+    const activeUser = localStorage.getItem("active_uid");
+    const response = await axios.get("http://localhost:4000/getMeetings/" + activeUser);
     console.log("response meetings from db " + JSON.stringify(response));
     return response.data;
   } catch (err) {
@@ -91,7 +92,7 @@ export const login = async (body) => {
 export const createMeeting = async (body) => {
   try {
     const response = await axios.post("http://localhost:4000/meetings", body);
-    console.log({ body });
+    console.log("In create meeting/axios interceptor body: " + JSON.stringify(body));
     return response.data;
   } catch (err) {
     console.error(err.message);

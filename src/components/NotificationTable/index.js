@@ -8,6 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
+import { hasRightToEdit } from "components/AxiosInterceptor/AxiosInterceptor";
 
 const NotificationTable = ({ data }) => {
   
@@ -16,9 +17,24 @@ const NotificationTable = ({ data }) => {
   if (!data || data.length === 0) {
     return <Typography>No notifications found.</Typography>;
   }
-  const handleRowClick = (data) => {//TO DO VieWAgenda
-    navigate("/EditAgenda", { state: data });
+
+  var memberHasRightToEdit;
+
+  const handleRowClick = async (body) => {
+    console.log("Data from handleRowClick: " + JSON.stringify(data));
+    console.log("Body from handleRowClick: " + JSON.stringify(body));
+    const response = await hasRightToEdit(body.meeting_id);
+    memberHasRightToEdit = response.data.rows[0].edit_agenda;
+    console.log("On Click - info has right to Edit: " + memberHasRightToEdit);
+    if(memberHasRightToEdit === true){
+      navigate("/EditAgenda", { state: body });
+    } else {
+      navigate("/NonEditableViewAgenda", { state: body }); 
+    }
   };
+ /* const handleRowClick = (data) => {//TO DO VieWAgenda
+    navigate("/EditAgenda", { state: data });
+  };  */
 
   return (
     <div id="tableParent">

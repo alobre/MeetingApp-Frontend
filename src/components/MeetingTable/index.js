@@ -23,13 +23,14 @@ const MeetingTable = ({ data }) => {
 
   const handleRowClick = async (body) => {
     console.log("Data from handleRowClick: " + JSON.stringify(data));
+    console.log("Body from handleRowClick: " + JSON.stringify(body));
     const response = await hasRightToEdit(body.meeting_id);
     const memberHasRightToEdit = response.data.rows[0].edit_agenda;
     console.log("On Click - info has right to Edit: " + memberHasRightToEdit);
     if(memberHasRightToEdit === true){
       navigate("/EditAgenda", { state: body });
     } else {
-      navigate("/ViewAgenda"); 
+      navigate("/NonEditableViewAgenda", { state: body }); 
     }
   };
 
@@ -68,7 +69,6 @@ const MeetingTable = ({ data }) => {
             <TableRow>
               <TableCell>Date</TableCell>
               <TableCell>Title</TableCell>
-              <TableCell>Edit details</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -100,20 +100,7 @@ const MeetingTable = ({ data }) => {
                         </div>
                       </TableCell>
                       <TableCell>{row.title}</TableCell>
-                      <TableCell>
-                        <IconButton
-                          color="primary"
-                          onClick={() => handleRowClick("edit", row)}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          color="primary"
-                          onClick={() => handleRowClick("delete", row)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </TableCell>
+                      
                     </TableRow>
                   ))}
                 </React.Fragment>

@@ -17,6 +17,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import WriteProtocol from "routes/WriteProtocol";
 import ViewProtocol from "routes/ViewProtocol";
+import NonEditableViewAgenda from "routes/NonEditableViewAgenda";
 import { Provider } from 'react-redux';
 import store from './redux/store';
 
@@ -200,6 +201,7 @@ function App() {
           <Route path="/Notification" element={<Notification />} />
           <Route path="/EditAgenda" element={<EditAgenda />} />
           <Route path="/ViewAgenda" element={<ViewAgenda />} />
+          <Route path="/NonEditableViewAgenda" element={<NonEditableViewAgenda />} />
           <Route path="/WriteProtocol" element={<WriteProtocol />} />
           <Route path="/ViewProtocol" element={<ViewProtocol />} />
         </Routes>
