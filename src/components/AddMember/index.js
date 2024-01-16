@@ -1,3 +1,10 @@
+/*
+
+This component is a "modal" for searching for and adding members. 
+Uses LDAP search.
+
+*/
+
 import React, { useState, useEffect } from "react";
 import {
   Button,
@@ -16,6 +23,8 @@ const AddMemberModal = ({ isOpen, onClose, onSave }) => {
   const [selectedMember, setSelectedMember] = useState(null);
   const [hasRightsToEdit, setHasRightsToEdit] = useState(false);
   const [users, setUsers] = useState([]);
+
+  // search for users and fetch the list from db that is presented in the dropdown
 
   const fetchUsersFromDatabase = async (query) => {
     try {
@@ -50,7 +59,7 @@ const AddMemberModal = ({ isOpen, onClose, onSave }) => {
         setUsers(usersList);
       } else {
         console.log("No attributes found in the LDAP response.");
-        setUsers([]); // Set users to an empty array if no attributes are found
+        setUsers([]);
       }
     } catch (error) {
       console.error("Error fetching users from LDAP", error);

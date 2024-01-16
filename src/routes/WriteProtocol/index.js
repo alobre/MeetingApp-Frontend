@@ -29,7 +29,34 @@ import MemberList from "components/MemberList";
 const WriteProtocol = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const agenda = location.state?.agenda;
+  // const agenda = location.state?.agenda;
+
+  // THIS IS JUST FOR TESTING PURPOSES, agenda below is hard coded
+
+  const agenda = {
+    meetingDate: "2024-01-16",
+    meetingTime: "10:00 AM",
+    meetingPlace: "FHTW",
+    members: [{ name: "Ana" }, { name: "Amelie" }, { name: "Johanna" }],
+    actionPoints: [
+      {
+        title: "discuss project updates",
+        subPoints: [
+          { title: "update on task 1" },
+          { title: "update on task 2" },
+        ],
+        comments: [
+          { title: "comment on task 1" },
+          { title: "comment on task 2" },
+        ],
+      },
+      {
+        title: "plan sprint",
+        subPoints: [{ title: "assign tasks" }, { title: "set goals" }],
+        comments: [{ title: "comment on task" }, { title: "comment on goals" }],
+      },
+    ],
+  };
 
   const [meetingNotes, setMeetingNotes] = useState(
     Array(agenda.actionPoints.length).fill("")
@@ -83,25 +110,6 @@ const WriteProtocol = () => {
       return newTexts;
     });
   };
-
-  // const handleAddSubPoint = (actionPointIndex) => {
-  //   const updatedAgenda = { ...agenda };
-  //   const selectedActionPoint = updatedAgenda.actionPoints[actionPointIndex];
-
-  //   if (!selectedActionPoint.subPoints) {
-  //     selectedActionPoint.subPoints = [];
-  //   }
-
-  //   const newSubPoint = {
-  //     title: newSubPointText,
-  //     notes: [],
-  //   };
-
-  //   selectedActionPoint.subPoints.push(newSubPoint);
-
-  //   setNewAgenda(updatedAgenda);
-  //   setNewSubPointText("");
-  // };
 
   const handleAddActionPoint = () => {
     const updatedAgenda = { ...newAgenda };
@@ -159,6 +167,7 @@ const WriteProtocol = () => {
   };
 
   const handleAddNote = (item) => {
+    console.log("item: " + JSON.stringify(item));
     const noteItem = { ...item };
     setAddNoteItem(noteItem);
     setNoteText("");

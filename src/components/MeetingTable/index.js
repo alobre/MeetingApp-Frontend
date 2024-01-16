@@ -1,3 +1,9 @@
+/*
+
+This component is a table in which all the meetings are presented to the user
+
+*/
+
 import React, { memo, useState } from "react";
 import style from "./style.css";
 import Table from "@mui/material/Table";
@@ -19,37 +25,22 @@ const MeetingTable = ({ data }) => {
   const navigate = useNavigate();
   var memberHasRightToEdit;
 
-
+  // clicking on a table row retreives the meeting id, and based on
+  // user credentials, navigates to either editable agenda view,
+  // or just the non-editable agenda view
 
   const handleRowClick = async (body) => {
-    console.log("Data from handleRowClick: " + JSON.stringify(data));
-    console.log("Body from handleRowClick: " + JSON.stringify(body));
+    //console.log("Data from handleRowClick: " + JSON.stringify(data));
+    //console.log("Body from handleRowClick: " + JSON.stringify(body));
     const response = await hasRightToEdit(body.meeting_id);
     const memberHasRightToEdit = response.data.rows[0].edit_agenda;
-    console.log("On Click - info has right to Edit: " + memberHasRightToEdit);
-    if(memberHasRightToEdit === true){
+    //console.log("On Click - info has right to Edit: " + memberHasRightToEdit);
+    if (memberHasRightToEdit === true) {
       navigate("/EditAgenda", { state: body });
     } else {
-      navigate("/NonEditableViewAgenda", { state: body }); 
+      navigate("/NonEditableViewAgenda", { state: body });
     }
   };
-
-  // const handleRowClick = (action, data) => {
-  //   if (action === "edit") {
-  //     console.log("Edit clicked for:", data);
-  //     return;
-  //     // Handle the "Edit" button click
-  //     // setSelectedMeeting(data);
-  //     // setEditDialogOpen(true);
-  //   } else if (action === "delete") {
-  //     // Handle the "Delete" button click
-  //     // Implement delete logic or show a confirmation dialog
-  //     console.log("Delete clicked for:", data);
-  //   } else {
-  //     // Handle other actions or navigate to the agenda
-  //     navigate("/EditAgenda", { state: data });
-  //   }
-  // };
 
   // Group meetings by type
   const groupedMeetings = data.reduce((groups, meeting) => {
@@ -86,7 +77,13 @@ const MeetingTable = ({ data }) => {
                   {meetings.map((row) => (
                     <TableRow
                       key={row.meeting_id}
-                      onClick={() => handleRowClick({meeting_id: row.meeting_id, agenda_id: row.agenda_id, meeting: row})}
+                      onClick={() =>
+                        handleRowClick({
+                          meeting_id: row.meeting_id,
+                          agenda_id: row.agenda_id,
+                          meeting: row,
+                        })
+                      }
                     >
                       <TableCell component="th" scope="row" align="center">
                         <div id="DateCell">
@@ -100,7 +97,6 @@ const MeetingTable = ({ data }) => {
                         </div>
                       </TableCell>
                       <TableCell>{row.title}</TableCell>
-                      
                     </TableRow>
                   ))}
                 </React.Fragment>

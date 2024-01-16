@@ -1,3 +1,10 @@
+/*
+
+"Route" for creating a new meeting. Takes user inputs and saves the meeting
+information to db.
+
+*/
+
 import { useEffect, useState } from "react";
 import {
   Button,
@@ -27,13 +34,12 @@ import AddMeetingSerie from "components/AddMeetingSerie";
 import NotificationScreen from "routes/Notification";
 import { createMeeting } from "components/AxiosInterceptor/AxiosInterceptor";
 
+// hard coded types; TODO probably need more
 const meetingTypes = [
   { label: "Board" },
   { label: "IT Department" },
   { label: "Project Stardust" },
 ];
-
-
 
 const MeetingForm = () => {
   const navigate = useNavigate();
@@ -50,11 +56,10 @@ const MeetingForm = () => {
   const [members, setMembers] = useState([]);
   const [meetingType, setMeetingType] = useState(null);
 
-  // user has to be logged in, if not goto login screen
+  // user has to be logged in, if not go to login screen
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("authenticated") !== null;
     if (isAuthenticated) {
-      
     } else {
       navigate("/Login");
     }
@@ -92,13 +97,8 @@ const MeetingForm = () => {
       meetingSerie: [], // seperieren, weil es sich dann ein JArray daruas erstellet ? // mal ein array dafr
     };
 
-    // toTst.
-    // if (meetingSerie) {
-    //   // Wenn eine Meeting-Serie ausgewählt wurde, füg in [] hinzu
-    //   meetingData.meetingSeries.push(meetingSerie);
-    // }
+    //console.log(JSON.stringify(meetingData));
 
-    console.log(JSON.stringify(meetingData));
     try {
       const response = await createMeeting(meetingData);
       console.log("Meeting created:", response);
@@ -116,19 +116,7 @@ const MeetingForm = () => {
       navigate("/");
     } catch (error) {
       console.error("Error creating meeting:", error);
-      // Handle the error as needed
-    } /*
-    members.forEach((member) => {
-      console.log("Meeting Title: " + meetingData.title + "invited members " + JSON.stringify(members));
-      const message = `You have been invited to a meeting "` + meetingData.title + '" scheduled on: ' + meetingData.date + ' at ' + meetingData.time;
-      const tmpMember: string = member;
-      //send to db in future
-      //addNotification(tmpMember.toString().toLowerCase(), message, meetingData.date, meetingData.time);
-    });  */
-
-    // Reset all form inputs to initial state
-    // ist alles von einem meeting in meetingData saved ?
-    // setMeetingSerie([meetingData]);
+    }
   };
 
   const handleMemberSave = (selectedMembers) => {
@@ -245,18 +233,6 @@ const MeetingForm = () => {
               onSave={handleMemberSave}
             />
           </div>
-
-          {/* hier --------------------------------------- */}
-          {/* <div className="form-groupII">
-            <Button onClick={() => setMemberModalOpen(true)}>Add Member</Button>
-            <AddMemberModal
-              isOpen={isMemberModalOpen}
-              onClose={() => setMemberModalOpen(false)}
-              // users={users}
-              onSave={handleMemberSave}
-            />
-          </div> */}
-
           <div className="form-group">
             <Button variant="contained" onClick={handleSaveMeeting}>
               Save Meeting

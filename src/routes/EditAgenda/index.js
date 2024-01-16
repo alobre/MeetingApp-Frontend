@@ -1,7 +1,13 @@
 /*
-TODO:
-finalize agenda
-invite to edit/comment
+  "Route" for editing a meeting agenda. 
+  The top part is redarding the meeting details - here the user can add more
+  members to the meeting, edit button saves the updates to database and delete 
+  removes the meeting and all other corresponding details from the database.
+
+  The agenda part is for agenda details. 
+  Each agenda has action points, subpoints and comments that go along that action point.
+  Save saves/updates the agenda in the database; finalize "finalizes" the agenda and
+  from that point on the agenda is not editable.
 */
 
 import React, { useEffect, useState } from "react";
@@ -82,26 +88,6 @@ const MeetingDetails = (props) => {
     fetchAgenda();
   }, []);
 
-  // console.log("State: ", JSON.stringify(state, null, 2));
-
-  // const MeetingDetails = () => {
-  //   useEffect(() => {
-  //     const avatarContainers = document.querySelectorAll('.avatar-container');
-
-  //     avatarContainers.forEach((container) => {
-  //       const avatar = container.querySelector('img');
-  //       const hoverLetter = container.querySelector('.hover-letter');
-
-  //       hoverLetter.addEventListener('mouseover', () => {
-  //         avatar.src = '';
-  //       });
-
-  //       hoverLetter.addEventListener('mouseout', () => {
-  //         avatar.src = '/public/Foxl.jpg';
-  //       });
-  //     });
-  //   }, []);
-
   const handleStartTimeChange = (date) => {
     setMeetingStart(dayjs(date).format("HH:mm"));
   };
@@ -175,29 +161,6 @@ const MeetingDetails = (props) => {
       ].updateActionPointComment = true;
     updatedActionPoints[actionPointIndex].changesComments = true;
     setActionPoints(updatedActionPoints);
-
-    // const comment_id = updatedActionPoints[actionPointIndex].actionPointComments[commentsIndex].comment_id;
-    // const allNewComments = [...newComment]
-    // const allEditedComments = [...editedComment]
-    // allNewComments.map(c => {
-    //   if(c.comment_id == comment_id) c.comment_text = event.target.value;
-    //   else{
-    //     allEditedComments.map(ec =>{
-    //       if(ec.comment_id == comment_id){
-    //         ec.comment_text = event.target.value;
-    //       }else{
-    //         allEditedComments.push(updatedActionPoints[actionPointIndex].actionPointComments[commentsIndex])
-    //       }
-    //     })
-    //   }
-    // })
-    // if(updatedActionPoints[actionPointIndex].actionPointComments[commentsIndex].addToDB){
-    //   allNewComments.map(c => {
-    //     if(c.comment_id == comment_id) c.comment_text = event.target.value;
-    //   })
-    //   setNewComment(allNewComments)
-    //   setEditedComment(allEditedComments)
-    // }
   };
 
   const handleAddActionPoint = () => {
@@ -255,11 +218,6 @@ const MeetingDetails = (props) => {
 
   const handleDeleteComment = async (comment_id) => {
     const res = await deleteActionPointComment(comment_id);
-    // const updatedActionPoints = actionPoints.map(ap => {
-    //   ap.actionPointComments = ap.actionPointComments.filter(apc => apc.action_point_comment_id !== comment_id);
-    //   return ap;
-    // });
-    // setActionPoints(updatedActionPoints);
     fetchAgenda();
   };
 
@@ -299,7 +257,6 @@ const MeetingDetails = (props) => {
     };
 
     return (
-      // hier members sollten sich erzeugen.
       <Card className="cardMemberList" onClick={handleDropdownClick}>
         <h3>Members:</h3>
         {isDropdownOpen && (
@@ -388,19 +345,7 @@ const MeetingDetails = (props) => {
   return (
     <div>
       <Card className="cardParent">
-        <div className="inviteMembersButton">
-          {/* <Button variant="contained" onClick={() => setMemberModalOpen(true)}>
-            Add Member
-          </Button>
-          <AddMemberModal
-            isOpen={isMemberModalOpen}
-            onClose={() => setMemberModalOpen(false)}
-            onSave={handleMemberSave}
-          /> */}
-          {/* <Button variant="contained" color="primary">
-            Invite Members
-          </Button> */}
-        </div>
+        <div className="inviteMembersButton"></div>
 
         <Card className="cardMeetingDetails">
           <h1>{meetingDetails.title}</h1>
@@ -570,19 +515,6 @@ const MeetingDetails = (props) => {
               Add Action Point
             </Button>
           </div>
-          {/* <div className="button-group">
-            <Button
-              variant="contained"
-              onClick={() => setMemberModalOpen(true)}
-            >
-              Add Member
-            </Button>
-            <AddMemberModal
-              isOpen={isMemberModalOpen}
-              onClose={() => setMemberModalOpen(false)}
-              onSave={handleMemberSave}
-            />
-          </div> */}
           <div className="button-group">
             <Button variant="contained" onClick={updateActionPoints}>
               save agenda
