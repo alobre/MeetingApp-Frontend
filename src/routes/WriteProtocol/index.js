@@ -1,7 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "@mui/material/Card";
 import { useLocation } from "react-router-dom";
 import ViewProtocol from "routes/ViewProtocol";
+import {
+  getAgenda,
+  getActionPoints,
+  deleteActionPointComment,
+  deleteActionPointSubPoint,
+  deleteActionPoint,
+  postActionPoint,
+  postActionPointComment,
+  postActionPointSubPoint,
+  updateActionPoint,
+  updateActionPointComment,
+  updateActionPointSubPoint,
+  editMeeting,
+  deleteMeeting,
+  insertCommentNotes,
+  insertSubpointNotes,
+} from "components/AxiosInterceptor/AxiosInterceptor";
 
 import {
   Button,
@@ -29,52 +46,92 @@ import MemberList from "components/MemberList";
 const WriteProtocol = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  // const agenda = location.state?.agenda;
+  const agenda_id = location.state?.agenda.agenda.agenda_id;
 
+  //console.log("id: " + JSON.stringify(bla.agenda.agenda_id));
   // THIS IS JUST FOR TESTING PURPOSES, agenda below is hard coded
 
-  const agenda = {
-    meetingDate: "2024-01-16",
-    meetingTime: "10:00 AM",
-    meetingPlace: "FHTW",
-    members: [{ name: "Ana" }, { name: "Amelie" }, { name: "Johanna" }],
-    actionPoints: [
-      {
-        title: "discuss project updates",
-        subPoints: [
-          { title: "update on task 1" },
-          { title: "update on task 2" },
-        ],
-        comments: [
-          { title: "comment on task 1" },
-          { title: "comment on task 2" },
-        ],
-      },
-      {
-        title: "plan sprint",
-        subPoints: [{ title: "assign tasks" }, { title: "set goals" }],
-        comments: [{ title: "comment on task" }, { title: "comment on goals" }],
-      },
-    ],
-  };
+  // const agenda = {
+  //   meetingDate: "2024-01-16",
+  //   meetingTime: "10:00 AM",
+  //   meetingPlace: "FHTW",
+  //   members: [{ name: "Ana" }, { name: "Amelie" }, { name: "Johanna" }],
+  //   actionPoints: [
+  //     {
+  //       title: "discuss project updates",
+  //       subPoints: [
+  //         { title: "update on task 1" },
+  //         { title: "update on task 2" },
+  //       ],
+  //       comments: [
+  //         { title: "comment on task 1" },
+  //         { title: "comment on task 2" },
+  //       ],
+  //     },
+  //     {
+  //       title: "plan sprint",
+  //       subPoints: [{ title: "assign tasks" }, { title: "set goals" }],
+  //       comments: [{ title: "comment on task" }, { title: "comment on goals" }],
+  //     },
+  //   ],
+  // };
 
-  const [meetingNotes, setMeetingNotes] = useState(
-    Array(agenda.actionPoints.length).fill("")
-  );
+  const [agenda, setAgenda] = useState(null);
+  const [meetingNotes, setMeetingNotes] = useState([]);
   const [noteModalOpen, setNoteModalOpen] = useState(false);
   const [noteText, setNoteText] = useState("");
   const [noteItem, setNoteItem] = useState(null);
   const [addNoteItem, setAddNoteItem] = useState(null);
   const [editNoteItem, setEditNoteItem] = useState(null);
   // const [newSubPointText, setNewSubPointText] = useState("");
-  const [subPointTexts, setSubPointTexts] = useState(
-    Array(agenda.actionPoints.length).fill("")
-  );
+  const [subPointTexts, setSubPointTexts] = useState([]);
   const [newAgenda, setNewAgenda] = useState(agenda);
   const [newActionPointText, setNewActionPointText] = useState("");
   const [isModalOpen, setModalOpen] = useState(false);
   const [membersToShow, setMembersToShow] = useState(3);
 
+  useEffect(() => {
+    const fetchAgendaDetails = async () => {
+      try {
+        const response = await getAgenda(agenda_id);
+        setAgenda(response);
+        console.log("in useeffect: " + JSON.stringify(response));
+      } catch (error) {
+        console.error("Error fetching agenda details", error);
+      }
+    };
+
+    fetchAgendaDetails();
+  }, [agenda_id]);
+
+  // agenda.agenda => object {id and isfinalized}
+  // agenda.actionPoints => action points array of objects [{}]
+  // agenda.meeting => object
+  // meeting_id
+  // meeting_series_id
+  // agenda_id
+  // user_id
+  // title
+  // address
+  // building
+  // room
+  // date
+  // start_time
+  // end_time
+
+  // agenda.meetingMembers => array of objects[{}]
+  // {
+  // user_id
+  // meeting_id
+  // edit_agenda
+  // is_owner
+  // first_name
+  // TODO we need members fullname and so on, look at editagenda meeting members or edit db
+  // }
+
+  console.log("after useeffect: " + JSON.stringify(agenda));
+
+  // FROM HERE THERE IS AGENDA
   const openModal = () => {
     setModalOpen(true);
   };
@@ -88,22 +145,29 @@ const WriteProtocol = () => {
     openModal();
   };
 
-  const handleAddSubPoint = (actionPointIndex) => {
+  const handleAddSubPoint = async (actionPointIndex) => {
     const updatedAgenda = { ...agenda };
     const selectedActionPoint = updatedAgenda.actionPoints[actionPointIndex];
 
-    if (!selectedActionPoint.subPoints) {
-      selectedActionPoint.subPoints = [];
+    if (!selectedActionPoint.subpoints) {
+      selectedActionPoint.subpoints = [];
     }
 
     const newSubPoint = {
-      title: subPointTexts[actionPointIndex],
+      message: subPointTexts[actionPointIndex],
       notes: [],
+      addToDB: true,
     };
 
-    selectedActionPoint.subPoints.push(newSubPoint);
+    selectedActionPoint.subpoints.push(newSubPoint);
 
-    setNewAgenda(updatedAgenda);
+    setAgenda(updatedAgenda);
+
+    // const res = await postActionPointSubPoint(
+    //   newSubPoint.message,
+    //   selectedActionPoint.action_point_id
+    // );
+
     setSubPointTexts((prevTexts) => {
       const newTexts = [...prevTexts];
       newTexts[actionPointIndex] = "";
@@ -112,30 +176,39 @@ const WriteProtocol = () => {
   };
 
   const handleAddActionPoint = () => {
-    const updatedAgenda = { ...newAgenda };
+    const updatedAgenda = { ...agenda };
     const newActionPoint = {
-      title: newActionPointText,
-      subPoints: [],
+      text: newActionPointText,
+      subpoints: [],
       comments: [],
+      addToDB: true,
     };
     updatedAgenda.actionPoints.push(newActionPoint);
-    setNewAgenda(updatedAgenda);
+    setAgenda(updatedAgenda);
     setNewActionPointText("");
   };
 
   const handleEditSubPoint = (actionPointIndex, subPointIndex) => {
-    const updatedAgenda = { ...newAgenda };
+    const updatedAgenda = { ...agenda };
     const selectedSubPoint =
-      updatedAgenda.actionPoints[actionPointIndex].subPoints[subPointIndex];
-    setNewActionPointText(selectedSubPoint.title);
+      updatedAgenda.actionPoints[actionPointIndex].subpoints[subPointIndex];
+    setNewActionPointText(selectedSubPoint.message);
     setAddNoteItem({ actionPointIndex, subPointIndex });
   };
 
-  const handleDeleteSubPoint = (actionPointIndex, subPointIndex) => {
-    const updatedAgenda = { ...newAgenda };
+  const handleDeleteSubPoint = async (
+    actionPointIndex,
+    subPointIndex,
+    actionPointSubpointId
+  ) => {
+    console.log("sp to delete id: " + actionPointSubpointId);
+
+    const updatedAgenda = { ...agenda };
     const selectedActionPoint = updatedAgenda.actionPoints[actionPointIndex];
-    selectedActionPoint.subPoints.splice(subPointIndex, 1);
-    setNewAgenda(updatedAgenda);
+    selectedActionPoint.subpoints.splice(subPointIndex, 1);
+    setAgenda(updatedAgenda);
+
+    const res = await deleteActionPointSubPoint(actionPointSubpointId);
   };
 
   const handleMeetingNotesChange = (event, index) => {
@@ -163,12 +236,12 @@ const WriteProtocol = () => {
 
     if (item.subPointIndex !== undefined && item.commentIndex !== undefined) {
       console.log("Accessing comment notes");
-      return newAgenda.actionPoints[item.actionPointIndex].comments[
+      return agenda.actionPoints[item.actionPointIndex].comments[
         item.commentIndex
       ].notes[item.noteIndex];
     } else if (item.subPointIndex !== undefined) {
       console.log("Accessing subpoint notes");
-      return newAgenda.actionPoints[item.actionPointIndex].subPoints[
+      return agenda.actionPoints[item.actionPointIndex].subpoints[
         item.subPointIndex
       ].notes[item.noteIndex];
     }
@@ -183,9 +256,7 @@ const WriteProtocol = () => {
     console.log("noteItem:", noteItem);
 
     const subPoint =
-      newAgenda.actionPoints[item.actionPointIndex].subPoints[
-        item.subPointIndex
-      ];
+      agenda.actionPoints[item.actionPointIndex].subpoints[item.subPointIndex];
     console.log("subPoint:", subPoint);
 
     setNoteText(getNotesFromItem(noteItem));
@@ -213,12 +284,12 @@ const WriteProtocol = () => {
     if (editNoteItem !== null) {
       const { actionPointIndex, subPointIndex, commentIndex, noteIndex } =
         editNoteItem;
-      const updatedAgenda = { ...newAgenda };
+      const updatedAgenda = { ...agenda };
 
       if (subPointIndex !== undefined && commentIndex === undefined) {
         console.log("sp index not undefined : " + subPointIndex);
         const selectedSubPoint =
-          updatedAgenda.actionPoints[actionPointIndex].subPoints[subPointIndex];
+          updatedAgenda.actionPoints[actionPointIndex].subpoints[subPointIndex];
 
         console.log("SELECTED SUBP " + JSON.stringify(selectedSubPoint));
         if (!selectedSubPoint.notes) {
@@ -243,14 +314,14 @@ const WriteProtocol = () => {
       setEditNoteItem(null);
       setNoteItem(null);
       setNoteModalOpen(false);
-      setNewAgenda(updatedAgenda);
+      setAgenda(updatedAgenda);
     } else if (addNoteItem !== null) {
       const { actionPointIndex, subPointIndex, commentIndex } = addNoteItem;
-      const updatedAgenda = { ...newAgenda };
+      const updatedAgenda = { ...agenda };
 
       if (subPointIndex !== undefined && commentIndex === undefined) {
         const selectedSubPoint =
-          updatedAgenda.actionPoints[actionPointIndex].subPoints[subPointIndex];
+          updatedAgenda.actionPoints[actionPointIndex].subpoints[subPointIndex];
         if (!selectedSubPoint.notes) {
           selectedSubPoint.notes = [];
         }
@@ -267,7 +338,7 @@ const WriteProtocol = () => {
         "All Comments and Notes:",
         updatedAgenda.actionPoints.map((point) =>
           point.comments.map((comment) => ({
-            comment: comment.title,
+            comment: comment.comment_text,
             notes: comment.notes,
           }))
         )
@@ -276,14 +347,14 @@ const WriteProtocol = () => {
       console.log(
         "All SP and Notes:",
         updatedAgenda.actionPoints.map((point) =>
-          point.subPoints.map((subPoint) => ({
-            subPoint: subPoint.title,
+          point.subpoints.map((subPoint) => ({
+            subPoint: subPoint.message,
             notes: subPoint.notes,
           }))
         )
       );
 
-      setNewAgenda(updatedAgenda);
+      setAgenda(updatedAgenda);
 
       const updatedMeetingNotes = [...meetingNotes];
       updatedMeetingNotes[actionPointIndex] = updatedNotes.join("\n");
@@ -300,14 +371,14 @@ const WriteProtocol = () => {
       const updatedNotes = item.notes.filter((_, index) => index !== noteIndex);
       item.notes = updatedNotes;
 
-      const updatedActionPoints = [...newAgenda.actionPoints];
+      const updatedActionPoints = [...agenda.actionPoints];
       const selectedActionPoint = updatedActionPoints[item.actionPointIndex];
 
       if (item.hasOwnProperty("subPointIndex")) {
         const selectedSubPoint =
-          selectedActionPoint.subPoints[item.subPointIndex];
+          selectedActionPoint.subpoints[item.subPointIndex];
         selectedSubPoint.notes = updatedNotes;
-        selectedActionPoint.subPoints[item.subPointIndex] = selectedSubPoint;
+        selectedActionPoint.subpoints[item.subPointIndex] = selectedSubPoint;
       } else if (item.hasOwnProperty("commentIndex")) {
         const selectedComment = selectedActionPoint.comments[item.commentIndex];
         selectedComment.notes = updatedNotes;
@@ -328,51 +399,132 @@ const WriteProtocol = () => {
     return <div>No agenda found.</div>;
   }
 
-  const handleSaveProtocol = () => {
-    const protocol = {
-      meetingDate: newAgenda.meetingDate,
-      meetingTime: newAgenda.meetingTime,
-      meetingPlace: newAgenda.meetingPlace,
-      members: newAgenda.members,
-      agendaPoints: newAgenda.actionPoints.map((actionPoint, index) => ({
-        title: actionPoint.title,
-        subPoints: actionPoint.subPoints.map((subPoint) => ({
-          ...subPoint,
-          notes: subPoint.notes || [],
-        })),
-        comments: actionPoint.comments.map((comment) => ({
-          ...comment,
-          notes: comment.notes || [],
-        })),
-        meetingNotes: meetingNotes[index],
-      })),
-    };
-    navigate("/ViewProtocol", { state: { protocol } }); // Pass the agenda object in the state
+  // const handleSaveProtocol = () => {
+  //   const protocol = {
+  //     meetingDate: newAgenda.meetingDate,
+  //     meetingTime: newAgenda.meetingTime,
+  //     meetingPlace: newAgenda.meetingPlace,
+  //     members: newAgenda.members,
+  //     agendaPoints: newAgenda.actionPoints.map((actionPoint, index) => ({
+  //       title: actionPoint.title,
+  //       subPoints: actionPoint.subPoints.map((subPoint) => ({
+  //         ...subPoint,
+  //         notes: subPoint.notes || [],
+  //       })),
+  //       comments: actionPoint.comments.map((comment) => ({
+  //         ...comment,
+  //         notes: comment.notes || [],
+  //       })),
+  //       meetingNotes: meetingNotes[index],
+  //     })),
+  //   };
+  //   navigate("/ViewProtocol", { state: { protocol } }); // Pass the agenda object in the state
 
-    console.log("Protocol:", protocol);
+  //   console.log("Protocol:", protocol);
+  // };
+
+  const handleSaveProtocol = async () => {
+    try {
+      // Step 1: Save Agenda
+      const agendaData = {
+        text: agenda.text,
+        // Add other agenda-related data as needed
+      };
+
+      //const agendaId = await postActionPoint(agendaData);
+
+      // save and action points and subpoints and notes
+      for (const actionPoint of agenda.actionPoints) {
+        // Save Action Point
+
+        console.log("in handle save pro AGENAD ID: " + agenda_id);
+        console.log("in handle save pro text : " + actionPoint.text);
+
+        const actionPointData = {
+          agenda_id: agenda.agenda_id,
+          text: actionPoint.text,
+        };
+
+        let actionPointId;
+        if (actionPoint.addToDB) {
+          console.log("in save ap");
+          actionPointId = await postActionPoint(actionPoint.text, agenda_id);
+          actionPoint.action_point_id = actionPointId;
+        }
+
+        // subpoints
+        for (const subpoint of actionPoint.subpoints) {
+          const subpointData = {
+            action_point_id: actionPoint.action_point_id,
+            message: subpoint.message,
+          };
+
+          let subpointId;
+          if (subpoint.addToDB && actionPoint.addToDB) {
+            console.log("BLA");
+            subpointId = await postActionPointSubPoint(
+              subpoint.message,
+              actionPointId
+            );
+            subpoint.action_point_id = actionPointId;
+          } else if (subpoint.addToDB && !actionPoint.addToDB) {
+            console.log("BLA");
+            subpointId = await postActionPointSubPoint(
+              subpoint.message,
+              actionPoint.action_point_id
+            );
+            subpoint.action_point_id = actionPoint.action_point_id;
+          }
+          // sp notes TODO addToDB check
+          if (subpoint.notes && subpoint.notes.length > 0) {
+            for (const note of subpoint.notes) {
+              console.log("single note: " + note);
+
+              const subpointNotesData = {
+                action_point_id: actionPoint.action_point_id,
+                text: note,
+              };
+
+              await insertSubpointNotes(subpointNotesData);
+            }
+          }
+        }
+
+        // comments
+
+        for (const comment of actionPoint.comments) {
+          const commentData = {
+            action_point_id: actionPoint.action_point_id,
+            comment_text: comment.comment_text,
+          };
+
+          //const commentId = await postActionPointComment(commentData);
+
+          // comment notes
+          if (comment.notes && comment.notes.length > 0) {
+            for (const note of comment.notes) {
+              const commentNotesData = {
+                action_point_comment_id: comment.action_point_comment_id,
+                text: note,
+              };
+
+              await insertCommentNotes(commentNotesData);
+            }
+          }
+        }
+      }
+
+      const protocol = { ...agenda };
+      navigate("/ViewProtocol", { state: { protocol } });
+    } catch (error) {
+      console.error("Error saving protocol to the database", error);
+    }
   };
+
+  console.log("new agenda CHECK AP: " + JSON.stringify(agenda.actionPoints));
 
   return (
     <div>
-      {/* <Card className="card-container">
-        <Typography variant="h5" className="members">
-          Members
-        </Typography>
-        <List>
-          {agenda.members.slice(0, 3).map((member, index) => (
-            <ListItem key={index}>{member.name}</ListItem>
-          ))}
-        </List>
-        <Button variant="outlined" onClick={showAllMembers}>
-          Show All Members
-        </Button>
-      </Card>
-
-      <MemberList
-        isOpen={isModalOpen}
-        closeModal={closeModal}
-        members={agenda.members}
-      /> */}
       <Card className="card-container">
         <Typography variant="h2">Meeting Notes</Typography>
         <Button
@@ -388,19 +540,25 @@ const WriteProtocol = () => {
               <TableRow>
                 <TableCell>
                   <Typography variant="h6">Meeting Time:</Typography>
-                  <Typography variant="h6">{agenda.meetingTime}</Typography>
+                  <Typography variant="h6">
+                    {agenda.meeting.start_time} - {agenda.meeting.end_time}
+                  </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>
                   <Typography variant="h6">Meeting Date:</Typography>
-                  <Typography variant="h6">{agenda.meetingDate}</Typography>
+                  <Typography variant="h6">{agenda.meeting.date}</Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>
                   <Typography variant="h6">Meeting Place:</Typography>
-                  <Typography variant="h6">{agenda.meetingPlace}</Typography>
+                  <Typography variant="h6">{agenda.meeting.address}</Typography>
+                  <Typography variant="h6">
+                    {agenda.meeting.building}
+                  </Typography>
+                  <Typography variant="h6">{agenda.meeting.room}</Typography>
                 </TableCell>
               </TableRow>
 
@@ -410,8 +568,10 @@ const WriteProtocol = () => {
                   Members
                 </Typography>
                 <List>
-                  {agenda.members.slice(0, 3).map((member, index) => (
-                    <ListItem key={index}>{member.name}</ListItem>
+                  {agenda.meetingMembers.slice(0, 3).map((member, index) => (
+                    <ListItem key={index}>
+                      {member.first_name} {member.last_name} {member.email}
+                    </ListItem>
                   ))}
                 </List>
                 <Button variant="outlined" onClick={showAllMembers}>
@@ -422,7 +582,7 @@ const WriteProtocol = () => {
                 <MemberList
                   isOpen={isModalOpen}
                   closeModal={closeModal}
-                  members={agenda.members}
+                  members={agenda.meetingMembers}
                 />
               </TableCell>
             </TableBody>
@@ -456,7 +616,7 @@ const WriteProtocol = () => {
                   </Typography>
                 </TableCell>
               </TableRow>
-              {newAgenda.actionPoints.map((actionPoint, actionPointIndex) => (
+              {agenda.actionPoints.map((actionPoint, actionPointIndex) => (
                 <TableRow key={actionPointIndex}>
                   <TableCell>
                     <Typography variant="body1">
@@ -465,15 +625,15 @@ const WriteProtocol = () => {
                   </TableCell>
                   <TableCell>
                     <Typography variant="h6" className="agenda-item-title">
-                      {actionPoint.title}
+                      {actionPoint.text}
                     </Typography>
                   </TableCell>
                   <TableCell>
                     <List>
-                      {actionPoint.subPoints.map((subPoint, subPointIndex) => (
+                      {actionPoint.subpoints.map((subPoint, subPointIndex) => (
                         <div key={subPointIndex}>
                           <ListItem>
-                            {subPoint.title}
+                            {subPoint.message}
                             <IconButton
                               variant="outlined"
                               size="small"
@@ -492,7 +652,8 @@ const WriteProtocol = () => {
                               onClick={() =>
                                 handleDeleteSubPoint(
                                   actionPointIndex,
-                                  subPointIndex
+                                  subPointIndex,
+                                  subPoint.action_point_subpoint_id
                                 )
                               }
                             >
@@ -556,7 +717,12 @@ const WriteProtocol = () => {
                         <IconButton
                           variant="outlined"
                           size="small"
-                          onClick={() => handleAddSubPoint(actionPointIndex)}
+                          onClick={() =>
+                            handleAddSubPoint(
+                              actionPointIndex,
+                              actionPoint.action_point_id
+                            )
+                          }
                         >
                           <AddIcon />
                         </IconButton>
@@ -568,7 +734,7 @@ const WriteProtocol = () => {
                       {actionPoint.comments.map((comment, commentIndex) => (
                         <div key={commentIndex}>
                           <ListItem>
-                            {comment.title}
+                            {comment.comment_text}
                             <IconButton
                               variant="outlined"
                               size="small"
@@ -778,17 +944,17 @@ export default WriteProtocol;
 //     });
 //   };
 
-//   const handleAddActionPoint = () => {
-//     const updatedAgenda = { ...newAgenda };
-//     const newActionPoint = {
-//       title: newActionPointText,
-//       subPoints: [],
-//       comments: [],
-//     };
-//     updatedAgenda.actionPoints.push(newActionPoint);
-//     setNewAgenda(updatedAgenda);
-//     setNewActionPointText("");
+// const handleAddActionPoint = () => {
+//   const updatedAgenda = { ...newAgenda };
+//   const newActionPoint = {
+//     title: newActionPointText,
+//     subPoints: [],
+//     comments: [],
 //   };
+//   updatedAgenda.actionPoints.push(newActionPoint);
+//   setNewAgenda(updatedAgenda);
+//   setNewActionPointText("");
+// };
 
 //   const handleEditSubPoint = (actionPointIndex, subPointIndex) => {
 //     const updatedAgenda = { ...newAgenda };

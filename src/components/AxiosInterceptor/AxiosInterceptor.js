@@ -28,7 +28,9 @@ axios.interceptors.response.use(
 export const getMeetings = async () => {
   try {
     const activeUser = localStorage.getItem("active_uid");
-    const response = await axios.get("http://localhost:4000/getMeetings/" + activeUser);
+    const response = await axios.get(
+      "http://localhost:4000/getMeetings/" + activeUser
+    );
     console.log("response meetings from db " + JSON.stringify(response));
     return response.data;
   } catch (err) {
@@ -52,13 +54,13 @@ export const hasRightToEdit = async (meetingId) => {
   } catch (err) {
     console.error(err.message);
   }
-}
+};
 
 export const getNotifications = async () => {
   try {
     const activeUser = localStorage.getItem("active_uid");
     console.log("Active user = " + localStorage.getItem("active_uid"));
-    const response = await axios.get("http://localhost:4000/getNotifications",{
+    const response = await axios.get("http://localhost:4000/getNotifications", {
       params: {
         active_uid: activeUser,
       },
@@ -92,7 +94,9 @@ export const login = async (body) => {
 export const createMeeting = async (body) => {
   try {
     const response = await axios.post("http://localhost:4000/meetings", body);
-    console.log("In create meeting/axios interceptor body: " + JSON.stringify(body));
+    console.log(
+      "In create meeting/axios interceptor body: " + JSON.stringify(body)
+    );
     return response.data;
   } catch (err) {
     console.error(err.message);
@@ -184,6 +188,8 @@ export const deleteActionPointSubPoint = async (action_point_subpoint_id) => {
 
 export const postActionPoint = async (text, agenda_id) => {
   try {
+    console.log("post action point axios");
+    console.log("axios agenda id " + agenda_id + " and text " + text);
     const body = {
       text,
       agenda_id,
@@ -192,6 +198,10 @@ export const postActionPoint = async (text, agenda_id) => {
       "http://localhost:4000/actionPoint",
       body
     );
+
+    console.log("RETURNING ID " + response.data);
+    console.log("RETURNING ID " + JSON.stringify(response.data));
+
     return response.data;
   } catch (err) {
     console.error(err.message);
@@ -264,6 +274,7 @@ export const postActionPointSubPoint = async (message, action_point_id) => {
     console.error(err.message);
   }
 };
+
 export const updateActionPointSubPoint = async (
   message,
   action_point_subpoint_id
@@ -289,6 +300,39 @@ export const fetchUsers = async (username) => {
     const response = await axios.get("http://localhost:4000/user/" + username);
     // console.log({ username });
     console.log("Response Data: " + JSON.stringify(response.data));
+    return response.data;
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
+export const insertSubpointNotes = async (body) => {
+  try {
+    console.log("IN AXIOS body " + JSON.stringify(body));
+    const response = await axios.post(
+      "http://localhost:4000/subpointNotes",
+      body
+    );
+    console.log(
+      "insert SP notes response in axios: " + JSON.stringify(response.data)
+    );
+
+    return response.data;
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
+export const insertCommentNotes = async (body) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:4000/commentNotes",
+      body
+    );
+    console.log(
+      "insert CN notes response in axios: " + JSON.stringify(response.data)
+    );
+
     return response.data;
   } catch (err) {
     console.error(err.message);

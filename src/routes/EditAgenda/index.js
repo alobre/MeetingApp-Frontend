@@ -275,49 +275,108 @@ const MeetingDetails = (props) => {
     );
   };
 
+  // const updateActionPoints = async () => {
+  //   actionPoints.map(async (ap) => {
+  //     if (ap.addToDB) {
+  //       const res = await postActionPoint(ap.text, ap.agenda_id);
+  //     }
+  //     if (ap.updateActionPointTitle) {
+  //       const res = await updateActionPoint(ap.text, ap.agenda_id);
+  //     }
+  //     if (ap.changesComments) {
+  //       ap.actionPointComments.map(async (apc) => {
+  //         if (apc.addToDB == true) {
+  //           const res = await postActionPointComment(
+  //             active_uid,
+  //             apc.comment_text,
+  //             ap.action_point_id
+  //           );
+  //         }
+  //         if (apc.updateActionPointComment == true) {
+  //           const res = await updateActionPointComment(
+  //             active_uid,
+  //             apc.comment_text,
+  //             ap.action_point_id
+  //           );
+  //         }
+  //       });
+  //     }
+  //     if (ap.changesSubPoints) {
+  //       ap.actionPointSubPoints.map(async (apsp) => {
+  //         if (apsp.addToDB == true) {
+  //           const res = await postActionPointSubPoint(
+  //             apsp.message,
+  //             apsp.action_point_id
+  //           );
+  //         }
+  //         if (apsp.updateSubPointMessage == true) {
+  //           const res = await updateActionPointSubPoint(
+  //             apsp.message,
+  //             apsp.action_point_subpoint_id
+  //           );
+  //         }
+  //       });
+  //     }
+  //   });
+  // };
+
   const updateActionPoints = async () => {
-    actionPoints.map(async (ap) => {
+    const updatedActionPoints = [...actionPoints];
+
+    // ssave / update action points
+    for (const ap of updatedActionPoints) {
       if (ap.addToDB) {
-        const res = await postActionPoint(ap.text, ap.agenda_id);
+        // save new ap and get ID
+        const newActionPointResult = await postActionPoint(
+          ap.text,
+          ap.agenda_id
+        );
+        const newActionPointId = newActionPointResult.action_point_id;
+        console.log("returning id in fe " + newActionPointId);
+        ap.action_point_id = newActionPointId;
+      } else if (ap.updateActionPointTitle) {
+        // update existing ap
+        await updateActionPoint(ap.text, ap.agenda_id);
       }
-      if (ap.updateActionPointTitle) {
-        const res = await updateActionPoint(ap.text, ap.agenda_id);
+
+      // save/update each comment
+      for (const apc of ap.actionPointComments) {
+        if (apc.addToDB) {
+          // save new comment
+          await postActionPointComment(
+            active_uid,
+            apc.comment_text,
+            ap.action_point_id
+          );
+        } else if (apc.updateActionPointComment) {
+          // update existing
+          await updateActionPointComment(
+            active_uid,
+            apc.comment_text,
+            ap.action_point_id
+          );
+        }
       }
-      if (ap.changesComments) {
-        ap.actionPointComments.map(async (apc) => {
-          if (apc.addToDB == true) {
-            const res = await postActionPointComment(
-              active_uid,
-              apc.comment_text,
-              ap.action_point_id
-            );
-          }
-          if (apc.updateActionPointComment == true) {
-            const res = await updateActionPointComment(
-              active_uid,
-              apc.comment_text,
-              ap.action_point_id
-            );
-          }
-        });
+
+      // save/update each sp
+      for (const apsp of ap.actionPointSubPoints) {
+        if (apsp.addToDB) {
+          // save new sp
+          console.log("save sp ap id " + ap.action_point_id);
+
+          await postActionPointSubPoint(apsp.message, ap.action_point_id);
+        } else if (apsp.updateSubPointMessage) {
+          // update subpoint
+          await updateActionPointSubPoint(
+            apsp.message,
+            apsp.action_point_subpoint_id
+          );
+        }
       }
-      if (ap.changesSubPoints) {
-        ap.actionPointSubPoints.map(async (apsp) => {
-          if (apsp.addToDB == true) {
-            const res = await postActionPointSubPoint(
-              apsp.message,
-              apsp.action_point_id
-            );
-          }
-          if (apsp.updateSubPointMessage == true) {
-            const res = await updateActionPointSubPoint(
-              apsp.message,
-              apsp.action_point_subpoint_id
-            );
-          }
-        });
-      }
-    });
+    }
+
+    // refresh
+    fetchAgenda();
   };
 
   const handleEditMeeting = async () => {

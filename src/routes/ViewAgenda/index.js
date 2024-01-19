@@ -70,7 +70,9 @@ const ViewAgenda = () => {
         </Typography>
         <List>
           {agenda.meetingMembers.map((member, index) => (
-            <ListItem key={index}>{member.first_name}</ListItem>
+            <ListItem key={index}>
+              {member.first_name} {member.last_name} {member.email}
+            </ListItem>
           ))}
         </List>
         <Typography variant="h5" className="agenda-items-header">
