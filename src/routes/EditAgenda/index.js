@@ -401,6 +401,8 @@ const MeetingDetails = (props) => {
     navigate("/");
   };
 
+  console.log("meet buil " + meetingBuilding);
+
   return (
     <div>
       <Card className="cardParent">
@@ -418,7 +420,7 @@ const MeetingDetails = (props) => {
                   className="timePicker"
                   type="time"
                   label="Meeting Start"
-                  value={dayjs(`2022-04-17T${meetingStart}`).toDate()}
+                  value={dayjs(`2022-04-17T${meetingStart}`)}
                   onChange={(date) => handleStartTimeChange(date)}
                 />
 
@@ -426,7 +428,7 @@ const MeetingDetails = (props) => {
                   className="timePicker"
                   type="time"
                   label="Meeting End"
-                  value={dayjs(`2022-04-17T${meetingEnd}`).toDate()}
+                  value={dayjs(`2022-04-17T${meetingEnd}`)}
                   onChange={(date) => handleEndTimeChange(date)}
                 />
               </DemoContainer>
