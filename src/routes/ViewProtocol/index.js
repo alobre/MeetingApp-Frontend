@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import {
@@ -17,6 +17,7 @@ import {
   Typography,
   ListItemIcon,
 } from "@mui/material";
+import { getProtocol } from "components/AxiosInterceptor/AxiosInterceptor";
 import Card from "@mui/material/Card";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import MemberList from "components/MemberList";
@@ -27,10 +28,27 @@ const ViewProtocol = () => {
   const navigate = useNavigate();
   const location = useLocation();
   console.log("location.state:", location.state);
-  const protocol = location.state?.protocol;
-  console.log("protocol:", protocol);
+  //const protocol = location.state?.protocol;
+  //console.log("protocol:", protocol);
   const [isModalOpen, setModalOpen] = useState(false);
   const [membersToShow, setMembersToShow] = useState(3);
+  const [protocol, setProtocol] = useState(null);
+  const agenda_id = location.state?.protocol.agenda.agenda_id;
+
+  useEffect(() => {
+    const fetchAgendaDetails = async () => {
+      try {
+        const response = await getProtocol(agenda_id);
+        setProtocol(response);
+        console.log(JSON.stringify(response));
+        console.log("in ue protocol ap " + JSON.stringify(protocol));
+      } catch (error) {
+        console.error("Error fetching agenda details", error);
+      }
+    };
+
+    fetchAgendaDetails();
+  }, [agenda_id]);
 
   const openModal = () => {
     setModalOpen(true);
@@ -41,7 +59,7 @@ const ViewProtocol = () => {
   };
 
   const showAllMembers = () => {
-    setMembersToShow(protocol.members.length);
+    setMembersToShow(protocol.meetingMembers.length);
     openModal();
   };
 
@@ -78,19 +96,27 @@ const ViewProtocol = () => {
               <TableRow>
                 <TableCell>
                   <Typography variant="h6">Meeting Time:</Typography>
-                  <Typography variant="h6">{protocol.meetingTime}</Typography>
+                  <Typography variant="h6">
+                    {protocol.meeting.start_time} - {protocol.meeting.end_time}
+                  </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>
                   <Typography variant="h6">Meeting Date:</Typography>
-                  <Typography variant="h6">{protocol.meetingDate}</Typography>
+                  <Typography variant="h6">{protocol.meeting.date}</Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>
                   <Typography variant="h6">Meeting Place:</Typography>
-                  <Typography variant="h6">{protocol.meetingPlace}</Typography>
+                  <Typography variant="h6">
+                    {protocol.meeting.address}
+                  </Typography>
+                  <Typography variant="h6">
+                    {protocol.meeting.building}
+                  </Typography>
+                  <Typography variant="h6">{protocol.meeting.room}</Typography>
                 </TableCell>
               </TableRow>
 
@@ -100,8 +126,10 @@ const ViewProtocol = () => {
                   Members
                 </Typography>
                 <List>
-                  {protocol.members.slice(0, 3).map((member, index) => (
-                    <ListItem key={index}>{member.name}</ListItem>
+                  {protocol.meetingMembers.slice(0, 3).map((member, index) => (
+                    <ListItem key={index}>
+                      {member.first_name} {member.last_name} {member.email}
+                    </ListItem>
                   ))}
                 </List>
                 <Button variant="outlined" onClick={showAllMembers}>
@@ -112,7 +140,7 @@ const ViewProtocol = () => {
                 <MemberList
                   isOpen={isModalOpen}
                   closeModal={closeModal}
-                  members={protocol.members}
+                  members={protocol.meetingMembers}
                 />
               </TableCell>
             </TableBody>
@@ -155,14 +183,14 @@ const ViewProtocol = () => {
                   </TableCell>
                   <TableCell>
                     <Typography variant="h6" className="agenda-item-title">
-                      {actionPoint.title}
+                      {actionPoint.text}
                     </Typography>
                   </TableCell>
                   <TableCell>
                     <List>
-                      {actionPoint.subPoints.map((subPoint, subPointIndex) => (
+                      {actionPoint.subpoints.map((subPoint, subPointIndex) => (
                         <div key={subPointIndex}>
-                          <ListItem>{subPoint.title}</ListItem>
+                          <ListItem>{subPoint.message}</ListItem>
                           {subPoint.notes && subPoint.notes.length > 0 && (
                             <ListItem className="notes-text">Notes</ListItem>
                           )}
@@ -181,7 +209,7 @@ const ViewProtocol = () => {
                     <List>
                       {actionPoint.comments.map((comment, commentIndex) => (
                         <div key={commentIndex}>
-                          <ListItem>{comment.title}</ListItem>
+                          <ListItem>{comment.comment_text}</ListItem>
                           {comment.notes && comment.notes.length > 0 && (
                             <ListItem className="notes-text">Notes</ListItem>
                           )}

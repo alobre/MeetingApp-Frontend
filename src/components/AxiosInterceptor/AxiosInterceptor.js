@@ -131,6 +131,20 @@ export const getAgenda = async (agenda_id) => {
   }
 };
 
+export const getProtocol = async (agenda_id) => {
+  try {
+    const response = await axios.get(
+      "http://localhost:4000/protocol/" + agenda_id
+    );
+    console.log(
+      "getProtocol in axios response " + JSON.stringify(response.data)
+    );
+    return response.data;
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
 export const getActionPoints = async (agenda_id) => {
   try {
     const response = await axios.get(

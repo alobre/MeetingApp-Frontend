@@ -396,7 +396,7 @@ const WriteProtocol = () => {
   };
 
   if (!agenda) {
-    return <div>No agenda found.</div>;
+    return <div>Loading...</div>;
   }
 
   // const handleSaveProtocol = () => {
