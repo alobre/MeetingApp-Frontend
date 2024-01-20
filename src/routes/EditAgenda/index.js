@@ -82,6 +82,8 @@ const MeetingDetails = (props) => {
     setMeetingDate(formattedDate);
 
     let actionPoints = await getActionPoints(state.agenda_id);
+    actionPoints.sort((a, b) => a.action_point_id - b.action_point_id);
+
     setActionPoints(actionPoints);
   };
   useEffect(() => {

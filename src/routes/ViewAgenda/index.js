@@ -28,6 +28,7 @@ const ViewAgenda = () => {
     const fetchAgendaDetails = async () => {
       try {
         const response = await getAgenda(agenda_id);
+
         setAgenda(response);
         console.log(JSON.stringify(response));
       } catch (error) {
@@ -37,6 +38,8 @@ const ViewAgenda = () => {
 
     fetchAgendaDetails();
   }, [agenda_id]);
+
+  agenda.actionPoints.sort((a, b) => a.action_point_id - b.action_point_id);
 
   if (!agenda) {
     return <div>Loading...</div>;

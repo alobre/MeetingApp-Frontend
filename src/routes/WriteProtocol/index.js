@@ -131,6 +131,9 @@ const WriteProtocol = () => {
 
   console.log("after useeffect: " + JSON.stringify(agenda));
 
+  if (agenda) {
+    agenda.actionPoints.sort((a, b) => a.action_point_id - b.action_point_id);
+  }
   // FROM HERE THERE IS AGENDA
   const openModal = () => {
     setModalOpen(true);

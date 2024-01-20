@@ -55,6 +55,9 @@ const ViewProtocol = () => {
 
   if (newProtocol) {
     console.log("Type of newProtocol.meeting: " + typeof newProtocol.meeting);
+    newProtocol.actionPoints.sort(
+      (a, b) => a.action_point_id - b.action_point_id
+    );
 
     if (newProtocol.meeting) {
       console.log(
