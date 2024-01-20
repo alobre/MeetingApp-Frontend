@@ -230,7 +230,7 @@ const ViewProtocol = () => {
                                     <div className="note-list">
                                       {subPoint.notes.map((note, noteIndex) => (
                                         <ListItem key={noteIndex}>
-                                          {note}
+                                          {note.text}
                                         </ListItem>
                                       ))}
                                     </div>
@@ -257,7 +257,7 @@ const ViewProtocol = () => {
                                     <div className="note-list">
                                       {comment.notes.map((note, noteIndex) => (
                                         <ListItem key={noteIndex}>
-                                          {note}
+                                          {note.text}
                                         </ListItem>
                                       ))}
                                     </div>

@@ -471,9 +471,10 @@ const WriteProtocol = () => {
             console.log("BLA");
             subpointId = await postActionPointSubPoint(
               subpoint.message,
-              actionPoint.action_point_id
+              actionPoint.action_point_id.actionPointId
             );
             subpoint.action_point_id = actionPoint.action_point_id;
+            //subpoint.action_point_subpoint_id = subpointId.action_point_id;
           }
           // sp notes TODO addToDB check
           if (subpoint.notes && subpoint.notes.length > 0) {
@@ -481,7 +482,7 @@ const WriteProtocol = () => {
               console.log("single note: " + note);
 
               const subpointNotesData = {
-                action_point_id: actionPoint.action_point_id,
+                action_point_subpoint_id: subpoint.action_point_subpoint_id,
                 text: note,
               };
 
