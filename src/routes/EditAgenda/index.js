@@ -178,6 +178,11 @@ const MeetingDetails = (props) => {
   };
 
   const handleAddSubPoint = (actionPointIndex) => {
+    console.log(
+      "AP INDEX AND ID " +
+        actionPointIndex +
+        actionPoints[actionPointIndex].action_point_id
+    );
     const updatedActionPoints = [...actionPoints];
     const newSubPoint = {
       message: "",
@@ -333,6 +338,7 @@ const MeetingDetails = (props) => {
         );
         const newActionPointId = newActionPointResult.action_point_id;
         console.log("returning id in fe " + newActionPointId);
+
         ap.action_point_id = newActionPointId;
       } else if (ap.updateActionPointTitle) {
         // update existing ap
