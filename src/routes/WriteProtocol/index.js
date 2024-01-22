@@ -143,9 +143,18 @@ const WriteProtocol = () => {
     setModalOpen(false);
   };
 
+  // const showAllMembers = () => {
+  //   setMembersToShow(agenda.members.length);
+  //   openModal();
+  // };
+
   const showAllMembers = () => {
-    setMembersToShow(agenda.members.length);
-    openModal();
+    if (agenda && agenda.meetingMembers) {
+      setMembersToShow(agenda.meetingMembers.length);
+      openModal();
+    }
+    // setMembersToShow(newProtocol.meetingMembers.length);
+    // openModal();
   };
 
   const handleAddSubPoint = async (actionPointIndex) => {

@@ -76,6 +76,8 @@ const MeetingDetails = (props) => {
 
   const active_uid = localStorage.getItem("active_uid");
 
+  console.log("members in edit: " + JSON.stringify(members));
+
   const fetchAgenda = async () => {
     const parsedDate = dayjs(meetingDetails.date, { format: "YYYY-MM-DD" });
     const formattedDate = parsedDate.format("YYYY-MM-DD");
@@ -251,9 +253,45 @@ const MeetingDetails = (props) => {
     navigate("/ViewAgenda", { state: { agenda } }); // Pass the agenda object in the state
   };
 
+  // const handleMemberSave = (selectedMembers) => {
+  //   // Concatenate the new members to the existing array
+  //   setMembers((prevMembers) => [...prevMembers, ...selectedMembers]);
+  // };
+
   const handleMemberSave = (selectedMembers) => {
-    // Concatenate the new members to the existing array
-    setMembers((prevMembers) => [...prevMembers, ...selectedMembers]);
+    const cleanedMembers = [];
+
+    // reformat what comes from add member modal for comparing for extracting duplicates
+    for (const member of selectedMembers) {
+      var name = member.first_name.split(", ");
+      var cn = name[0];
+      var full_name = cn.split(" ");
+      var first_name_db = full_name[0];
+      var last_name_db = full_name[1];
+      var uid = name[1];
+      var email_db = name[2];
+      var hasRightsToEdit = member.hasRightsToEdit;
+
+      const user = {
+        ldap_name: uid,
+        first_name: first_name_db,
+        last_name: last_name_db,
+        email: email_db,
+        hasRightsToEdit: hasRightsToEdit,
+      };
+
+      // check duplicate
+      const existingUser = members.find(
+        (existingMember) => existingMember.ldap_name === user.ldap_name
+      );
+
+      // if not dupl, insert
+      if (!existingUser) {
+        cleanedMembers.push(user);
+      }
+    }
+
+    setMembers((prevMembers) => [...prevMembers, ...cleanedMembers]);
   };
 
   const MemberList = ({ members }) => {
@@ -478,6 +516,7 @@ const MeetingDetails = (props) => {
                 isOpen={isMemberModalOpen}
                 onClose={() => setMemberModalOpen(false)}
                 onSave={handleMemberSave}
+                externalMembers={members}
               />
             </div>
             <div className="button-group">

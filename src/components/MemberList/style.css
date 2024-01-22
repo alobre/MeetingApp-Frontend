@@ -44,6 +44,8 @@ ul {
   margin: 50px auto;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  max-width: 50vw; /* sets a maximum width for the modal */
+  max-width: 50vw;
   width: 50vw;
+  /* max-height: 300px;
+  overflow: scroll; */
 }

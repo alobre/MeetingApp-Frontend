@@ -79,8 +79,12 @@ const ViewProtocol = () => {
   };
 
   const showAllMembers = () => {
-    setMembersToShow(newProtocol.meetingMembers.length);
-    openModal();
+    if (newProtocol && newProtocol.meetingMembers) {
+      setMembersToShow(newProtocol.meetingMembers.length);
+      openModal();
+    }
+    // setMembersToShow(newProtocol.meetingMembers.length);
+    // openModal();
   };
 
   if (!newProtocol) {
@@ -163,13 +167,17 @@ const ViewProtocol = () => {
                 <Button variant="outlined" onClick={showAllMembers}>
                   Show All Members
                 </Button>
-                {/* </Card> */}
 
                 <MemberList
                   isOpen={isModalOpen}
                   closeModal={closeModal}
-                  members={newProtocol.meeting && newProtocol.meetingMembers}
+                  members={
+                    (newProtocol.meetingMembers &&
+                      newProtocol.meetingMembers) ||
+                    []
+                  }
                 />
+                {/* </Card> */}
               </TableCell>
             </TableBody>
           </Table>

@@ -55,11 +55,14 @@ const MeetingForm = () => {
   const [isMemberModalOpen, setMemberModalOpen] = useState(false);
   const [members, setMembers] = useState([]);
   const [meetingType, setMeetingType] = useState(null);
+  const [meetingOwner, setMeetingOwner] = useState(null);
 
   // user has to be logged in, if not go to login screen
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("authenticated") !== null;
     if (isAuthenticated) {
+      const active_uid = localStorage.getItem("active_uid");
+      setMeetingOwner(active_uid);
     } else {
       navigate("/Login");
     }
@@ -94,7 +97,9 @@ const MeetingForm = () => {
       title,
       members,
       meetingType: meetingType.label,
-      meetingSerie: [], // seperieren, weil es sich dann ein JArray daruas erstellet ? // mal ein array dafr
+      meetingSerie: [],
+      owner: meetingOwner,
+      // seperieren, weil es sich dann ein JArray daruas erstellet ? // mal ein array dafr
     };
 
     //console.log(JSON.stringify(meetingData));

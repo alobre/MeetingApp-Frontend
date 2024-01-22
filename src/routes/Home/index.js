@@ -8,6 +8,7 @@ import { getMeetings } from "components/AxiosInterceptor/AxiosInterceptor";
 
 const HomeScreen = () => {
   const [meetings, setMeetings] = useState([]);
+  const [groupedMeetings, setGroupedMeetings] = useState([]);
   const [authenticated, setAuthenticated] = useState(null);
   const [sortByType, setSortByType] = useState(false); // Default sorting by date
   const [sortByDate, setSortByDate] = useState(true);
@@ -32,23 +33,26 @@ const HomeScreen = () => {
     setSortByType(true);
     setSortByDate(false);
 
-    // Sort meetings by type, handling null values
-    setMeetings([
-      ...meetings.sort((a, b) => {
-        const typeA = a.meeting_series_name || "";
-        const typeB = b.meeting_series_name || "";
-        return typeA.localeCompare(typeB);
-      }),
-    ]);
+    // sort meetings by type
+    const sortedMeetings = [...meetings].sort((a, b) => {
+      const typeA = a.meeting_series_name || "";
+      const typeB = b.meeting_series_name || "";
+      return typeA.localeCompare(typeB);
+    });
+
+    setGroupedMeetings(sortedMeetings);
   };
 
   const handleSortByDate = () => {
     setSortByType(false);
     setSortByDate(true);
-    // Sort meetings by date
-    setMeetings([
-      ...meetings.sort((a, b) => new Date(a.date) - new Date(b.date)),
-    ]);
+
+    // by datetime
+    const sortedMeetings = [...meetings].sort(
+      (a, b) => new Date(a.date) - new Date(b.date)
+    );
+
+    setMeetings(sortedMeetings);
   };
 
   if (!authenticated) {
@@ -67,7 +71,8 @@ const HomeScreen = () => {
             sort by date
           </Button>
         </Card>
-        <MeetingTable data={meetings} />
+        {sortByType && <MeetingTable data={groupedMeetings} />}
+        {sortByDate && <MeetingTable data={meetings} />}{" "}
       </div>
     );
   }

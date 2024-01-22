@@ -18,7 +18,7 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { fetchUsers } from "components/AxiosInterceptor/AxiosInterceptor";
 
-const AddMemberModal = ({ isOpen, onClose, onSave }) => {
+const AddMemberModal = ({ isOpen, onClose, onSave, externalMembers }) => {
   const [members, setMembers] = useState([]);
   const [selectedMember, setSelectedMember] = useState(null);
   const [hasRightsToEdit, setHasRightsToEdit] = useState(false);
@@ -55,8 +55,35 @@ const AddMemberModal = ({ isOpen, onClose, onSave }) => {
           return combinedValues.join(", ");
         });
 
+        const parsedUsersObjects = usersList.map((item) => {
+          const [name, uid, email] = item.split(", ");
+          return { name, uid, email };
+        });
+
+        console.log("ext mem " + JSON.stringify(externalMembers));
+        console.log("int mem " + JSON.stringify(members));
+        console.log("user list " + JSON.stringify(usersList));
+
+        // check for already added users to avoid duplicates
+
+        let filteredUsers = [];
+        if (externalMembers) {
+          filteredUsers = usersList.filter(
+            (user) =>
+              !members.some((member) => member.first_name === user) &&
+              !externalMembers.some(
+                (externalMember) =>
+                  externalMember.ldap_name === user.split(", ")[1]
+              )
+          );
+        } else {
+          filteredUsers = usersList.filter(
+            (user) => !members.some((member) => member.first_name === user)
+          );
+        }
+
         // set the combined values in the state
-        setUsers(usersList);
+        setUsers(filteredUsers);
       } else {
         console.log("No attributes found in the LDAP response.");
         setUsers([]);
@@ -122,7 +149,10 @@ const AddMemberModal = ({ isOpen, onClose, onSave }) => {
         />
         <Button onClick={handleMemberSave}>Add Member</Button>
 
-        <div className="form-group">
+        <div
+          className="form-group"
+          style={{ maxHeight: "300px", overflowY: "auto" }}
+        >
           {members.map((member, index) => (
             <div key={member.first_name}>
               <FormControlLabel
