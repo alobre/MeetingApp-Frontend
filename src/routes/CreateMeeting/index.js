@@ -68,13 +68,11 @@ const MeetingForm = () => {
     }
   }, []);
 
-  // ToTest search for meetingSerie
   const [meetingSerie, setMeetingSerie] = useState([]);
 
   // ToTest search for meetingSerie
   const handleToSearchForMeetingSerie = () => {
-    // console.log("closing");
-    setMeetingSerie([]); // oder noch ein bool einrichten
+    setMeetingSerie([]); 
   };
 
   const handleAddressSave = () => {
@@ -99,10 +97,8 @@ const MeetingForm = () => {
       meetingType: meetingType.label,
       meetingSerie: [],
       owner: meetingOwner,
-      // seperieren, weil es sich dann ein JArray daruas erstellet ? // mal ein array dafr
     };
 
-    //console.log(JSON.stringify(meetingData));
 
     try {
       const response = await createMeeting(meetingData);

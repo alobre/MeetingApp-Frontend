@@ -39,8 +39,6 @@ const ViewAgenda = () => {
     fetchAgendaDetails();
   }, [agenda_id]);
 
-  // agenda.actionPoints.sort((a, b) => a.action_point_id - b.action_point_id);
-
   if (!agenda) {
     return <div>Loading...</div>;
   } else {

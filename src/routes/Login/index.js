@@ -24,7 +24,6 @@ const LoginScreen = () => {
       );
       navigate("/");
     }
-    //result.success ? navigate('/') : setErrorMessage(result.error)
   };
 
   const ErrorComponent = () => <div className="error">{error.msg}</div>;

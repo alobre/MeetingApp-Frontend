@@ -10,7 +10,7 @@ const HomeScreen = () => {
   const [meetings, setMeetings] = useState([]);
   const [groupedMeetings, setGroupedMeetings] = useState([]);
   const [authenticated, setAuthenticated] = useState(null);
-  const [sortByType, setSortByType] = useState(false); // Default sorting by date
+  const [sortByType, setSortByType] = useState(false);
   const [sortByDate, setSortByDate] = useState(true);
 
   const navigate = useNavigate();

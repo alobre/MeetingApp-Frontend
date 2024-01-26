@@ -31,11 +31,8 @@ const NotificationTable = ({ data }) => {
   // or just the non-editable agenda view
 
   const handleRowClick = async (body) => {
-    //console.log("Data from handleRowClick: " + JSON.stringify(data));
-    //console.log("Body from handleRowClick: " + JSON.stringify(body));
     const response = await hasRightToEdit(body.meeting_id);
     memberHasRightToEdit = response.data.rows[0].edit_agenda;
-    //console.log("On Click - info has right to Edit: " + memberHasRightToEdit);
     if (memberHasRightToEdit === true) {
       navigate("/EditAgenda", { state: body });
     } else {
@@ -67,9 +64,7 @@ const NotificationTable = ({ data }) => {
                 }
               >
                 <TableCell>
-                  {new Date(notification.date).toLocaleDateString(
-                    "en-GB" /* or your preferred locale */
-                  )}
+                  {new Date(notification.date).toLocaleDateString("en-GB")}
                 </TableCell>
                 <TableCell>{notification.start_time}</TableCell>
                 <TableCell>
@@ -87,4 +82,3 @@ const NotificationTable = ({ data }) => {
 };
 
 export default NotificationTable;
-

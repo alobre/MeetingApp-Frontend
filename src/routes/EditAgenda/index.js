@@ -101,6 +101,7 @@ const MeetingDetails = (props) => {
   };
 
   const handleMeetingDateChange = (event) => {
+    console.log("change meeting date " + event.target.value);
     setMeetingDate(event.target.value);
   };
 
@@ -250,13 +251,8 @@ const MeetingDetails = (props) => {
       })),
       members,
     };
-    navigate("/ViewAgenda", { state: { agenda } }); // Pass the agenda object in the state
+    navigate("/ViewAgenda", { state: { agenda } });
   };
-
-  // const handleMemberSave = (selectedMembers) => {
-  //   // Concatenate the new members to the existing array
-  //   setMembers((prevMembers) => [...prevMembers, ...selectedMembers]);
-  // };
 
   const handleMemberSave = (selectedMembers) => {
     const cleanedMembers = [];
@@ -319,51 +315,6 @@ const MeetingDetails = (props) => {
       </Card>
     );
   };
-
-  // const updateActionPoints = async () => {
-  //   actionPoints.map(async (ap) => {
-  //     if (ap.addToDB) {
-  //       const res = await postActionPoint(ap.text, ap.agenda_id);
-  //     }
-  //     if (ap.updateActionPointTitle) {
-  //       const res = await updateActionPoint(ap.text, ap.agenda_id);
-  //     }
-  //     if (ap.changesComments) {
-  //       ap.actionPointComments.map(async (apc) => {
-  //         if (apc.addToDB == true) {
-  //           const res = await postActionPointComment(
-  //             active_uid,
-  //             apc.comment_text,
-  //             ap.action_point_id
-  //           );
-  //         }
-  //         if (apc.updateActionPointComment == true) {
-  //           const res = await updateActionPointComment(
-  //             active_uid,
-  //             apc.comment_text,
-  //             ap.action_point_id
-  //           );
-  //         }
-  //       });
-  //     }
-  //     if (ap.changesSubPoints) {
-  //       ap.actionPointSubPoints.map(async (apsp) => {
-  //         if (apsp.addToDB == true) {
-  //           const res = await postActionPointSubPoint(
-  //             apsp.message,
-  //             apsp.action_point_id
-  //           );
-  //         }
-  //         if (apsp.updateSubPointMessage == true) {
-  //           const res = await updateActionPointSubPoint(
-  //             apsp.message,
-  //             apsp.action_point_subpoint_id
-  //           );
-  //         }
-  //       });
-  //     }
-  //   });
-  // };
 
   const updateActionPoints = async () => {
     const updatedActionPoints = [...actionPoints];
@@ -436,9 +387,7 @@ const MeetingDetails = (props) => {
       meetingRoom,
       members,
     };
-    // console.log("edited meeting " + JSON.stringify(meeting));
     const response = await editMeeting(meetingId, meeting);
-    // console.log("Meeting edited:", response);
   };
 
   const meetingIdToDelete = state.meeting_id;

@@ -30,11 +30,8 @@ const MeetingTable = ({ data }) => {
   // or just the non-editable agenda view
 
   const handleRowClick = async (body) => {
-    //console.log("Data from handleRowClick: " + JSON.stringify(data));
-    //console.log("Body from handleRowClick: " + JSON.stringify(body));
     const response = await hasRightToEdit(body.meeting_id);
     const memberHasRightToEdit = response.data.rows[0].edit_agenda;
-    //console.log("On Click - info has right to Edit: " + memberHasRightToEdit);
     if (memberHasRightToEdit === true) {
       navigate("/EditAgenda", { state: body });
     } else {

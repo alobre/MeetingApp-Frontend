@@ -28,8 +28,6 @@ const ViewProtocol = () => {
   const navigate = useNavigate();
   const location = useLocation();
   console.log("location.state:", location.state);
-  //const protocol = location.state?.protocol;
-  //console.log("protocol:", protocol);
   const [isModalOpen, setModalOpen] = useState(false);
   const [membersToShow, setMembersToShow] = useState(3);
   const [newProtocol, setNewProtocol] = useState(null);
@@ -83,8 +81,6 @@ const ViewProtocol = () => {
       setMembersToShow(newProtocol.meetingMembers.length);
       openModal();
     }
-    // setMembersToShow(newProtocol.meetingMembers.length);
-    // openModal();
   };
 
   if (!newProtocol) {
@@ -93,25 +89,6 @@ const ViewProtocol = () => {
 
   return (
     <div>
-      {/* <Card className="card-container">
-        <Typography variant="h5" className="members">
-          Members
-        </Typography>
-        <List>
-          {protocol.members.slice(0, 3).map((member, index) => (
-            <ListItem key={index}>{member.name}</ListItem>
-          ))}
-        </List>
-        <Button variant="outlined" onClick={showAllMembers}>
-          Show All Members
-        </Button>
-      </Card>
-
-      <MemberList
-        isOpen={isModalOpen}
-        closeModal={closeModal}
-        members={protocol.members}
-      /> */}
       <Card className="card-container">
         <Typography variant="h2">Meeting Protocol</Typography>
         <TableContainer className="table-container-details">
@@ -177,7 +154,6 @@ const ViewProtocol = () => {
                     []
                   }
                 />
-                {/* </Card> */}
               </TableCell>
             </TableBody>
           </Table>

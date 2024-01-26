@@ -45,35 +45,10 @@ const NonEditableViewAgenda = () => {
 
     fetchAgendaDetails();
   }, [location.state]);
-  /*
-const NonEditableViewAgenda = (data) => {
-  const location = useLocation();
-  const navigate = useNavigate();
 
-  const [agenda, setAgenda] = useState(null);
-
-  useEffect(() => {
-    const fetchAgendaDetails = async () => {
-      try {
-        console.log("NonEditableViewAgenda agenda_id: " + data.agenda_id);
-        const response = await getAgenda(data.agenda_id);
-        setAgenda(response);
-        console.log(JSON.stringify(response));
-      } catch (error) {
-        console.error("Error fetching agenda details", error);
-      }
-    };
-
-    fetchAgendaDetails();
-  }, [data.agenda_id]);
-*/
   if (!agenda) {
     return <div>Loading...</div>;
   }
-
-  const navigateToWriteProtocol = (agenda) => {
-    navigate("/WriteProtocol", { state: { agenda: agenda } });
-  };
 
   return (
     <div>
